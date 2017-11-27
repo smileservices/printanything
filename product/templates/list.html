@@ -1,0 +1,7 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h2>Shows all the products</h2>
+    {% for key, art in products.items %}
+        <li><a href="{{ art.get_absolute_url }}">{{ art.name }}</a></li>
+    {% endfor %}
+{% endblock content %}

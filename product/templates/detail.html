@@ -1,0 +1,5 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h2>Shows just one product - {{ product }}</h2>
+    <p><a href="{{ product.get_buy_link }}">Add to cart</a></p>
+{% endblock content %}
