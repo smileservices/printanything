@@ -1,5 +1,11 @@
 {% extends 'main.html' %}
 {% block content %}
     <h2>Shows just one product - {{ product }}</h2>
+    <p>Gallery:</p>
+    <ul>
+        {% for img in product.images.all %}
+        <li><a href="{{ img.relative_path.url }}"><img src="{{ img.get_thumb_small_url }}" alt=""></a></li>
+        {% endfor %}
+    </ul>
     <p><a href="{{ product.get_buy_link }}">Add to cart</a></p>
 {% endblock content %}

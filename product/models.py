@@ -24,7 +24,7 @@ class Art(models.Model):
     externalId = models.CharField(max_length=64)
     slug = models.SlugField(default='xxx', unique=True)
     name = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='art_big/', blank=True)
+    big_image = models.ImageField(upload_to='art_big/', blank=True)
     description = models.TextField()
     unit_price = models.FloatField(default=0.0, verbose_name='Unit Price')
     stock = models.IntegerField()
@@ -51,7 +51,7 @@ class Art(models.Model):
         return reverse('cart-add', args=[self.id])
 
     class Meta:
-        verbose_name = 'Image'
+        verbose_name = 'Art'
 
 
 class Support(models.Model):
