@@ -6,14 +6,16 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 
-from product.models import Art, Tag
+from product.models import Art, Support, Tag
 # Create your views here.
 
 
 def detail(request, slug):
     product = get_object_or_404(Art, slug=slug)
+    supports = Support.objects.all()
     data = {
-        'product': product
+        'product': product,
+        'supports': supports
     }
     return render(request, 'detail.html', data)
 

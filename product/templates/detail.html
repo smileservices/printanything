@@ -7,5 +7,19 @@
         <li><a href="{{ img.relative_path.url }}"><img src="{{ img.get_thumb_small_url }}" alt=""></a></li>
         {% endfor %}
     </ul>
-    <p><a href="{{ product.get_buy_link }}">Add to cart</a></p>
+<form action="{{ product.get_buy_link }}" method="post">
+{% csrf_token %}
+    <select name="support" id="support">
+    {% for support in supports %}
+        {% for sz in support.size_set.all %}
+            <option value="{{ sz.id }}">{{ sz.name }}</option>
+        {% endfor %}
+    {% endfor %}
+    </select>
+    <select name="size" id="size">
+
+    </select>
+    <input name="qty" type="number" step="1" min="1" value="1">
+    <button type="submit">Add to cart</button>
+</form>
 {% endblock content %}

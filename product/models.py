@@ -47,9 +47,6 @@ class Art(models.Model):
     def get_absolute_url(self):
         return reverse('product-detail', args=[self.slug])
 
-    def get_buy_link(self):
-        return reverse('cart-add', args=[self.id])
-
     class Meta:
         verbose_name = 'Art'
 
@@ -61,7 +58,6 @@ class Support(models.Model):
     description = models.TextField()
     unit_price = models.FloatField(default=0.0, verbose_name='Unit Price')
     vendor_price = models.FloatField(default=0.0, verbose_name='Vendor Price')
-    stock = models.IntegerField()
     vendor = models.ForeignKey(Vendor)
     dateAdded = models.DateTimeField(auto_now_add=True)
 
@@ -84,6 +80,15 @@ class Support(models.Model):
 
     class Meta:
         verbose_name = 'Print Support'
+
+
+class Size(models.Model):
+    name = models.CharField(max_length=254)
+    stock = models.IntegerField()
+    support = models.ForeignKey(Support)
+
+    class Meta:
+        verbose_name = 'Print Support Size'
 
 @receiver(pre_save, sender=Art)
 @receiver(pre_save, sender=Support)

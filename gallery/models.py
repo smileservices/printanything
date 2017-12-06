@@ -26,10 +26,10 @@ def get_thumb_url(instance, size):
 
 class Image(models.Model):
     relative_path = models.ImageField(upload_to=get_save_path)
-    product = models.ForeignKey(Art, on_delete=models.CASCADE, related_name='images')
+    product = models.ForeignKey(Art, on_delete=models.CASCADE, related_name='images', db_constraint=False)
 
     def get_image_path(self):
-        return os.path.join(settings.BASE_DIR, self.relative_path.url)
+        return os.path.join(settings.BASE_DIR, self.relative_path.url[1:])
 
     def get_image_url(self):
         return self.relative_path.url
@@ -41,7 +41,7 @@ class Image(models.Model):
 @receiver(post_save, sender=Image)
 def save_thumbnail(sender, **kwargs):
     sizes = [(120, 120), ]
-    filename, extension = os.path.splitext(kwargs['instance'].relative_path.url)
+    filename, extension = os.path.splitext(kwargs['instance'].get_image_path())
     for size in sizes:
         img = PIL_Image.open(kwargs['instance'].get_image_path())
         img.thumbnail(size)
