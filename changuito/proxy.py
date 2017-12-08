@@ -65,12 +65,13 @@ class CartProxy(MiddlewareMixin):
         request.session[CART_ID] = cart.id
         return cart
 
-    def add(self, product, unit_price, quantity=1):
+    def add(self, product, size, unit_price, quantity=1):
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
             item = models.Item.objects.get(cart=self.cart,
                                            product=product,
+                                           size=size,
                                            content_type=ctype)
         except models.Item.DoesNotExist:
             item = models.Item()
@@ -78,11 +79,11 @@ class CartProxy(MiddlewareMixin):
             item.product = product
             item.unit_price = unit_price
             item.quantity = quantity
+            item.size_id = size.pk
             item.save()
         else:
             item.quantity += quantity
             item.save()
-
         return item
 
     def remove_item(self, item_id):

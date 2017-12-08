@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
+from product.models import Size
 
 try:
     from django.conf import settings
+
     User = settings.AUTH_USER_MODEL
 except (ImportError, AttributeError):
     from django.contrib.auth.models import User
@@ -46,7 +48,8 @@ class ItemManager(models.Manager):
             kwargs['content_type'] = ContentType.objects.get_for_model(type(kwargs['product']),
                                                                        for_concrete_model=False)
             kwargs['object_id'] = kwargs['product'].pk
-            del(kwargs['product'])
+
+            del (kwargs['product'])
         return super(ItemManager, self).get(*args, **kwargs)
 
 
@@ -59,6 +62,7 @@ class Item(models.Model):
     # product as generic relation
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
+    size = models.ForeignKey(Size)
 
     objects = ItemManager()
 
@@ -75,6 +79,7 @@ class Item(models.Model):
 
     def total_price(self):
         return float(self.quantity) * float(self.unit_price)
+
     total_price = property(total_price)
 
     # product

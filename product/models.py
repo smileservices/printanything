@@ -87,6 +87,9 @@ class Size(models.Model):
     stock = models.IntegerField()
     support = models.ForeignKey(Support)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = 'Print Support Size'
 
