@@ -20,4 +20,9 @@
         </tr>
         {% endfor %}
     </table>
+
+<form action="{% url 'order-checkout' %}">
+    {% csrf_token %}
+    <button type="submit">Checkout!</button>
+</form>
 {% endblock %}

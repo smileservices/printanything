@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^customer/', include('customer.urls')),
     url(r'^products/', include('product.urls')),
     url(r'^cart/', include('changuito.urls')),
+    url(r'^order/', include('order.urls')),
     # url(r'/^', views.homepage),
 ]
 

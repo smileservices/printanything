@@ -31,10 +31,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
+    'contact.apps.ContactConfig',
     'product.apps.ProductConfig',
     'vendor.apps.VendorConfig',
     'artist.apps.ArtistConfig',
     'gallery.apps.GalleryConfig',
+    'order.apps.OrderConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
