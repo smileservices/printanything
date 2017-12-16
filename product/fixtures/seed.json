@@ -1,0 +1,190 @@
+[
+  {
+    "model": "vendor.vendor",
+    "pk": 1,
+    "fields": {
+      "name": "Best Tshirt Vendor"
+    }
+  },
+  {
+    "model": "vendor.vendor",
+    "pk": 2,
+    "fields": {
+      "name": "Cheap Tshirt Vendor"
+    }
+  },
+  {
+    "model": "artist.artist",
+    "pk": 1,
+    "fields": {
+      "name": "MemeAShit"
+    }
+  },
+  {
+    "model": "artist.artist",
+    "pk": 2,
+    "fields": {
+      "name": "Meme-elangelo"
+    }
+  },
+  {
+    "model": "product.tag",
+    "pk": 1,
+    "fields": {
+      "name": "Doge"
+    }
+  },
+    {
+    "model": "product.tag",
+    "pk": 2,
+    "fields": {
+      "name": "Bitcoin"
+    }
+  },
+    {
+    "model": "product.tag",
+    "pk": 3,
+    "fields": {
+      "name": "Good guy Greg"
+    }
+  },
+    {
+    "model": "product.support",
+    "pk": 1,
+    "fields": {
+      "externalId": "tshtblkxx",
+      "slug": "black-quality-t-shirt",
+      "name": "Black Quality T-shirt",
+      "description": "Great quality black t-shirt",
+      "unit_price": "35",
+      "vendor_price": "10",
+      "vendor": 1,
+      "dateAdded": "2017-12-09 13:50:00"
+    }
+  },
+  {
+    "model": "product.support",
+    "pk": 2,
+    "fields": {
+      "externalId": "tshtwhtxx",
+      "slug": "white-quality-t-shirt",
+      "name": "White Quality T-shirt",
+      "description": "Great quality white t-shirt",
+      "unit_price": "35",
+      "vendor_price": "10",
+      "vendor": 1,
+      "dateAdded": "2017-12-09 13:50:00"
+    }
+  },
+  {
+    "model": "product.support",
+    "pk": 3,
+    "fields": {
+      "externalId": "883-vrza",
+      "slug": "white-t-shirt",
+      "name": "White T-shirt",
+      "description": "Some regular white t-shirt",
+      "unit_price": "25",
+      "vendor_price": "3",
+      "vendor": 2,
+      "dateAdded": "2017-12-09 13:50:00"
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 1,
+    "fields": {
+      "name": "S",
+      "stock": 20,
+      "support": 3
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 2,
+    "fields": {
+      "name": "M",
+      "stock": 10,
+      "support": 3
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 3,
+    "fields": {
+      "name": "L",
+      "stock": 15,
+      "support": 3
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 4,
+    "fields": {
+      "name": "S",
+      "stock": 20,
+      "support": 2
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 5,
+    "fields": {
+      "name": "M",
+      "stock": 10,
+      "support": 2
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 6,
+    "fields": {
+      "name": "L",
+      "stock": 15,
+      "support": 2
+    }
+  },
+      {
+    "model": "product.size",
+    "pk": 7,
+    "fields": {
+      "name": "S",
+      "stock": 20,
+      "support": 1
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 8,
+    "fields": {
+      "name": "M",
+      "stock": 10,
+      "support": 1
+    }
+  },
+  {
+    "model": "product.size",
+    "pk": 9,
+    "fields": {
+      "name": "L",
+      "stock": 15,
+      "support": 1
+    }
+  },
+  {
+    "model": "product.art",
+    "pk": 1,
+    "fields": {
+      "externalId": "Dogecoin",
+      "slug": "dogecoin",
+      "name": "Dogecoin",
+      "big_image": "art_big/dogecoin_faucet_cover_02.jpg",
+      "description": "Did you know that Dogecoin exists?",
+      "unit_price": "0",
+      "stock": "-1",
+      "artist": 1,
+      "dateAdded": "2017-12-09 13:50:00",
+      "tags": [1,2]
+    }
+  }
+]

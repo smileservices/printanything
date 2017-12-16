@@ -2,3 +2,5 @@ media/
 *.pyc
 *.swp
 *.sqlite3
+.idea/
+*/migrations/*

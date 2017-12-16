@@ -8,10 +8,9 @@ from order.models import Order, OrderDetails, ShippingDetails
 # Create your views here.
 
 def checkout(request):
-    cart = request.cart
+    cart = request.cart.get_cart(request)
     data = {
-        'total_price': cart.total_price(),
-        'total_quantity': cart.total_quantity()
+        'cart': cart
     }
     return render(request, 'checkout.html', data)
 
