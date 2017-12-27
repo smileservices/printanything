@@ -82,14 +82,14 @@
 <script type="text/template" id="sup_sec_tmpl">
     <div class="widget color">
         <h6 class="widget-title">Color</h6>
-        <div class="widget-desc">
+        <div class="widget-desc" id="support_colours">
             {!colours}
         </div>
     </div>
 
     <div class="widget size mb-15">
         <h6 class="widget-title">Size</h6>
-        <div class="widget-desc">
+        <div class="widget-desc" id="support_sizes">
             <ul>
                 {!sizes}
             </ul>
@@ -97,13 +97,12 @@
     </div>
 </script>
 <script type="text/template" id="sup_sec_tmpl_colours">
-    <label class="custom-control custom-checkbox d-inline-block">
-      <input type="checkbox" class="custom-control-input">
-      <span id="colour_{colour_lower}" class="custom-control-indicator {colour_lower}"></span>{colour}
+    <label>
+        <input name="colour" type="radio" {!checked} value="{colour}"> {colour}
     </label>
 </script>
 <script type="text/template" id="sup_sec_tmpl_size">
-    <li><a href="#">{size}</a></li>
+    <li><a href="#" data-id="{size-id}">{size}</a></li>
 </script>
 
 <form action="{% url 'cart-add' %}" method="post">

@@ -35,6 +35,12 @@
     ************ PLACE YOUR CUSTOM CSS HERE ************
     ------------------------------------------------- */
 
+
+
+/*
+    PRODUCT DETAIL PAGE
+*/
+
     .support-types {
         padding: 10px;
         border: solid darkgrey 3px;
@@ -48,4 +54,8 @@
 
     .support-types.selected {
         border-color: paleturquoise;
+    }
+
+    #support_sizes a.selected {
+        background-color: black
     }
