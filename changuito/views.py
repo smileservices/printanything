@@ -1,18 +1,18 @@
 from django.http import JsonResponse
 from django.shortcuts import render_to_response
-from product.models import Art, Support, Size
+from product.models import Art, Support, Stock
 from .proxy import CartProxy
 
 
 def add_to_cart(request):
     if request.method == 'POST':
-        product = Art.objects.get(id=request.POST['product'])
+        product = Art.objects.get(id=request.POST['product_id'])
         quantity = int(request.POST['qty'])
-        size = Size.objects.get(id=request.POST['size'])
+        stock = Stock.objects.get(id=request.POST['stock'])
         cart = request.cart
-        price = product.unit_price + size.support.unit_price
+        price = product.unit_price + stock.support.unit_price
         try:
-            cart.add(product, size, price, quantity)
+            cart.add(product, stock, price, quantity)
             res = True
         except:  # todo handle multiple exceptions
             res = False

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
-from product.models import Size
+from product.models import Stock
 
 try:
     from django.conf import settings
@@ -62,7 +62,7 @@ class Item(models.Model):
     # product as generic relation
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    size = models.ForeignKey(Size)
+    size = models.ForeignKey(Stock)
 
     objects = ItemManager()
 

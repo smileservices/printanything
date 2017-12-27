@@ -1,6 +1,6 @@
 
 
-//$(document).ready(function(){
+$(document).ready(function(){
 
     var supports = {
         'data_by_id': {},
@@ -124,4 +124,31 @@
             supports.trigger_support_select(self_elem);
         }
     })
-//})
+
+    $('.cart-submit').click(function(e){
+        e.preventDefault();
+        //create form
+        var url = $('form#add_to_cart').attr('action');
+        var csrf = $('form input[name="csrfmiddlewaretoken"]').val();
+        var product_id = $('form input[name="product_id"]').val();
+        var qty = $('input[name="qty"]').val();
+        var stock = $('#support_sizes a.selected').attr('data-id');
+        if (!stock) {
+            alert('Select one size!');
+        }
+        $.ajax({
+            'method': 'POST',
+            'url': url,
+            'dataType': 'json',
+            'data': {
+                'csrfmiddlewaretoken': csrf,
+                'product_id': product_id,
+                'stock': stock,
+                'qty': qty
+            },
+            'success': function(data) {
+                console.log('data')
+            }
+        })
+    })
+})
