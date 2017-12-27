@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
 
     var supports = {
@@ -90,30 +88,6 @@ $(document).ready(function(){
         }
     }
 
-    var ajax_object = {
-        'ajax_calls': {},
-        'retrieve': function(url, done, before=null, after=null, fail=null) {
-            var self = this;
-            if (!self.ajax_calls[url]) {
-                if (before) {
-                    before();
-                }
-                self.ajax_calls[url] = $.get(url, done)
-                if (after) {
-                    self.ajax_calls[url].done(after);
-                }
-                if (fail) {
-                    self.ajax_calls[url].fail(fail);
-                }
-            } else {
-                if (before) {
-                    before();
-                }
-                self.ajax_calls[url].then(after);
-            }
-        }
-    }
-
     //initialize first support
     supports.trigger_support_select($('.support-types').first())
 
@@ -136,19 +110,16 @@ $(document).ready(function(){
         if (!stock) {
             alert('Select one size!');
         }
-        $.ajax({
-            'method': 'POST',
-            'url': url,
-            'dataType': 'json',
-            'data': {
-                'csrfmiddlewaretoken': csrf,
-                'product_id': product_id,
-                'stock': stock,
-                'qty': qty
-            },
-            'success': function(data) {
-                console.log('data')
-            }
+        cart.add_product(url, csrf, {
+            'product_id': product_id,
+            'qty': qty,
+            'stock': stock
+        }, function(){
+            console.log('Before adding!')
+        }, function(data) {
+            console.log('Done adding!')
+        }, function(data) {
+            console.log('After adding!')
         })
     })
 })
