@@ -47,8 +47,9 @@ $(document).ready(function(){
             })
             return sizes_by_colours;
         },
-        'trigger_select': function(support_id, self_elem) {
+        'trigger_select': function(self_elem) {
             var self = this;
+            var support_id = self_elem.attr('data-id');
             ajax_object.retrieve(self.get_stock_url(support_id),
                 done=function(data){
                     supports.data_by_id[support_id] = data;},
@@ -86,12 +87,14 @@ $(document).ready(function(){
         }
     }
 
+    //initialize first support
+    supports.trigger_select($('.support-types').first())
+
     // get support options
     $('.support-types').click(function(){
         var self_elem = $(this);
         if (!self_elem.hasClass('selected')) {
-            support_id = self_elem.attr('data-id');
-            supports.trigger_select(support_id, self_elem);
+            supports.trigger_select(self_elem);
         }
     })
 })
