@@ -2,31 +2,37 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Tag, Art, Support, Size
+from .models import Tag, Art, Support, Stock
 from gallery.models import Image
-
 
 # Register your models here.
 
+admin.site.register(Tag)
 
+
+# ART ADMIN SECTION
 class ArtImage(admin.TabularInline):
     model = Image
     extra = 1
 
 
 class ArtAdmin(admin.ModelAdmin):
+    model = Art
     inlines = [ArtImage, ]
 
 
-class SupportSize(admin.TabularInline):
-    model = Size
-    extra = 3
+admin.site.register(Art, ArtAdmin)
+
+
+# SUPPORT ADMIN SECTION
+class StockAdminInline(admin.TabularInline):
+    model = Stock
+    extra = 1
 
 
 class SupportAdmin(admin.ModelAdmin):
-    inlines = [SupportSize, ]
+    model = Support
+    inlines = [StockAdminInline, ]
 
 
-admin.site.register(Tag)
 admin.site.register(Support, SupportAdmin)
-admin.site.register(Art, ArtAdmin)

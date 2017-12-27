@@ -8,6 +8,13 @@
 # Fixtures:
  - Useful for populating the database
  - Find in each sub-app in the fixtures/seed.json file
- - Apply them with "python manage.py loaddata seed.json"
+ - Apply them:
+    python manage.py loaddata seed.json
+    python manage.py dump seed.json
+
+
+# Clean Up DB:
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc"  -delete
 
 

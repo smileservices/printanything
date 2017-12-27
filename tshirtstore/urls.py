@@ -25,8 +25,9 @@ urlpatterns = [
     url(r'^products/', include('product.urls')),
     url(r'^cart/', include('changuito.urls')),
     url(r'^order/', include('order.urls')),
-    # url(r'/^', views.homepage),
+    url(r'^$', views.homepage, name="index"),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # do we need this?

@@ -1,0 +1,129 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+    {% block breadcrumos %}
+        {% include "breadcrumbs.html" %}
+    {% endblock breadcrumos %}
+<section class="single_product_details_area section_padding_100">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12 col-md-5">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                {% for img in product.images.all %}
+                                <li class="active" data-target="#product_details_slider" data-slide-to="{{ forloop.counter0 }}" style="background-image: url({{ img.get_thumb_small_url }});">
+                                </li>
+                                {% endfor %}
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <a class="gallery_img" href="{{ product.get_primary_image.get_image_url}}">
+                                        <img class="d-block w-100" src="{{ product.get_primary_image.get_thumb_big_url }}" alt="slide {{ forloop.counter }}">
+                                    </a>
+                                    <!-- Product Badge -->
+                                    <div class="product_badge">
+                                        <span class="badge-new">New</span>
+                                    </div>
+                                </div>
+                                {% for img in product.images.all %}
+                                {% if not img.primary %}
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{{ img.get_image_url }}">
+                                        <img class="d-block w-100" src="{{ img.get_thumb_big_url }}" alt="slide {{ forloop.counter }}">
+                                    </a>
+                                    <!-- Product Badge -->
+                                    <div class="product_badge">
+                                        <span class="badge-new">New</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-7">
+                    <div class="single_product_desc">
+                        <h4 class="title"><a href="#">{{ product.name }}</a></h4>
+                        <div class="short_overview">
+                            <h6>Overview</h6>
+                            <p>{{ product.description }}</p>
+                        </div>
+                        <div class="widget support mb-15">
+                            <h6 class="widget-title">Put it on</h6>
+                            {% for support in supports %}
+                                <span data-id="{{ support.id }}" class="support-types{% if forloop.counter == 1 %} selected{% endif %}">{{ support }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div id="support_section">
+                            <!-- TO BE POPULATED DYNAMICALLY -->
+                        </div>
+
+                        <!-- Add to Cart Form -->
+                        <form class="cart clearfix mb-15" action="{% url 'cart-add' %}" method="post">
+                            <div class="quantity">
+                                <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                <input type="number" class="qty-text" id="qty" step="1" min="1" max="12" name="qty" value="1">
+                                <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            </div>
+                            <button type="submit" name="addtocart" value="5" class="btn cart-submit">Add to cart</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+ </section>
+
+<script type="text/template" id="sup_sec_tmpl">
+    <div class="widget color">
+        <h6 class="widget-title">Color</h6>
+        <div class="widget-desc">
+            {!colours}
+        </div>
+    </div>
+
+    <div class="widget size mb-15">
+        <h6 class="widget-title">Size</h6>
+        <div class="widget-desc">
+            <ul>
+                {!sizes}
+            </ul>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="sup_sec_tmpl_colours">
+    <label class="custom-control custom-checkbox d-inline-block">
+      <input type="checkbox" class="custom-control-input">
+      <span id="colour_{colour_lower}" class="custom-control-indicator {colour_lower}"></span>{colour}
+    </label>
+</script>
+<script type="text/template" id="sup_sec_tmpl_size">
+    <li><a href="#">{size}</a></li>
+</script>
+
+<form action="{% url 'cart-add' %}" method="post">
+{% csrf_token %}
+    <input type="hidden" name="product" value="{{ product.id }}">
+    {% for support in supports %}
+        <label>{{ support }}</label>
+        <select name="size" id="size">
+            {% for sz in support.size_set.all %}
+            <option value="{{ sz.id }}">{{ sz.name }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+
+    <input name="qty" type="number" step="1" min="1" value="1">
+    <button type="submit">Add to cart</button>
+</form>
+{% endblock content %}
+
+{% block custom_javascript %}
+    <script src="{% static 'jquery.templates/jquery.templates.js' %}"></script>
+    <script src="{% static 'js/product_page.js'%}"></script>
+{% endblock custom_javascript %}

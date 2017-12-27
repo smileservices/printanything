@@ -1,0 +1,51 @@
+    /* ----------------------------------------------------------
+    :: Template Name: Bigshop - Responsive Ecommerce Template
+    :: Author: Designing World
+    :: Author URL: https://wrapbootstrap.com/user/DesigningWorld
+    :: Description: Bigshop is smart &amp; elegant e-commerce HTML5 Template. It's suitable for all e-commerce business platform. It's come with 55+ Pages &amp; exciting all features. It's super responsive for all Desktop/Mobile layout.
+    :: Version: 1.0
+    :: Created: 20 September 2017
+    :: Last Updated: 14 October 2017
+    ---------------------------------------------------------- */
+    
+    .floatleft {
+        float: left
+    }
+    
+    .floatright {
+        float: right
+    }
+    
+    .alignleft {
+        float: left;
+        margin-right: 15px;
+    }
+    
+    .alignright {
+        float: right;
+        margin-left: 15px;
+    }
+    
+    .aligncenter {
+        display: block;
+        margin: 0 auto 15px;
+    }
+
+    /* -------------------------------------------------
+    ************ PLACE YOUR CUSTOM CSS HERE ************
+    ------------------------------------------------- */
+
+    .support-types {
+        padding: 10px;
+        border: solid darkgrey 3px;
+        margin: 5px;
+    }
+
+    .support-types:hover {
+        border-color: paleturquoise;
+        cursor: hand
+    }
+
+    .support-types.selected {
+        border-color: paleturquoise;
+    }

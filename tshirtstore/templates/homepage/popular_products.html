@@ -1,0 +1,46 @@
+{% block popular_products %}
+    <div class="popular_items_area home-3 section_padding_100_70">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="popular_section_heading mb-50 text-center">
+                        <h5>Popular This Week</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="popular_items_slides col-12">
+
+                    {% for product in popular_products %}
+                    <!-- Single Popular Item Area Start -->
+                    <div class="single_popular_item">
+                        <div class="product_image">
+                            <!-- Product Image -->
+                            <a href="{{ product.get_absolute_url }}">
+                                <img class="first_img" src="{{ product.get_primary_image.get_thumb_med_url }}" alt="">
+                            </a>
+
+                            <!-- Product Badge -->
+                            <div class="product_badge">
+                                <span class="badge-offer">On Sale</span>
+                            </div>
+                            <!-- Add to cart -->
+                            <div class="product_add_to_cart">
+                                <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to Cart</a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product_description">
+                            <h5><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+                            <h6>${{ product.unit_price|add:cheapest_support.unit_price }} ({{cheapest_support.name}})</h6>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock popular_products %}

@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from customer.models import Customer as Customer
 from contact.models import Contact
-from product.models import Art, Support, Size
+from product.models import Art, Support
+from vendor.models import Size, Colour
 from changuito.models import Cart
 
 # Create your models here.
@@ -31,6 +32,7 @@ class OrderDetails(models.Model):
     art = models.ForeignKey(Art)
     support = models.ForeignKey(Support)
     size = models.ForeignKey(Size)
+    colour = models.ForeignKey(Colour)
     unit_price = models.FloatField()
     qty = models.IntegerField()
     subtotal = models.FloatField()
