@@ -81,6 +81,18 @@ var cart = {
                     'total': data['total'],
                     'total_qty': data['total_qty'],
                 }, '#top_cart');
+
+            //add remove listeners
+            $('header .dropdown-product-remove a').click(function(e){
+                e.preventDefault();
+                cart.remove_item($(this).attr('data-id'));
+            })
+        })
+    },
+    'remove_item': function(id){
+        var self = this
+        $.get('/cart/remove/'+id, function(data){
+            self.refresh();
         })
     }
 }

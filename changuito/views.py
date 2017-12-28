@@ -50,7 +50,7 @@ def get_cart_json(request):
             'url': item.product.get_absolute_url(),
             'qty': int(item.quantity),
             'price': item.unit_price,
-            'remove_url': item.get_remove_from_cart_url()
+            'id': item.id
         })
     return JsonResponse({
         'items': items_list,
