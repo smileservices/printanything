@@ -1,5 +1,9 @@
 # TODO:
     - Finish the order phase
+        - Before/After add product to cart actions
+        - Retrieve cart content and display on top
+        - Remove item from cart menu
+        - Cart page
         - Order Placement
         - Payment
         - Order processing (place to vendor/status/shipment)

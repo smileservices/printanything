@@ -80,8 +80,12 @@ $(document).ready(function(){
                     supports.data_by_id[support_id] = data;},
                 before=function() {
                     $('.support-types').removeClass('selected');
-                    self_elem.addClass('selected');},
+                    self_elem.addClass('selected');
+                    //show alert
+                    alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', 'Retrieving support options', true)
+                },
                 after=function() {
+                    alert_box.hide('#add_to_cart_alert_box');
                     supports.select_support(support_id);
                 }
             )
@@ -100,6 +104,8 @@ $(document).ready(function(){
     })
 
     $('.cart-submit').click(function(e){
+        var button = this;
+        var button_text = $(button).text()
         e.preventDefault();
         //create form
         var url = $('form#add_to_cart').attr('action');
@@ -109,6 +115,7 @@ $(document).ready(function(){
         var stock = $('#support_sizes a.selected').attr('data-id');
         if (!stock) {
             alert('Select one size!');
+            return false;
         }
         cart.add_product(url, csrf, {
             'product_id': product_id,
@@ -116,10 +123,13 @@ $(document).ready(function(){
             'stock': stock
         }, function(){
             console.log('Before adding!')
+            var spinner = $('#spinner')
+            $(button).html(spinner.removeClass('hidden'))
         }, function(data) {
             console.log('Done adding!')
         }, function(data) {
             console.log('After adding!')
+//            $(button).html(button_text)
         })
     })
 })

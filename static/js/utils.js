@@ -22,6 +22,25 @@ var ajax_object = {
     }
 }
 
+var alert_box = {
+    '__default_classes': 'alert alert-dismissible fade show ',
+    'show_message': function(alert_box_id, alert_type, message, loading=false) {
+        var self = this;
+        var alert_container = $(alert_box_id).addClass(self['__default_classes']+alert_type);
+        alert_container.find('span.text').text(message);
+        if (loading) {
+            var loader = $('#spinner-holder').html();
+            alert_container.append(loader);
+        }
+    },
+    'hide': function(alert_box_id) {
+        $(alert_box_id)
+            .attr('class', '')
+            .addClass('hidden')
+            .find('.spinner').remove();
+    }
+}
+
 var cart = {
     'add_product': function(url, csrf, product_data, before, success, complete) {
         before();
