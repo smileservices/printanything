@@ -114,7 +114,7 @@ $(document).ready(function(){
         var qty = $('input[name="qty"]').val();
         var stock = $('#support_sizes a.selected').attr('data-id');
         if (!stock) {
-            alert('Select one size!');
+            alert_box.show_message('#add_to_cart_alert_box', 'alert-danger', 'Please select a size!')
             return false;
         }
         cart.add_product(url, csrf, {
@@ -122,14 +122,11 @@ $(document).ready(function(){
             'qty': qty,
             'stock': stock
         }, function(){
-            console.log('Before adding!')
-            var spinner = $('#spinner')
-            $(button).html(spinner.removeClass('hidden'))
+            alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', 'Adding product to cart', true)
         }, function(data) {
-            console.log('Done adding!')
+            alert_box.hide('#add_to_cart_alert_box')
+            alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', data.result)
         }, function(data) {
-            console.log('After adding!')
-//            $(button).html(button_text)
         })
     })
 })
