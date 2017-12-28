@@ -14,7 +14,7 @@
  - Find in each sub-app in the fixtures/seed.json file
  - Apply them:
     python manage.py loaddata seed.json
-    python manage.py dump seed.json
+    python manage.py dumpdata > seed.json
 
 
 # Clean Up DB:

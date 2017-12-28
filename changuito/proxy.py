@@ -70,6 +70,8 @@ class CartProxy(MiddlewareMixin):
         return cart
 
     def add(self, product, stock, unit_price, quantity=1):
+        if stock.stock == 0:
+                raise StockEmpty
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
@@ -77,8 +79,6 @@ class CartProxy(MiddlewareMixin):
                                            product=product,
                                            stock=stock,
                                            content_type=ctype)
-            if item.stock.stock == 0:
-                raise StockEmpty
         except models.Item.DoesNotExist:
             item = models.Item()
             item.cart = self.cart
@@ -90,6 +90,8 @@ class CartProxy(MiddlewareMixin):
         else:
             item.quantity += quantity
             item.save()
+            stock.stock -= quantity
+            stock.save()
         return item
 
     def remove_item(self, item_id):
