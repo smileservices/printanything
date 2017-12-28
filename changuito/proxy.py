@@ -27,6 +27,10 @@ class CartDoesNotExist(Exception):
 class UserDoesNotExist(Exception):
     pass
 
+class StockEmpty(Exception):
+    pass
+
+
 
 class CartProxy(MiddlewareMixin):
     def __init__(self, request):
@@ -65,21 +69,23 @@ class CartProxy(MiddlewareMixin):
         request.session[CART_ID] = cart.id
         return cart
 
-    def add(self, product, size, unit_price, quantity=1):
+    def add(self, product, stock, unit_price, quantity=1):
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
             item = models.Item.objects.get(cart=self.cart,
                                            product=product,
-                                           size=size,
+                                           stock=stock,
                                            content_type=ctype)
+            if item.stock.stock == 0:
+                raise StockEmpty
         except models.Item.DoesNotExist:
             item = models.Item()
             item.cart = self.cart
             item.product = product
             item.unit_price = unit_price
             item.quantity = quantity
-            item.size_id = size.pk
+            item.stock_id = stock.pk
             item.save()
         else:
             item.quantity += quantity

@@ -62,7 +62,7 @@ class Item(models.Model):
     # product as generic relation
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    size = models.ForeignKey(Stock)
+    stock = models.ForeignKey(Stock)
 
     objects = ItemManager()
 

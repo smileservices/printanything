@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render_to_response
 from product.models import Art, Support, Stock
-from .proxy import CartProxy
+from .proxy import CartProxy, ItemDoesNotExist, StockEmpty
 
 
 def add_to_cart(request):
@@ -13,9 +13,11 @@ def add_to_cart(request):
         price = product.unit_price + stock.support.unit_price
         try:
             cart.add(product, stock, price, quantity)
-            res = True
-        except:  # todo handle multiple exceptions
-            res = False
+            res = 'Successfully selected product to your shopping cart!'
+        except ItemDoesNotExist:
+            res = 'Something went very wrong! The selected product could not be added to your cart because it doesn\'t exist!'
+        except StockEmpty as e:
+            res = 'We\'re sorry, but it seems that the requested {}\'s stock is empty!'.format(str(e))
         return JsonResponse(dict(result=res))
 
 
