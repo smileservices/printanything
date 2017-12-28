@@ -13,8 +13,8 @@
         <tr>
             <td>{{ item.product.name }}</td>
             <td>{{ item.quantity }}</td>
-            <td>{{ item.size.support }}</td>
-            <td>{{ item.size }}</td>
+            <td>{{ item.stock.support }}</td>
+            <td>{{ item.stock.size }}</td>
             <td>{{ item.total_price }}</td>
             <td><a href="{{ item.get_remove_from_cart_url }}">Remove</a></td>
         </tr>

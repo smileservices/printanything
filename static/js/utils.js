@@ -61,6 +61,26 @@ var cart = {
             'complete': complete,
         })
     },
-    'retrieve_cart': function(){
+    'get_cart_content': function(before, success){
+        before()
+        $.get('/cart/retrieve', success)
+    },
+    'refresh': function(){
+        var self = this
+        self.get_cart_content(function(){
+            $('header .cart').empty();
+            $('header .cart').append($('<ul class="cart-list animated fadeInUp">Please wait </ul>').append($('#spinner-holder').html()));
+        }, function(data) {
+            var products = $('<ul></ul>');
+            $.each(data['items'], function(key, item) {
+                products.template(item, '#top_cart_product', true)
+            })
+            $('header .cart')
+                .template({
+                    'products': products.html(),
+                    'total': data['total'],
+                    'total_qty': data['total_qty'],
+                }, '#top_cart');
+        })
     }
 }

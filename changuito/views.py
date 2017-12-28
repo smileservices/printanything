@@ -35,3 +35,26 @@ def get_cart(request):
     cart = CartProxy(request)
     items = [i for i in cart]
     return render_to_response('cart.html', dict(cart=items))
+
+
+def get_cart_json(request):
+    cart = CartProxy(request)
+    items_list = []
+    total = cart.get_cart(request).total_price()
+    total_qty = cart.get_cart(request).total_quantity()
+    for item in cart:
+        items_list.append({
+            'name': item.product.name,
+            'support': item.stock.support.name + ' - ' + str(item.stock),
+            'photo': item.product.get_primary_image().get_thumb_small_url(),
+            'url': item.product.get_absolute_url(),
+            'qty': int(item.quantity),
+            'price': item.unit_price,
+            'remove_url': item.get_remove_from_cart_url()
+        })
+    return JsonResponse({
+        'items': items_list,
+        'total_qty': int(total_qty),
+        'total': total
+    })
+

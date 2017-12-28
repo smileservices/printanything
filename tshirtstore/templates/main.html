@@ -50,6 +50,28 @@
         <span class="text">{alert_text}</span>
     </div>
 </script>
+<script type="text/template" id="top_cart">
+<a href="{% url 'cart-inspect' %}" title="Cart"><i class="pe-7s-cart"></i><span class="cart_quantity">{total_qty}</span></a>
+<ul class="cart-list animated fadeInUp">
+    {!products}
+    <li class="total">
+        <span class="pull-right">Total: ${total}</span>
+        <a href="{% url 'cart-inspect' %}" class="btn btn-sm btn-cart">Cart</a>
+        <a href="{% url 'cart-inspect' %}" class="btn btn-sm btn-checkout">Checkout</a>
+    </li>
+</ul>
+</script>
+<script type="text/template" id="top_cart_product">
+    <li>
+        <a href="#" class="image"><img src="{!photo}" class="cart-thumb" alt=""></a>
+        <div class="cart-item-desc">
+            <h6><a href="{!url}">{!name}</a></h6>
+            <p>{support}</p>
+            <p>{!qty}x - <span class="price">${!price}</span></p>
+        </div>
+        <span class="dropdown-product-remove"><a href="{!remove_url}"><i class="fa fa-times fa-lx"></i></a></span>
+    </li>
+</script>
 {% block javascript %}
     <!-- ============= jQuery (Necessary for All JavaScript Plugins) ============= -->
     <script src={% static "js/jquery/jquery-2.2.4.min.js" %}></script>
@@ -61,7 +83,10 @@
     <script src={% static "js/plugins.js" %}></script>
     <!-- Active js -->
     <script src={% static "js/active.js" %}></script>
+    <script src="{% static 'jquery.templates/jquery.templates.js' %}"></script>
     <script src={% static "js/utils.js" %}></script>
+    <script src={% static "js/each_page.js" %}></script>
+
     <!-- Active js -->
 {% endblock javascript %}
 {% block custom_javascript %}{% endblock custom_javascript %}

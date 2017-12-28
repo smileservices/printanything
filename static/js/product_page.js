@@ -127,6 +127,7 @@ $(document).ready(function(){
             alert_box.hide('#add_to_cart_alert_box')
             alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', data.result)
         }, function(data) {
+            cart.refresh()
         })
     })
 })

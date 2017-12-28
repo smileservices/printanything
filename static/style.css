@@ -60,6 +60,16 @@
         background-color: black
     }
 
+
+/*
+    CART DROPDOWN
+*/
+
+header .dropdown-product-remove {
+    float: right;
+    margin-top: -20px;
+}
+
 /*
     UTILS
 */
