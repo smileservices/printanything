@@ -90,8 +90,9 @@ class CartProxy(MiddlewareMixin):
         else:
             item.quantity += quantity
             item.save()
-            stock.stock -= quantity
-            stock.save()
+            if stock.stock > 0:
+                stock.stock -= quantity
+                stock.save()
         return item
 
     def remove_item(self, item_id):
