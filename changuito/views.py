@@ -47,7 +47,7 @@ def update_cart(request):
                 cart_proxy.update(item_id, qty)
             for item_id in json.loads(request.POST['remove']):
                 cart_proxy.remove_item(item_id)
-            result = True
+            result = 'Cart updated successfully!'
         except StockEmpty as e:
             result = str(e)
         except ItemDoesNotExist as e:

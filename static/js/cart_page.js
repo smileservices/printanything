@@ -26,16 +26,17 @@ $(document).ready(function(){
 
     $('.cart-footer a.update_cart').click(function(e){
         e.preventDefault();
+        alert_box.hide()
+        alert_box.show_message('#cart_alert_box', 'alert-info', 'Updating cart, please wait ...', true)
         $.post($(this).attr('data-url'), {
                 'qty': JSON.stringify(update_cart['qty']),
                 'remove': JSON.stringify(update_cart['remove']),
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
         }, function(data){
-            if (data['result'] == true) {
-                location.reload()
-            } else {
-                alert(data['result'])
-            }
+            //show result
+            alert_box.hide()
+            alert_box.show_message('#cart_alert_box', 'alert-info', data['result'])
+            cart.refresh()
         })
     })
 
