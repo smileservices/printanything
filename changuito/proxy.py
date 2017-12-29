@@ -8,7 +8,6 @@ try:
 except ImportError:
     from datetime import datetime as timezone
 
-
 CART_ID = 'CART-ID'
 
 
@@ -27,9 +26,9 @@ class CartDoesNotExist(Exception):
 class UserDoesNotExist(Exception):
     pass
 
+
 class StockEmpty(Exception):
     pass
-
 
 
 class CartProxy(MiddlewareMixin):
@@ -71,7 +70,7 @@ class CartProxy(MiddlewareMixin):
 
     def add(self, product, stock, unit_price, quantity=1):
         if stock.stock == 0:
-                raise StockEmpty
+            raise StockEmpty
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
@@ -101,13 +100,18 @@ class CartProxy(MiddlewareMixin):
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
 
-    def update(self, product, quantity, *args):
+    def update(self, id, quantity, *args):
         try:
             item = models.Item.objects.get(cart=self.cart,
-                                           object_id=product.id,
-                                           content_type=product.content_type)
-            item.quantity = quantity
-            item.save()
+                                           id=id)
+            prev_qty = item.quantity
+            if int(quantity) <= item.stock.stock + prev_qty:
+                item.quantity = quantity
+                item.save()
+                item.stock.stock -= prev_qty - int(quantity)
+                item.stock.save()
+            else:
+                raise StockEmpty('Too many products chosen for {}. Only {} left in stock!'.format(str(item.stock), item.stock.stock))
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
         return self.cart

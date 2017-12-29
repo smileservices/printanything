@@ -26,7 +26,11 @@ $(document).ready(function(){
 
     $('.cart-footer a.update_cart').click(function(e){
         e.preventDefault();
-        $.post($(this).attr('data-url'), function(data){
+        $.post($(this).attr('data-url'), {
+                'qty': JSON.stringify(update_cart['qty']),
+                'remove': JSON.stringify(update_cart['remove']),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        }, function(data){
             if (data['result'] == true) {
                 location.reload()
             } else {

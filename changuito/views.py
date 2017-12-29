@@ -1,8 +1,8 @@
+import json
 from django.http import JsonResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from product.models import Art, Support, Stock
 from .proxy import CartProxy, ItemDoesNotExist, StockEmpty
-
 
 def add_to_cart(request):
     if request.method == 'POST':
@@ -38,16 +38,24 @@ def get_cart(request):
     for i in cart_proxy:
         items.append(i)
         cart_total += i.total_price
-    return render_to_response('changuito/cart.html', dict(section='Cart', cart=items, cart_total=cart_total))
+    return render(request, 'changuito/cart.html', dict(section='Cart', cart=items, cart_total=cart_total))
 
 
 def update_cart(request):
     if request.method == 'POST':
+        #return result: error or result: true
         cart_proxy = CartProxy(request)
-        #todo handle new qty > available stock for art/support
-        #todo handle remove item
-        #todo handle update qty
-        #todo return result: error or result: true
+        try:
+            for item_id, qty in json.loads(request.POST['qty']).items():
+                cart_proxy.update(item_id, qty)
+            for item_id in json.loads(request.POST['remove']):
+                cart_proxy.remove_item(item_id)
+            result = True
+        except StockEmpty as e:
+            result = str(e)
+        except ItemDoesNotExist as e:
+            result = 'Something went wrong! An item you submitted does not exist in the cart!'
+        return JsonResponse(dict(result=result))
 
 
 
