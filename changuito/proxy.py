@@ -69,8 +69,8 @@ class CartProxy(MiddlewareMixin):
         return cart
 
     def add(self, product, stock, unit_price, quantity=1):
-        if stock.stock == 0:
-            raise StockEmpty
+        if (stock.stock != -1) and (stock.stock - int(quantity) < 0):
+            raise StockEmpty(stock)
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
@@ -87,16 +87,20 @@ class CartProxy(MiddlewareMixin):
             item.stock_id = stock.pk
             item.save()
         else:
-            item.quantity += quantity
+            item.quantity += int(quantity)
             item.save()
-            if stock.stock > 0:
-                stock.stock -= quantity
-                stock.save()
+        stock.stock -= int(quantity)
+        stock.save()
         return item
 
     def remove_item(self, item_id):
         try:
-            self.cart.item_set.get(id=item_id).delete()
+            item = models.Item.objects.get(cart=self.cart,
+                                           id=item_id)
+            if item.stock.stock != -1:
+                item.stock.stock += item.quantity
+                item.stock.save()
+            item.delete()
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
 
@@ -108,7 +112,7 @@ class CartProxy(MiddlewareMixin):
             if int(quantity) <= item.stock.stock + prev_qty:
                 item.quantity = quantity
                 item.save()
-                item.stock.stock -= prev_qty - int(quantity)
+                item.stock.stock -= int(quantity) - prev_qty
                 item.stock.save()
             else:
                 raise StockEmpty('Too many products chosen for {}. Only {} left in stock!'.format(str(item.stock), item.stock.stock))

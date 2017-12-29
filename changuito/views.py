@@ -17,17 +17,14 @@ def add_to_cart(request):
         except ItemDoesNotExist:
             res = 'Something went very wrong! The selected product could not be added to your cart because it doesn\'t exist!'
         except StockEmpty as e:
-            res = 'We\'re sorry, but it seems that the requested {}\'s stock is empty!'.format(str(e))
+            res = 'We\'re sorry, but it seems that we don\'t have enough stock for {}!'.format(str(e))
         return JsonResponse(dict(result=res))
 
 
 def remove_from_cart(request, item_id):
     cart = request.cart
-    try:
-        cart.remove_item(item_id)
-        res = True
-    except:  # todo handle multiple exceptions
-        res = False
+    cart.remove_item(item_id)
+    res = True
     return JsonResponse(dict(result=res))
 
 
