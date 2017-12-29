@@ -1,0 +1,75 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    {% block breadcrumos %}
+        {% include "changuito/breadcrumbs.html" %}
+    {% endblock breadcrumos %}
+
+    <div class="cart_area section_padding_100 clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="cart-table clearfix">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th><i class="fa fa-trash-o" aria-hidden="true"></i></th>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for item in cart %}
+                                <tr id="item_{{ item.id }}">
+                                    <td class="action"><a class="remove_item" href="#" data-id="{{ item.id }}"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+                                    <td class="cart_product_img">
+                                        <a href="#"><img src="{{ item.product.get_primary_image.get_thumb_small_url }}" alt="Product"></a>
+                                    </td>
+                                    <td class="cart_product_desc">
+                                        <h5>{{ item.product.name }} on {{ item.stock.support }} ({{ item.stock }})</h5>
+                                    </td>
+                                    <td class="price"><span>$</span><span class="number">{{ item.unit_price }}</span></td>
+                                    <td class="qty">
+                                        <div class="quantity">
+                                            <input type="number" data-id="{{ item.id }}" class="qty-text" id="qty-3" step="1" min="1" max="99" name="quantity_{{ item.id }}" value="{{ item.quantity|floatformat:"0" }}">
+                                        </div>
+                                    </td>
+                                    <td class="total_price"><span>$</span><span class="number">{{ item.total_price }}</span></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                            <tfoot>
+                                <tr id="total">
+                                    <td colspan="5"><strong>Total</strong></td>
+                                    <td colspan="4"><strong>$<span class="number">{{ cart_total }}</span></strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="cart-footer d-flex mt-30">
+                        <div class="back-to-shop w-50">
+                        </div>
+                        <div class="update-checkout w-50 text-right">
+                            <a href="#" class="update_cart" data-url="{% url 'update-cart' %}">Update Cart</a>
+                            <a href="{% url 'checkout' %}">Checkout</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% csrf_token %}
+
+{% endblock %}
+{% block custom_javascript %}
+    <script src="{% static 'js/cart_page.js'%}"></script>
+{% endblock custom_javascript %}

@@ -32,9 +32,23 @@ def remove_from_cart(request, item_id):
 
 
 def get_cart(request):
-    cart = CartProxy(request)
-    items = [i for i in cart]
-    return render_to_response('cart.html', dict(cart=items))
+    cart_proxy = CartProxy(request)
+    items = []
+    cart_total = 0
+    for i in cart_proxy:
+        items.append(i)
+        cart_total += i.total_price
+    return render_to_response('changuito/cart.html', dict(section='Cart', cart=items, cart_total=cart_total))
+
+
+def update_cart(request):
+    if request.method == 'POST':
+        cart_proxy = CartProxy(request)
+        #todo handle new qty > available stock for art/support
+        #todo handle remove item
+        #todo handle update qty
+        #todo return result: error or result: true
+
 
 
 def get_cart_json(request):

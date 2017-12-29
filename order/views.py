@@ -12,7 +12,7 @@ def checkout(request):
     data = {
         'cart': cart
     }
-    return render(request, 'checkout.html', data)
+    return render(request, 'order/checkout.html', data)
 
 
 def pay(request):

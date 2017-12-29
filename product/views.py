@@ -18,7 +18,7 @@ def detail(request, slug):
         'product': get_object_or_404(Art, slug=slug),
         'supports': Support.get_available(),
     }
-    return render(request, 'detail/main.html', data)
+    return render(request, 'product/detail.html', data)
 
 
 def support_stock(request, support_id):
@@ -52,4 +52,4 @@ def search(request, term):
     data = {
         'products': products
     }
-    return render(request, 'list.html', data)
+    return render(request, 'product/list.html', data)

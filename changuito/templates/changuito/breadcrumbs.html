@@ -4,9 +4,8 @@
             <div class="row">
                 <div class="col-12">
                     <ol class="breadcrumb d-inline-block">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Products</a></li>
-                        <li class="breadcrumb-item active">{{ product.name }}</li>
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item active">{{ section }}</li>
                     </ol>
                 </div>
             </div>
