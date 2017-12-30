@@ -4,6 +4,7 @@
         - Order Placement
         - Payment
         - Order processing (place to vendor/status/shipment)
+        - Implement cart/order reservation limited time
     - Implement UI
 
 # Fixtures:

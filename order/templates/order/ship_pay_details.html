@@ -1,0 +1,73 @@
+{% load static %}
+<div class="checkout_details_area mt-50 clearfix">
+    <h5>Contact Info</h5>
+    <form action="#" method="post">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <input type="email" class="form-control" id="email_address" placeholder="Email Address" value="">
+            </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="checkout_details_area mt-30">
+            <h5>Shipping Info</h5>
+            <div class="row shipping_input_field">
+                <div class="col-md-12 mb-3">
+                    <input type="text" class="form-control" id="first-name" placeholder="First Name" value="" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <input type="text" class="form-control" id="street-address" placeholder="Street Address" value="">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <input type="text" class="form-control" id="apartment-suite" placeholder="Apartment, suite, unit etc" value="">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="text" class="form-control" id="ship-city" placeholder="Town/City" value="">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="ship-state" placeholder="State" value="">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <select class="custom-select d-block w-100" id="ship-country">
+                        <option value="usa">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ger">Germany</option>
+                        <option value="fra">France</option>
+                        <option value="ind">India</option>
+                        <option value="aus">Australia</option>
+                        <option value="bra">Brazil</option>
+                        <option value="cana">Canada</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="ship-postcode" placeholder="Postcode / Zip" value="">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="number" class="form-control" id="phone-number" placeholder="Phone number" min="0" value="">
+                </div>
+            </div>
+        </div>
+        <!-- Payment -->
+        <div class="checkout_details_area mt-30">
+            <h5>Payment</h5>
+            <div class="payment">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" checked="checked">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description small-text"><img src="{% static 'img/payment-method/paypal_logo.png' %}"></span>
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="checkout-confirm mt-30 mb-50">
+    <button class="btn btn-success btn-block">Place your order</button>
+    <p class="small-text mt-30">By clicking 'Place Your Order' you agree to our <a href="/policies/privacy" target="_blank">privacy policy</a> and <a href="/policies/terms" target="_blank">terms of service</a>. You also agree to receive periodic email updates, discounts, and special offers.</p>
+    <label class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input">
+      <span class="custom-control-indicator"></span>
+      <span class="custom-control-description small-text">I would like to receive emails about new products directly from these sellers or any licensed partners</span>
+    </label>
+</div>

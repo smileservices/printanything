@@ -70,6 +70,44 @@ header .dropdown-product-remove {
     margin-top: -20px;
 }
 
+
+/*
+    CHECKOUT
+*/
+.checkout_details_area a.edit_cart {
+    float: right;
+    font-size: 14px;
+    color: #009688;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.checkout-confirm .small-text {
+    font-size: 12px;
+    color: #6a6f72;
+    line-height: 1.29;
+}
+
+.cart_product_desc .art_name {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    color: #4b5453;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cart_product_desc .support_name {
+    font-size: 15px;
+    text-align: left;
+    color: #9c9a9a;
+}
+
+.checkout_details_area .payment img {
+    height: 22px;
+    max-width: 100%;
+}
+
 /*
     UTILS
 */

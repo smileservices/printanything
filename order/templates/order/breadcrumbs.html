@@ -1,0 +1,14 @@
+{% block breadcrumbs %}
+    <div class="breadcumb_area section_padding_50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ol class="breadcrumb d-inline-block">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item active">{{ section }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock breadcrumbs %}

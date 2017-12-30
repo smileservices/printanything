@@ -1,0 +1,33 @@
+<div class="checkout_details_area mt-50 clearfix">
+    <h5>Order summary <a class="edit_cart" href="{% url 'cart-inspect' %}">Edit Cart</a></h5>
+    <div class="cart-table clearfix">
+    <table class="table table-responsive">
+        <tbody>
+
+            {% for item in cart %}
+            <tr id="item_{{ item.id }}">
+                <td class="cart_product_img">
+                    <a href="#"><img class="img img-thumbnail" src="{{ item.product.get_primary_image.get_thumb_small_url }}" alt="Product"></a>
+                </td>
+                <td class="cart_product_desc">
+                    <p class="art_name">{{ item.product.name }}</p>
+                    <p class="support_name">{{ item.stock.support }} ({{ item.stock }})</p>
+                </td>
+                <td class="price"><span>{{ item.quantity|floatformat:"0" }}x </span><span>$</span><span class="number">{{ item.unit_price }}</span></td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+        <tfoot>
+            <tr class="shipping">
+                <td colspan="2">Shipping</td>
+                <td>$<span class="number">{{ shipping }}</span></td>
+            </tr>
+            <tr class="total">
+                <td colspan="2"><strong>Total</strong></td>
+                <td colspan="1"><strong>$<span class="number">{{ cart_total }}</span></strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</div>
