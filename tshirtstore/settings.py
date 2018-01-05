@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'artist.apps.ArtistConfig',
     'gallery.apps.GalleryConfig',
     'order.apps.OrderConfig',
+    'shipping.apps.ShippingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'changuito',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -136,4 +138,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+PAYPAL_TEST = True
 

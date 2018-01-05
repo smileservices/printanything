@@ -108,6 +108,11 @@ header .dropdown-product-remove {
     max-width: 100%;
 }
 
+.checkout_details_area .shipping .shipping-description {
+    color: #a6a8a6;
+    font-size: 13px;
+}
+
 /*
     UTILS
 */

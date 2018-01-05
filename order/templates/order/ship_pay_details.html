@@ -1,10 +1,10 @@
 {% load static %}
 <div class="checkout_details_area mt-50 clearfix">
     <h5>Contact Info</h5>
-    <form action="#" method="post">
+    <form action="{% url 'place-order' %} " method="post">
         <div class="row">
             <div class="col-md-12 mb-3">
-                <input type="email" class="form-control" id="email_address" placeholder="Email Address" value="">
+                <input type="email" class="form-control" id="email_address" name="email" placeholder="Email Address" value="">
             </div>
         </div>
 
@@ -12,23 +12,23 @@
         <div class="checkout_details_area mt-30">
             <h5>Shipping Info</h5>
             <div class="row shipping_input_field">
-                <div class="col-md-12 mb-3">
-                    <input type="text" class="form-control" id="first-name" placeholder="First Name" value="" required>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <input type="text" class="form-control" id="street-address" placeholder="Street Address" value="">
-                </div>
-                <div class="col-md-12 mb-3">
-                    <input type="text" class="form-control" id="apartment-suite" placeholder="Apartment, suite, unit etc" value="">
+                <div class="col-md-6 mb-3">
+                    <input type="text" class="form-control" id="full-name" placeholder="Full Name" name="name" value="" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <input type="text" class="form-control" id="ship-city" placeholder="Town/City" value="">
+                    <input type="number" class="form-control" id="phone-number" placeholder="Phone number" min="0" name="phone" value="">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <input type="text" class="form-control" id="street-address" placeholder="Address" name="address" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="text" class="form-control" id="ship-city" placeholder="Town/City" name="city" value="" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" id="ship-state" placeholder="State" value="">
+                    <input type="text" class="form-control" id="ship-state" placeholder="State" name="state" value="" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <select class="custom-select d-block w-100" id="ship-country">
+                    <select class="custom-select d-block w-100" id="ship-country" name="country">
                         <option value="usa">United States</option>
                         <option value="uk">United Kingdom</option>
                         <option value="ger">Germany</option>
@@ -41,14 +41,29 @@
                 </div>
 
                 <div class="col-md-6">
-                    <input type="text" class="form-control" id="ship-postcode" placeholder="Postcode / Zip" value="">
+                    <input type="text" class="form-control" id="ship-postcode" placeholder="Postcode / Zip" name="zip" value="" required>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" cols="30" rows="3" name="shipping_details" placeholder="Details for the delivery (optional)"></textarea>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <input type="number" class="form-control" id="phone-number" placeholder="Phone number" min="0" value="">
-                </div>
             </div>
         </div>
+        <!-- Shipping -->
+        <div class="checkout_details_area mt-30">
+            <h5>Shipping</h5>
+            {% for option in shipping_options %}
+            <div class="shipping">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="shipping" value="{{ option.id }}">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description small-text">{{ option.name }} ${{ option.price }}</span>
+                </label>
+                <span class="shipping-description">{{ option.description }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% csrf_token %}
         <!-- Payment -->
         <div class="checkout_details_area mt-30">
             <h5>Payment</h5>
@@ -60,7 +75,7 @@
                 </label>
             </div>
         </div>
-    </form>
+    <input type="hidden" name="customer_check_url" value="{% url 'check-user' %}">
 </div>
 <div class="checkout-confirm mt-30 mb-50">
     <button class="btn btn-success btn-block">Place your order</button>
@@ -71,3 +86,4 @@
       <span class="custom-control-description small-text">I would like to receive emails about new products directly from these sellers or any licensed partners</span>
     </label>
 </div>
+    </form>

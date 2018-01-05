@@ -3,5 +3,5 @@ from django.contrib import admin
 from customer import views
 
 urlpatterns = [
-    # url(r'^/', views.),
+    url(r'^email', views.check_email, name='check-user'),
 ]
