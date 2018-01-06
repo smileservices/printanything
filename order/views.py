@@ -2,11 +2,15 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from paypal.standard.forms import PayPalPaymentsForm
 from order.models import Order, OrderDetails, ShippingDetails
 from customer.models import Customer
 from contact.models import Contact
 from changuito.proxy import CartProxy
 from shipping.models import Shipping
+from tshirtstore import settings
+from django.urls import reverse
+
 
 # Create your views here.
 
@@ -42,13 +46,40 @@ def place_order(request):
         'status': 'just created',
         'contact': contact
     })
-    # redirect to paypal
+    # redirect to
+    return process_payment(request, order)
+
+
+def process_payment(request, order):
+    paypal_dict = {
+        "business": settings.PAYPAL_RECEIVER_EMAIL,
+        "amount": order.calculate_price(),
+        "item_name": order.id,
+        "invoice": order.id,
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return_url": request.build_absolute_uri(reverse('payment-return')),
+        "cancel_return": request.build_absolute_uri(reverse('payment-cancel')),
+    }
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    context = {"form": form}
+    return render(request, "payment/payment_proceed.html", context)
 
 
 def payment_complete(request):
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment'
     })
+
+
+def payment_canceled(request):
+    return render(request, 'payment/payment_canceled.html', {
+        'section': 'Payment'
+    })
+
+
+def payment_ipn(request):
+    return True
 
 
 def __get_customer_contact(request):

@@ -54,8 +54,8 @@
             <h5>Shipping</h5>
             {% for option in shipping_options %}
             <div class="shipping">
-                <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" name="shipping" value="{{ option.id }}">
+                <label class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" {% if forloop.first %} checked="checked" {% endif %}  name="shipping" data-price="{{ option.price }}" value="{{ option.id }}">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description small-text">{{ option.name }} ${{ option.price }}</span>
                 </label>
@@ -86,4 +86,4 @@
       <span class="custom-control-description small-text">I would like to receive emails about new products directly from these sellers or any licensed partners</span>
     </label>
 </div>
-    </form>
+</form>

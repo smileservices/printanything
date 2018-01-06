@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    {% block breadcrumos %}
+        {% include "order/breadcrumbs.html" %}
+    {% endblock breadcrumos %}
+
+
+    <div class="checkout_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Proceed to payment</h3>
+                    {{ form.render }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block custom_javascript %}
+    <script src="{% static 'js/order_checkout.js' %}"></script>
+{% endblock custom_javascript %}
+

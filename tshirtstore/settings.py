@@ -140,4 +140,5 @@ STATICFILES_DIRS = [
 ]
 
 PAYPAL_TEST = True
+PAYPAL_RECEIVER_EMAIL = 'vladimir.gorea@gmail.com'
 

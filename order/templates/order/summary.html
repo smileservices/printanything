@@ -1,4 +1,4 @@
-<div class="checkout_details_area mt-50 clearfix">
+<div class="checkout_summary_area mt-50 clearfix">
     <h5>Order summary <a class="edit_cart" href="{% url 'cart-inspect' %}">Edit Cart</a></h5>
     <div class="cart-table clearfix">
     <table class="table table-responsive">
@@ -21,7 +21,7 @@
         <tfoot>
             <tr class="shipping">
                 <td colspan="2">Shipping</td>
-                <td>$<span class="number">{{ shipping }}</span></td>
+                <td>$<span class="number"></span></td>
             </tr>
             <tr class="total">
                 <td colspan="2"><strong>Total</strong></td>

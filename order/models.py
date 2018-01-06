@@ -47,13 +47,29 @@ class Order(models.Model):
             status=shipping_details['status'],
         )
         shipping.save()
+        #add shipping costs to order
+        detail_shipping = OrderDetails(
+            name='Shipping',
+            art=art,
+            support=support,
+            size=stock.size,
+            colour=stock.colour,
+            unit_price=item.unit_price,
+            qty=item.quantity,
+            order=self,
+        )
         return self
 
     def mark_shipped(self):
         return self
 
     def calculate_price(self):
-        return self
+        total_price = 0
+        for item in self.orderdetails_set.all():
+            total_price += item.calculate_price()
+        #add shipping cost
+        total_price += self.shippingdetails_set.get().cost
+        return total_price
 
 
 class Payment(models.Model):
