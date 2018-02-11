@@ -3,13 +3,15 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from paypal.standard.forms import PayPalPaymentsForm
-from order.models import Order, OrderDetails, ShippingDetails
+from order.models import Order, OrderDetails, ShippingDetails, Payment
 from customer.models import Customer
 from contact.models import Contact
 from changuito.proxy import CartProxy
 from shipping.models import Shipping
 from tshirtstore import settings
 from django.urls import reverse
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
 
 
 # Create your views here.
@@ -55,6 +57,7 @@ def process_payment(request, order):
         "business": settings.PAYPAL_RECEIVER_EMAIL,
         "amount": order.calculate_price(),
         "item_name": order.id,
+        "custom": order.id,
         "invoice": order.id,
         "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
         "return_url": request.build_absolute_uri(reverse('payment-return')),
@@ -78,8 +81,37 @@ def payment_canceled(request):
     })
 
 
-def payment_ipn(request):
-    return True
+#TODO Must test this when online
+def show_me_the_money(sender, **kwargs):
+    ipn_obj = sender
+    if ipn_obj.payment_status == ST_PP_COMPLETED:
+        if ipn_obj.receiver_email != settings.PAYPAL_RECEIVER_EMAIL:
+            # Not a valid payment
+            return
+        # Retrieve order
+        order = Order.objects.get(id=ipn_obj.custom)
+        if order is None:
+            return
+        if ipn_obj.mc_gross == order.calculate_price() and ipn_obj.mc_currency == 'USD':
+            # add to valid payments
+            payment = Payment(
+                id=ipn_obj.txn_id, #yes?
+                type='paypal',
+                amount=ipn_obj.mc_gross,
+                status='completed',
+                date=ipn_obj.payment_date,
+                order=order
+            )
+            payment.save()
+            order.status = 'Payment received'
+            order.save()
+        else:
+            return
+    else:
+        pass
+
+
+valid_ipn_received.connect(show_me_the_money)
 
 
 def __get_customer_contact(request):

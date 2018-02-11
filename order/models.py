@@ -6,7 +6,6 @@ from customer.models import Customer as Customer
 from contact.models import Contact
 from product.models import Art, Support
 from vendor.models import Size, Colour
-from changuito.models import Cart
 
 try:
     from django.utils import timezone
@@ -61,6 +60,11 @@ class Order(models.Model):
         return self
 
     def mark_shipped(self):
+        self.status = 'Shipped'
+        self.save()
+        shipping = self.shippingdetails_set.get()
+        shipping.status = 'Shipped'
+        shipping.save()
         return self
 
     def calculate_price(self):
