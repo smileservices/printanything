@@ -1,0 +1,4 @@
+django_paypal==0.4.1
+Django==1.11.3
+Pillow==5.0.0
+paypal==1.2.5
