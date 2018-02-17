@@ -11,14 +11,21 @@ try:
     from django.utils import timezone
 except ImportError:
     from datetime import datetime as timezone
+
+
 # Create your models here.
+
+
+class OrderStatus(models.Model):
+    text = models.CharField(max_length=255, default="unprocessed")
 
 
 class Order(models.Model):
     placed = models.DateTimeField(verbose_name='creation date',
-                                         default=timezone.now)
+                                  default=timezone.now)
     customer = models.ForeignKey(Customer)
-    status = models.CharField(max_length=255, default='Waiting for payment processor response')
+    status = models.ForeignKey(OrderStatus, default=1)
+    info = models.TextField(default="")
 
     def place_order(self, cart, shipping_details):
         # convert cart into order
@@ -46,7 +53,7 @@ class Order(models.Model):
             status=shipping_details['status'],
         )
         shipping.save()
-        #add shipping costs to order
+        # add shipping costs to order
         detail_shipping = OrderDetails(
             name='Shipping',
             art=art,
@@ -71,16 +78,19 @@ class Order(models.Model):
         total_price = 0
         for item in self.orderdetails_set.all():
             total_price += item.calculate_price()
-        #add shipping cost
+        # add shipping cost
         total_price += self.shippingdetails_set.get().cost
         return total_price
+
+    def __str__(self):
+        return "{} order - {:.2f}".format(self.status.text.title(), self.calculate_price())
 
 
 class Payment(models.Model):
     id = models.CharField(primary_key=True, max_length=255)
     type = models.CharField(max_length=255)
     amount = models.FloatField()
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=128)
     date = models.DateTimeField()
     order = models.ForeignKey(Order)
 

@@ -9,6 +9,7 @@
     - Implement UI
         - redirect to paypal
         - payment success/cancel
+    - Add option to act as if no stock is needed (something like unlimited stock)
 
 # Fixtures:
  - Useful for populating the database

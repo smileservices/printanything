@@ -81,24 +81,28 @@ def payment_canceled(request):
     })
 
 
+class PaymentException(Exception):
+    pass
+
+
 #TODO Must test this when online
 def show_me_the_money(sender, **kwargs):
     ipn_obj = sender
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         if ipn_obj.receiver_email != settings.PAYPAL_RECEIVER_EMAIL:
             # Not a valid payment
-            return
+            raise PaymentException('Invalid payment: receiver email does not match!')
         # Retrieve order
         order = Order.objects.get(id=ipn_obj.custom)
         if order is None:
-            return
+            raise PaymentException('Payment received for order that doesn\'t exist!')
         if ipn_obj.mc_gross == order.calculate_price() and ipn_obj.mc_currency == 'USD':
             # add to valid payments
             payment = Payment(
                 id=ipn_obj.txn_id, #yes?
                 type='paypal',
                 amount=ipn_obj.mc_gross,
-                status='completed',
+                status='complete',
                 date=ipn_obj.payment_date,
                 order=order
             )
