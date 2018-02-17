@@ -88,20 +88,23 @@ class Order(models.Model):
     def get_status(self):
         return self.status.text.title()
 
-
     def get_id(self):
         return self.id
+
+    def get_payment_status(self):
+        return self.payment_set.get().status.upper()
 
     get_id.short_description = 'ID'
     calculate_price.short_description = 'Price'
     get_status.short_description = 'Status'
+    get_payment_status.short_description = 'Payment Status'
 
 
 class Payment(models.Model):
     id = models.CharField(primary_key=True, max_length=255)
     type = models.CharField(max_length=255)
     amount = models.FloatField()
-    status = models.CharField(max_length=128)
+    status = models.CharField(max_length=128, verbose_name="Payment Status")
     date = models.DateTimeField()
     order = models.ForeignKey(Order)
 
