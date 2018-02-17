@@ -19,6 +19,9 @@ except ImportError:
 class OrderStatus(models.Model):
     text = models.CharField(max_length=255, default="unprocessed")
 
+    def __str__(self):
+        return self.text.title()
+
 
 class Order(models.Model):
     placed = models.DateTimeField(verbose_name='creation date',
@@ -82,8 +85,16 @@ class Order(models.Model):
         total_price += self.shippingdetails_set.get().cost
         return total_price
 
-    def __str__(self):
-        return "{} order - {:.2f}".format(self.status.text.title(), self.calculate_price())
+    def get_status(self):
+        return self.status.text.title()
+
+
+    def get_id(self):
+        return self.id
+
+    get_id.short_description = 'ID'
+    calculate_price.short_description = 'Price'
+    get_status.short_description = 'Status'
 
 
 class Payment(models.Model):
