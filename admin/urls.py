@@ -18,10 +18,13 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.conf.urls.static import static
 from django.conf import settings
-from django.views import generic
-from admin import views
-from vendor.models import Vendor
 from django.urls import reverse_lazy
+
+from admin import views
+from django.views import generic
+
+from vendor.models import Vendor
+from artist.models import Artist
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {
@@ -36,8 +39,12 @@ urlpatterns = [
 
 # USERS
 urlpatterns += [
-    url(r'^users/create$', views.CreateUser.as_view(), name='create_user'),
-    url(r'^users/edit/(?P<pk>[\d])', views.UpdateUser.as_view(), name='update_user'),
+    url(r'^users/create$', views.CreateUser.as_view(), name='create-user'),
+    url(r'^users/edit/(?P<pk>[\d])', views.UpdateUser.as_view(), name='update-user'),
+    url(r'^users/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=User,
+        success_url=reverse_lazy('admin-users')
+    ), name="delete-user"),
     url(r'^users', generic.ListView.as_view(
         queryset=User.objects.all(),
         template_name='admin/user/list.html'
@@ -56,6 +63,20 @@ urlpatterns += [
         queryset=Vendor.objects.all(),
         template_name='admin/vendor/list.html'
     ), name='admin-vendors'),
+]
+
+# ARTISTS
+urlpatterns += [
+    url(r'^artists/create$', views.CreateArtist.as_view(), name='create-artist'),
+    url(r'^artists/edit/(?P<pk>[\d])', views.UpdateArtist.as_view(), name='update-artist'),
+    url(r'^artists/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=Artist,
+        success_url=reverse_lazy('admin-artists')
+    ), name='delete-artist'),
+    url(r'^artists', generic.ListView.as_view(
+        queryset=Artist.objects.all(),
+        template_name='admin/artist/list.html'
+    ), name='admin-artists'),
 ]
 
 if settings.DEBUG:

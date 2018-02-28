@@ -15,24 +15,13 @@
                 <div class="table-responsive">
                     <table class="table no-margin">
                         <thead>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Staff</th>
-                            <th>Active</th>
-                            <th>Delete</th>
+                            <th>Name</th>
                         </thead>
-                        {% for user in object_list %}
+                        {% for artist in object_list %}
                             <tr>
-                                <td><a href="{% url 'update-user' pk=user.id %}">{{ user.username }}</a></td>
-                                <td>{{ user.first_name }}</td>
-                                <td>{{ user.last_name }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.is_staff | yesno:"Staff," }}</td>
-                                <td>{{ user.is_active | yesno:"Active,Inactive" }}</td>
+                                <td><a href="{% url 'update-artist' pk=artist.id %}">{{ artist.name }}</a></td>
                                 <td>
-                                    <form action="{% url "delete-user" pk=user.id %}" method="POST">
+                                    <form action="{% url "delete-artist" pk=artist.id %}" method="POST">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-flat btn-primary ink-reaction"><i class="md md-delete"></i></button>
                                     </form>
