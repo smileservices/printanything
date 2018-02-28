@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils.crypto import get_random_string
-
+from django.conf import settings
+import os
 
 def get_save_path(instance, filename):
     return "vendors/{0}_sizes.{1}".format(
@@ -20,6 +21,9 @@ class Vendor(models.Model):
 
     class Meta:
         verbose_name = 'Vendor'
+
+    def get_size_chart_url(self):
+        return os.path.join(self.sizes_chart.url)
 
 
 class Size(models.Model):

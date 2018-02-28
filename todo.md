@@ -1,15 +1,30 @@
 # TODO:
-    - Finish the order phase
-        - Order processing (place to vendor/status/shipment)
-        - Implement cart/order reservation limited time
-        - after clicking "place order"
-            - clear up cart
-            - send email with order
-        - admin order management
-    - Implement UI
-        - redirect to paypal
-        - payment success/cancel
-    - Add option to act as if no stock is needed (something like unlimited stock)
+- Finish the order phase
+    - Order processing (place to vendor/status/shipment)
+    - Implement cart/order reservation limited time
+    - after clicking "place order"
+        - clear up cart
+        - send email with order
+    - admin order management
+- Implement UI
+    - redirect to paypal
+    - payment success/cancel
+- Add option to act as if no stock is needed (something like unlimited stock)
+
+## USERS
+- admin users
+- regular users
+
+## ADMIN
+- notification for new orders
+- orders:
+    - list
+    - view
+    - edit
+
+## ORDER
+- email notifications
+- ticketing system
 
 # Fixtures:
  - Useful for populating the database
@@ -26,5 +41,3 @@ find . -path "*/migrations/*.pyc"  -delete
 
 # Plugins used:
  - Templating: https://github.com/petersirka/jquery.templates
-
-

@@ -15,19 +15,47 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.models import User
 from django.conf.urls.static import static
 from django.conf import settings
-
+from django.views import generic
 from admin import views
+from vendor.models import Vendor
+from django.urls import reverse_lazy
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {
         'template_name': 'admin/login.html',
-    }, name='login'),
+    }, name='admin-login'),
     url(r'^logout/$', auth_views.logout, {
         'next_page': '/'
     }, name='logout'),
-    url(r'^$', views.dashboard, name="dashboard"),
+    url(r'^$', views.dashboard, name="admin-dashboard"),
+    #todo add reset
+]
+
+# USERS
+urlpatterns += [
+    url(r'^users/create$', views.CreateUser.as_view(), name='create_user'),
+    url(r'^users/edit/(?P<pk>[\d])', views.UpdateUser.as_view(), name='update_user'),
+    url(r'^users', generic.ListView.as_view(
+        queryset=User.objects.all(),
+        template_name='admin/user/list.html'
+    ), name='admin-users'),
+]
+
+# VENDORS
+urlpatterns += [
+    url(r'^vendors/create$', views.CreateVendor.as_view(), name='create-vendor'),
+    url(r'^vendors/edit/(?P<pk>[\d])', views.UpdateVendor.as_view(), name='update-vendor'),
+    url(r'^vendors/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=Vendor,
+        success_url=reverse_lazy('admin-vendors')
+    ), name='delete-vendor'),
+    url(r'^vendors', generic.ListView.as_view(
+        queryset=Vendor.objects.all(),
+        template_name='admin/vendor/list.html'
+    ), name='admin-vendors'),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,39 @@
+{% extends 'admin/dashboard.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="text-primary">Vendors</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <th>Name</th>
+                            <th>Size Chart</th>
+                        </thead>
+                        {% for vendor in object_list %}
+                            <tr>
+                                <td><a href="{% url 'update-vendor' pk=vendor.id %}">{{ vendor.name }}</a></td>
+                                <td><a href="{{ vendor.get_size_chart_url }}">Size Chart</a></td>
+                                <td>
+                                    <form action="{% url "delete-vendor" pk=vendor.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-flat btn-primary ink-reaction"><i class="md md-delete"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
