@@ -4,7 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 from vendor.models import Vendor
 from artist.models import Artist
+from product.models import Art
+from gallery.models import Image
 
+from admin.widgets import BoostrapCheckbox, BoostrapFileInput
 
 class UserForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -24,3 +27,23 @@ class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist
         fields = ("name",)
+
+
+class ArtForm(forms.ModelForm):
+    ImagesFormSet = forms.inlineformset_factory(
+        Art,
+        Image,
+        fields=["relative_path", "primary"],
+        extra=1,
+        widgets={
+            "primary": BoostrapCheckbox(attrs={'field_name':'Primary'}),
+            "relative_path": BoostrapFileInput,
+        }
+    )
+
+    class Meta:
+        model = Art
+        fields = ("externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist","tags")
+
+
+

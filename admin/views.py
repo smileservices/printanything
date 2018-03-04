@@ -3,10 +3,11 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
-from admin.forms import UserForm, VendorForm, ArtistForm
+from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm
 from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
+from product.models import Art
 
 
 def dashboard(request):
@@ -111,4 +112,36 @@ class UpdateArtist(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         vendor = form.save()
+        return redirect(self.success_url)
+
+
+class CreateArt(LoginRequiredMixin, CreateView):
+    form_class = ArtForm
+    template_name = 'admin/art/art_form.html'
+    success_url = reverse_lazy('admin-vendors')
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(CreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Create Art'
+        context['submit_text'] = 'Art'
+        return context
+
+
+class UpdateArt(LoginRequiredMixin, UpdateView):
+    model = Art
+    form_class = ArtForm
+    template_name = 'admin/art/art_form.html'
+    success_url = reverse_lazy('admin-art')
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Update Art'
+        context['submit_text'] = 'Update'
+        # context['images_form'] = ArtForm.ImagesFormSet(instance=self.object)
+        context['images_form'] = ArtForm.ImagesFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        art = form.save()
         return redirect(self.success_url)

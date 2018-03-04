@@ -25,6 +25,7 @@ from django.views import generic
 
 from vendor.models import Vendor
 from artist.models import Artist
+from product.models import Art, Support
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {
@@ -79,5 +80,22 @@ urlpatterns += [
     ), name='admin-artists'),
 ]
 
+# ART
+urlpatterns += [
+    url(r'^art/create$', views.CreateArt.as_view(), name='create-art'),
+    url(r'^art/edit/(?P<pk>[\d])', views.UpdateArt.as_view(), name='update-art'),
+    url(r'^art/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=Art,
+        success_url=reverse_lazy('admin-art')
+    ), name='delete-art'),
+    url(r'^art', generic.ListView.as_view(
+        queryset=Art.objects.all(),
+        template_name='admin/art/list.html'
+    ), name='admin-art'),
+]
+
+#todo add supports
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

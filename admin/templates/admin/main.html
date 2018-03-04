@@ -17,6 +17,7 @@
 <link type="text/css" rel="stylesheet" href="{% static 'admin/css/theme-default/materialadmin.css' %}" />
 <link type="text/css" rel="stylesheet" href="{% static 'admin/css/theme-default/font-awesome.min.css' %}" />
 <link type="text/css" rel="stylesheet" href="{% static 'admin/css/theme-default/material-design-iconic-font.min.css' %}" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <link type="text/css" rel="stylesheet" href="{% static 'admin/css/style.css' %}" />
 <!-- END STYLESHEETS -->
 
@@ -45,7 +46,12 @@
         <script src="{% static 'admin/js/core/source/AppNavSearch.js' %}"></script>
         <script src="{% static 'admin/js/core/source/AppVendor.js' %}"></script>
         <script src="{% static 'admin/js/core/demo/Demo.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
         <!-- END JAVASCRIPT -->
-
+<script>
+    $(document).ready(function() {
+        $('select').select2();
+    });
+</script>
     </body>
 </html>
