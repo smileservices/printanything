@@ -21,6 +21,8 @@
     - list
     - view
     - edit
+- supports CRUD in vendor's view
+- vendor crud: image widget
 
 ## ORDER
 - email notifications

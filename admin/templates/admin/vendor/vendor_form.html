@@ -1,5 +1,6 @@
 {% extends 'admin/dashboard.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
     <div class="row">
@@ -14,11 +15,24 @@
 
                 {% for field in form %}
                     <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                        {% if field.name == 'sizes_chart' %}
+                            {% if field.value != ''%}
+                                <a href="{{ field.value.url }}">
+                                    <img class="img img-responsive thumbnail" src="{{ field.value.url }}">
+                                </a>
+                            {% else %}
+                                <div class="thumbnail">
+                                    <div class="alert alert-info">Upload an image</div>
+                                </div>
+                            {% endif %}
+                            {{ field.as_widget }}
+                    {% else %}
                         {{ field|add_class:'form-control' }}
                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {% for error in field.errors %}
                             <span class="error">{{ error }}</span>
                         {% endfor %}
+                    {% endif %}
                     </div>
                 {% endfor %}
                 <div class="card-actionbar-row">
