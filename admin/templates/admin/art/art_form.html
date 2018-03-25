@@ -21,6 +21,7 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
+                        {{ images_form.management_form }}
                         {% for form in images_form %}
                             {% include 'admin/gallery/images_form.html' with form=form %}
                         {% endfor %}

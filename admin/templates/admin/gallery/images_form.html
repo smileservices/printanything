@@ -1,6 +1,8 @@
 <div class="col-md-6 form-group">
 <div class="row">
     <div class="col-md-6">
+{#    {{ form.errors }}#}
+{#    {{ form.non_field_errors }}#}
     {% if form.instance.relative_path != '' %}
         <a href="{{ form.instance.get_thumb_small_url }}">
         <img class="img img-responsive thumbnail" src="{{ form.instance.get_thumb_small_url }}">
@@ -10,16 +12,18 @@
             <div class="alert alert-info">Upload an image</div>
         </div>
     {% endif %}
+            {% for error in form.relative_path.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
             {{ form.relative_path }}
     </div>
     <div class="col-md-6">
         {{ form.primary }}
         {{ form.DELETE }}
     </div>
-    {% for field in form %}
-        {% for error in field.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
+    {% for field in form.hidden_fields %}
+        {{ field }}
     {% endfor %}
+
 </div>
 </div>

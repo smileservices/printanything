@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.conf import settings
 from product.models import Art
+from django_cleanup.signals import cleanup_pre_delete
 
 
 # Create your models here.
@@ -28,6 +29,7 @@ class Image(models.Model):
     relative_path = models.ImageField(upload_to=get_save_path)
     art = models.ForeignKey(Art, on_delete=models.CASCADE, related_name='images', db_constraint=False)
     primary = models.BooleanField()
+    thumb_sizes = {'med': (600, 900), 'small': (600, 682), 'big': (800, 1128)}
 
     def get_image_path(self):
         return os.path.join(settings.BASE_DIR, self.relative_path.url[1:])
@@ -36,22 +38,28 @@ class Image(models.Model):
         return self.relative_path.url
 
     def get_thumb_big_url(self):
-        return get_thumb_url(self, (800, 1128))
+        return get_thumb_url(self, self.thumb_sizes['big'])
 
     def get_thumb_med_url(self):
-        return get_thumb_url(self, (600, 900))
+        return get_thumb_url(self, self.thumb_sizes['med'])
 
     def get_thumb_small_url(self):
-        return get_thumb_url(self, (600, 682))
+        return get_thumb_url(self, self.thumb_sizes['small'])
 
-    #todo implement delete
 
+# @receiver(cleanup_post_delete, sender=Image)
+def clean_thumbnails(**kwargs):
+    filename, extension = os.path.splitext(kwargs['file'].path)
+    for k, size in Image.thumb_sizes.items():
+        os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        
+
+cleanup_pre_delete.connect(clean_thumbnails)
 
 @receiver(post_save, sender=Image)
 def save_thumbnail(sender, **kwargs):
-    sizes = [(600, 900), (600, 682), (800, 1128)]
     filename, extension = os.path.splitext(kwargs['instance'].get_image_path())
-    for size in sizes:
+    for k, size in Image.thumb_sizes.items():
         img = PIL_Image.open(kwargs['instance'].get_image_path())
         img.thumbnail(size)
         img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)

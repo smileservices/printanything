@@ -10,7 +10,5 @@ class BoostrapCheckbox(widgets.Input):
         return context
 
 
-class BoostrapFileInput(widgets.Input):
+class BoostrapFileInput(widgets.FileInput):
     template_name = 'widgets/file_input.html'
-
-

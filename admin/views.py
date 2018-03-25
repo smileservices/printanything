@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
-from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm
+from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, BaseImageFormSet
 from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
@@ -138,10 +139,29 @@ class UpdateArt(LoginRequiredMixin, UpdateView):
         context = super(UpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Update Art'
         context['submit_text'] = 'Update'
-        # context['images_form'] = ArtForm.ImagesFormSet(instance=self.object)
-        context['images_form'] = ArtForm.ImagesFormSet(instance=self.object)
+        context['images_form'] = ArtForm.ImagesFormSet(instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         return context
 
-    def form_valid(self, form):
-        art = form.save()
-        return redirect(self.success_url)
+    def form_valid(self, form, images_formset):
+        success_redirect = super(UpdateArt, self).form_valid(form)
+        valid = images_formset.is_valid()
+        if valid:
+            images_formset.save()
+        validated_forms_context = self.get_context_data(form=form, validated_images_form=images_formset)
+        return success_redirect if valid else self.render_to_response(validated_forms_context)
+        ###
+        for image_form in images_formset.forms:
+            if image_form.is_valid():
+                image_form.save()
+            else:
+                valid = False
+                break
+        # we use the super method because the overwritten one is using another vars
+        return success_redirect if valid else self.render_to_response(validated_forms_context)
+
+    def post(self, request, *args, **kwargs):
+        # art_form = self.get_form(ArtForm) #this doesn't work
+        art = Art.objects.get(pk=kwargs.get('pk'))
+        art_form = ArtForm(data=request.POST, instance=art)
+        images_formset = art_form.ImagesFormSet(request.POST, request.FILES, instance=art)
+        return self.form_valid(art_form, images_formset)
