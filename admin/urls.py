@@ -94,7 +94,22 @@ urlpatterns += [
     ), name='admin-art'),
 ]
 
-#todo add supports
+# SUPPORTS
+urlpatterns += [
+    url(r'^supports/create$', views.CreateSupport.as_view(), name='create-support'),
+    url(r'^supports/edit/(?P<pk>[\d])', views.UpdateSupport.as_view(), name='update-support'),
+    url(r'^supports/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=Support,
+        success_url=reverse_lazy('admin-vendors')
+    ), name='delete-support'),
+    url(r'^supports', generic.ListView.as_view(
+        queryset=Support.objects.all(),
+        template_name='admin/support/list.html'
+    ), name='admin-supports'),
+]
+
+#todo create admin/supports/list.html
+#todo create CreateSupport/UpdateSupport view
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

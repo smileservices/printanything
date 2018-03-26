@@ -1,0 +1,58 @@
+{% load widget_tweaks %}
+<div class="col-md-12 form-group">
+    <div class="row">
+        <div class="card">
+            <form action="/admin/supports/edit/{{ form.instance.id }}"  enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+
+                <div class="card-body">
+                    <div class="col-md-4">
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
+                            {{ form.slug | add_class:'form-control' }}
+                            {{ form.slug.errors }}
+                        </div>
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                            {{ form.name | add_class:'form-control' }}
+                            {{ form.name.errors }}
+                        </div>
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.externalId.id_for_label }}">{{ form.externalId.label }}</label>
+                            {{ form.externalId | add_class:'form-control' }}
+                            {{ form.externalId.errors }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                            {% render_field form.description class="form-control" rows=6 %}
+                            {{ form.description.errors }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.vendor_price.id_for_label }}">{{ form.vendor_price.label }}</label>
+                            {{ form.vendor_price | add_class:'form-control' }}
+                            {{ form.vendor_price.errors }}
+                        </div>
+                        <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
+                            <label for="{{ form.unit_price.id_for_label }}">{{ form.unit_price.label }}</label>
+                            {{ form.unit_price | add_class:'form-control' }}
+                            {{ form.unit_price.errors }}
+                        </div>
+                    </div>
+                    {{ form.non_field_errors }}
+                    {% for field in form.hidden_fields %}
+                        {{ field }}
+                    {% endfor %}
+                    <div class="col-md-12">
+                        <div class="card-actionbar-row">
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction">Send</button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

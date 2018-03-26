@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table no-margin">
+        <thead>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>ExternalId</th>
+            <th>Unit Price</th>
+            <th>Vendor Price</th>
+            <th>Date Added</th>
+            <th>Vendor</th>
+        </thead>
+        {% for support in supports %}
+            <tr>
+                <td><a href="{% url 'update-support' pk=support.id %}">{{ support.name }}</a></td>
+                <td>{{ support.slug }}</td>
+                <td>{{ support.externalId }}</td>
+                <td>{{ support.unit_price }}</td>
+                <td>{{ support.vendor_price }}</td>
+                <td>{{ support.dateAdded }}</td>
+                <td><a href="{% url "update-vendor" pk=support.vendor.id %}">{{ support.vendor }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

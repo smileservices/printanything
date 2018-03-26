@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 from vendor.models import Vendor
 from artist.models import Artist
-from product.models import Art
+from product.models import Art, Support
 from gallery.models import Image
 
 from admin.widgets import BoostrapCheckbox, BoostrapFileInput
@@ -19,7 +19,21 @@ class UserForm(UserCreationForm):
         fields = ("username", "email", "is_active", "is_staff")
 
 
+class BaseSupportFormSet(forms.BaseInlineFormSet):
+    class Meta:
+        model = Support
+        fields = ("externalId", "slug", "name", "description", "unit_price", "vendor_price")
+
+
 class VendorForm(forms.ModelForm):
+    # SupportsFormSet = forms.inlineformset_factory(
+    #     Vendor,
+    #     Support,
+    #     formset=BaseSupportFormSet,
+    #     fields=("externalId", "slug", "name", "description", "unit_price", "vendor_price"),
+    #     extra=1
+    # )
+
     class Meta:
         model = Vendor
         fields = ("name", "sizes_chart")
@@ -35,7 +49,6 @@ class ArtistForm(forms.ModelForm):
 
 
 class BaseImageFormSet(forms.BaseInlineFormSet):
-
     class Meta:
         model = Image
         fields = ("relative_path", "primary")

@@ -22,7 +22,8 @@
     - view
     - edit
 - supports CRUD in vendor's view
-- vendor crud: image widget
+- supports admin manage stock options
+- vendor admin has create support button
 
 ## ORDER
 - email notifications
