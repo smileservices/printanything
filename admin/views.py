@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
-from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, BaseImageFormSet
+from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
 from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
@@ -86,10 +86,16 @@ class UpdateVendor(LoginRequiredMixin, UpdateView):
 
 class CreateSupport(LoginRequiredMixin, CreateView):
     model = Support
+    form_class = SupportForm
+    template_name = 'admin/support/form.html'
+    success_url = reverse_lazy('admin-supports')
 
 
 class UpdateSupport(LoginRequiredMixin, UpdateView):
     model = Support
+    form_class = SupportForm
+    template_name = 'admin/support/form.html'
+    success_url = reverse_lazy('admin-supports')
 
 
 class CreateArtist(LoginRequiredMixin, CreateView):
@@ -121,7 +127,7 @@ class UpdateArtist(LoginRequiredMixin, UpdateView):
 class CreateArt(LoginRequiredMixin, CreateView):
     form_class = ArtForm
     template_name = 'admin/art/art_form.html'
-    success_url = reverse_lazy('admin-vendors')
+    success_url = reverse_lazy('admin-art')
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

@@ -20,19 +20,13 @@ class UserForm(UserCreationForm):
 
 
 class BaseSupportFormSet(forms.BaseInlineFormSet):
+
     class Meta:
         model = Support
         fields = ("externalId", "slug", "name", "description", "unit_price", "vendor_price")
 
 
 class VendorForm(forms.ModelForm):
-    # SupportsFormSet = forms.inlineformset_factory(
-    #     Vendor,
-    #     Support,
-    #     formset=BaseSupportFormSet,
-    #     fields=("externalId", "slug", "name", "description", "unit_price", "vendor_price"),
-    #     extra=1
-    # )
 
     class Meta:
         model = Vendor
@@ -40,6 +34,13 @@ class VendorForm(forms.ModelForm):
         widgets = {
             'sizes_chart': BoostrapFileInput
         }
+
+
+class SupportForm(forms.ModelForm):
+
+    class Meta:
+        model = Support
+        fields = ("externalId", "slug", "name", "description", "unit_price", "vendor_price", "vendor")
 
 
 class ArtistForm(forms.ModelForm):
@@ -55,7 +56,6 @@ class BaseImageFormSet(forms.BaseInlineFormSet):
 
 
 class ArtForm(forms.ModelForm):
-    success_url = reverse_lazy('admin-art')
 
     ImagesFormSet = forms.inlineformset_factory(
         Art,

@@ -8,6 +8,7 @@
             <th>Vendor Price</th>
             <th>Date Added</th>
             <th>Vendor</th>
+            <th>Delete</th>
         </thead>
         {% for support in supports %}
             <tr>
@@ -18,6 +19,12 @@
                 <td>{{ support.vendor_price }}</td>
                 <td>{{ support.dateAdded }}</td>
                 <td><a href="{% url "update-vendor" pk=support.vendor.id %}">{{ support.vendor }}</a></td>
+                <td>
+                    <form action="{% url "delete-support" pk=support.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction"><i class="md md-delete"></i></button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>
