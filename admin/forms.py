@@ -69,9 +69,6 @@ class ArtForm(forms.ModelForm):
         }
     )
 
-    def is_valid(self):
-        super(ArtForm, self).is_valid()
-
     class Meta:
         model = Art
         fields = ("externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist", "tags")

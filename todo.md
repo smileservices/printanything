@@ -21,6 +21,8 @@
     - list
     - view
     - edit
+
+- Art create - add photo in js
 - supports CRUD in vendor's view
 - supports admin manage stock options
 - vendor admin has create support button

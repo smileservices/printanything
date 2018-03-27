@@ -66,6 +66,7 @@ class CreateVendor(LoginRequiredMixin, CreateView):
         context = super(CreateView, self).get_context_data(**kwargs)
         context['title'] = 'Create Vendor'
         context['submit_text'] = 'Create'
+        context['supports'] = self.object.support_set.all()
         return context
 
 
@@ -126,8 +127,24 @@ class CreateArt(LoginRequiredMixin, CreateView):
         # Call the base implementation first to get a context
         context = super(CreateView, self).get_context_data(**kwargs)
         context['title'] = 'Create Art'
-        context['submit_text'] = 'Art'
+        context['submit_text'] = 'Create'
+        context['images_form'] = ArtForm.ImagesFormSet(
+            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         return context
+
+    def form_valid(self, form):
+        art = form.save()
+        success_redirect = super(CreateArt, self).form_valid(form)
+        images_formset = form.ImagesFormSet(self.request.POST, self.request.FILES, instance=art)
+        valid = images_formset.is_valid()
+        if valid:
+            images_formset.save()
+        validated_forms_context = self.get_context_data(form=form, validated_images_form=images_formset)
+        return success_redirect if valid else self.render_to_response(validated_forms_context)
+
+    def post(self, request, *args, **kwargs):
+        art_form = ArtForm(data=request.POST)
+        return self.form_valid(art_form)
 
 
 class UpdateArt(LoginRequiredMixin, UpdateView):
@@ -140,7 +157,8 @@ class UpdateArt(LoginRequiredMixin, UpdateView):
         context = super(UpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Update Art'
         context['submit_text'] = 'Update'
-        context['images_form'] = ArtForm.ImagesFormSet(instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
+        context['images_form'] = ArtForm.ImagesFormSet(
+            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         return context
 
     def form_valid(self, form, images_formset):
@@ -153,6 +171,6 @@ class UpdateArt(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         art = Art.objects.get(pk=kwargs.get('pk'))
-        art_form = ArtForm(data=request.POST, instance=art)
+        art_form = ArtForm(data=request.POST, files=request.FILES, instance=art)
         images_formset = art_form.ImagesFormSet(request.POST, request.FILES, instance=art)
         return self.form_valid(art_form, images_formset)

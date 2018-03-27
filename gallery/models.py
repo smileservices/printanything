@@ -51,7 +51,10 @@ class Image(models.Model):
 def clean_thumbnails(**kwargs):
     filename, extension = os.path.splitext(kwargs['file'].path)
     for k, size in Image.thumb_sizes.items():
-        os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        try:
+            os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        except FileNotFoundError:
+            pass
         
 
 cleanup_pre_delete.connect(clean_thumbnails)

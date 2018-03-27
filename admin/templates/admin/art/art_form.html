@@ -25,8 +25,12 @@
                         {% for form in images_form %}
                             {% include 'admin/gallery/images_form.html' with form=form %}
                         {% endfor %}
-                        <div class="card-actionbar-row">
-                            <button type="submit" class="btn btn-flat btn-primary ink-reaction">{{ submit_text }}</button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card-actionbar-row">
+                                    <button type="submit" class="btn btn-flat btn-primary ink-reaction">{{ submit_text }}</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
