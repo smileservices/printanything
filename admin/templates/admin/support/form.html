@@ -59,6 +59,30 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-head style-primary">
+                    <header>Stock Options</header>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="support_stock" value="{{ form.instance.id }}">
+                        {{ stock_forms.management_form }}
+                        {% for form in stock_forms %}
+                            {% with form as form %}
+                                {% include "admin/support/stock.html" %}
+                            {% endwith %}
+                        {% endfor %}
+                        <div class="col-md-12">
+                            <div class="card-actionbar-row">
+                                <button type="submit" class="btn btn-flat btn-primary ink-reaction">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -8,7 +8,7 @@ from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
 from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
-from product.models import Art, Support
+from product.models import Art, Support, Stock
 
 
 def dashboard(request):
@@ -90,12 +90,41 @@ class CreateSupport(LoginRequiredMixin, CreateView):
     template_name = 'admin/support/form.html'
     success_url = reverse_lazy('admin-supports')
 
+    # todo add stock options
+
 
 class UpdateSupport(LoginRequiredMixin, UpdateView):
     model = Support
     form_class = SupportForm
     template_name = 'admin/support/form.html'
     success_url = reverse_lazy('admin-supports')
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateSupport, self).get_context_data(**kwargs)
+        context['stock_forms'] = SupportForm.StockFormSet(instance=self.object) if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        return context
+
+    def form_valid(self, form):
+        if self.request.POST['support_stock']:
+            stock_formset = form.StockFormSet(data=self.request.POST, instance=form.instance)
+            valid = stock_formset.is_valid()
+            if valid:
+                stock_formset.save()
+                return HttpResponseRedirect(reverse_lazy("admin-supports"))
+            else:
+                validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset)
+                return self.render_to_response(validated_forms_context)
+        else:
+            success_redirect = super(UpdateSupport, self).form_valid(form)
+            return success_redirect
+
+    def post(self, request, *args, **kwargs):
+        if request.POST['support_stock']:
+            form = SupportForm(instance=Support.objects.get(id=request.POST['support_stock']))
+        else:
+            form = SupportForm(data=request.POST)
+        self.object = form.instance
+        return self.form_valid(form)
 
 
 class CreateArtist(LoginRequiredMixin, CreateView):

@@ -1,0 +1,37 @@
+{% load widget_tweaks %}
+<div class="row{% if not form.initial %} extra_record{% endif %}">
+{{ form.non_field_errors }}
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+    <div class="col-md-3">
+        <div class="form-group floating-label {% if form.stock.errors %}has-error{% endif %}">
+            <label for="{{ form.stock.id_for_label }}">{{ form.stock.label }}</label>
+            {{ form.stock | add_class:'form-control' }}
+            {{ form.stock.errors }}
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group floating-label {% if form.colour.errors %}has-error{% endif %}">
+            <label for="{{ form.colour.id_for_label }}">{{ form.colour.label }}</label>
+            {{ form.colour | add_class:'form-control' }}
+            {{ form.colour.errors }}
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group floating-label {% if form.size.errors %}has-error{% endif %}">
+            <label for="{{ form.size.id_for_label }}">{{ form.size.label }}</label>
+            {{ form.size | add_class:'form-control' }}
+            {{ form.size.errors }}
+        </div>
+    </div>
+    {% if form.initial %}
+    <div class="col-md-3">
+        <div class="form-group floating-label {% if form.DELETE.errors %}has-error{% endif %}">
+            <label for="{{ form.DELETE.id_for_label }}"></label>
+            {{ form.DELETE | add_class:'form-control' }}
+            {{ form.DELETE.errors }}
+        </div>
+    </div>
+    {% endif %}
+</div>
