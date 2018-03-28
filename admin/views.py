@@ -105,7 +105,7 @@ class UpdateSupport(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        if self.request.POST['support_stock']:
+        if 'support_stock' in self.request.POST:
             stock_formset = form.StockFormSet(data=self.request.POST, instance=form.instance)
             valid = stock_formset.is_valid()
             if valid:
@@ -119,10 +119,11 @@ class UpdateSupport(LoginRequiredMixin, UpdateView):
             return success_redirect
 
     def post(self, request, *args, **kwargs):
-        if request.POST['support_stock']:
+        if 'support_stock' in request.POST:
             form = SupportForm(instance=Support.objects.get(id=request.POST['support_stock']))
         else:
-            form = SupportForm(data=request.POST)
+            support = Support.objects.get(pk=kwargs.get('pk'))
+            form = SupportForm(data=request.POST, instance=support)
         self.object = form.instance
         return self.form_valid(form)
 
