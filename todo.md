@@ -22,9 +22,7 @@
     - view
     - edit
 
-- Art create - add photo in js
-- supports admin create stock options
-- vendor admin - crud colors/sizes
+- Extra fields - add them in js
 - test forms errors handling
 
 ## ORDER

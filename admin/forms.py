@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
-from vendor.models import Vendor
+from vendor.models import Vendor, Size, Colour
 from artist.models import Artist
 from product.models import Art, Support, Stock
 from gallery.models import Image
@@ -20,13 +20,38 @@ class UserForm(UserCreationForm):
 
 
 class BaseStockFormSet(forms.BaseInlineFormSet):
-
     class Meta:
         model = Stock
         fields = ("stock", "colour", "size")
 
 
+class BaseSizeFormSet(forms.BaseInlineFormSet):
+    class Meta:
+        model = Size
+        fields = ("name",)
+
+
+class BaseColourFormSet(forms.BaseInlineFormSet):
+    class Meta:
+        model = Colour
+        fields = ("name",)
+
+
 class VendorForm(forms.ModelForm):
+    SizeFormset = forms.inlineformset_factory(
+        Vendor,
+        Size,
+        formset=BaseSizeFormSet,
+        extra=1,
+        fields=("name",)
+    )
+    ColourFormset = forms.inlineformset_factory(
+        Vendor,
+        Colour,
+        formset=BaseColourFormSet,
+        extra=1,
+        fields=("name",)
+    )
 
     class Meta:
         model = Vendor
@@ -37,13 +62,12 @@ class VendorForm(forms.ModelForm):
 
 
 class SupportForm(forms.ModelForm):
-
     StockFormSet = forms.inlineformset_factory(
         Support,
         Stock,
         formset=BaseStockFormSet,
         extra=3,
-        fields= ("stock", "colour", "size")
+        fields=("stock", "colour", "size")
     )
 
     class Meta:
@@ -64,7 +88,6 @@ class BaseImageFormSet(forms.BaseInlineFormSet):
 
 
 class ArtForm(forms.ModelForm):
-
     ImagesFormSet = forms.inlineformset_factory(
         Art,
         Image,

@@ -4,6 +4,7 @@
 
 {% block content %}
     <div class="row">
+        <form class="form" method="post" enctype="multipart/form-data">
 
         <div class="col-md-4">
             <div class="card">
@@ -11,19 +12,18 @@
                     <header>{{ title }}</header>
                 </div>
                 <div class="card-body">
-                    <form class="form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         {% for field in form %}
                             <div class="form-group floating-label {% if field.errors %}has-error{% endif %}">
                                 {% if field.name == 'sizes_chart' %}
-                                    {% if field.value != ''%}
+                                    {% if field.value.url %}
                                         <a href="{{ field.value.url }}">
                                             <img class="img img-responsive thumbnail" src="{{ field.value.url }}">
                                         </a>
                                     {% else %}
                                         <div class="thumbnail">
-                                            <div class="alert alert-info">Upload an image</div>
+                                            <div class="alert alert-info">Upload sizes chart</div>
                                         </div>
                                     {% endif %}
                                     {{ field.as_widget }}
@@ -36,15 +36,47 @@
                             {% endif %}
                             </div>
                         {% endfor %}
-                        <div class="card-actionbar-row">
-                            <button type="submit" class="btn btn-flat btn-primary ink-reaction">{{ submit_text }}</button>
-                        </div>
-                    </form>
                 </div>
+            </div>
+
+        <div class="card">
+            <div class="card-actionbar-row">
+                <button type="submit" class="btn btn-flat btn-primary ink-reaction">{{ submit_text }}</button>
             </div>
         </div>
 
-        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-head style-primary">
+                    <header>Sizes</header>
+                </div>
+                <div class="card-body">
+                    {{ size_formset.management_form }}
+                    {% for form in size_formset %}
+                        {% include "admin/vendor/size_colour_form.html" %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+       <div class="col-md-4">
+            <div class="card">
+                <div class="card-head style-primary">
+                    <header>Colours</header>
+                </div>
+                <div class="card-body">
+                    {{ colour_formset.management_form }}
+                    {% for form in colour_formset %}
+                        {% include "admin/vendor/size_colour_form.html" %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+    <div class="row">
+    <div class="col-md-12">
             <div class="card">
                 <div class="card-head style-primary">
                     <header>Supports</header>
@@ -59,6 +91,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 {% endblock content %}
