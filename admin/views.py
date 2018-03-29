@@ -90,7 +90,25 @@ class CreateSupport(LoginRequiredMixin, CreateView):
     template_name = 'admin/support/form.html'
     success_url = reverse_lazy('admin-supports')
 
-    # todo add stock options
+    def get_context_data(self, **kwargs):
+        context = super(CreateSupport, self).get_context_data(**kwargs)
+        context['stock_forms'] = SupportForm.StockFormSet() if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        context['action'] = 'Create'
+        return context
+
+    def form_valid(self, support_form):
+        support = support_form.save()
+        success_redirect = super(CreateSupport, self).form_valid(support_form)
+        stock_formset = support_form.StockFormSet(data=self.request.POST, instance=support)
+        valid = stock_formset.is_valid()
+        if valid:
+            stock_formset.save()
+        validated_forms_context = self.get_context_data(form=support_form, validated_stocks_form=stock_formset)
+        return success_redirect if valid else self.render_to_response(validated_forms_context)
+
+    def post(self, request, *args, **kwargs):
+        support_form = SupportForm(data=request.POST)
+        return self.form_valid(support_form)
 
 
 class UpdateSupport(LoginRequiredMixin, UpdateView):
@@ -102,30 +120,22 @@ class UpdateSupport(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UpdateSupport, self).get_context_data(**kwargs)
         context['stock_forms'] = SupportForm.StockFormSet(instance=self.object) if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        context['action'] = 'Update'
         return context
 
-    def form_valid(self, form):
-        if 'support_stock' in self.request.POST:
-            stock_formset = form.StockFormSet(data=self.request.POST, instance=form.instance)
-            valid = stock_formset.is_valid()
-            if valid:
-                stock_formset.save()
-                return HttpResponseRedirect(reverse_lazy("admin-supports"))
-            else:
-                validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset)
-                return self.render_to_response(validated_forms_context)
-        else:
-            success_redirect = super(UpdateSupport, self).form_valid(form)
-            return success_redirect
+    def form_valid(self, form, stock_formset):
+        success_redirect = super(UpdateSupport, self).form_valid(form)
+        valid = stock_formset.is_valid()
+        if valid:
+            stock_formset.save()
+        validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset)
+        return success_redirect if valid else self.render_to_response(validated_forms_context)
 
     def post(self, request, *args, **kwargs):
-        if 'support_stock' in request.POST:
-            form = SupportForm(instance=Support.objects.get(id=request.POST['support_stock']))
-        else:
-            support = Support.objects.get(pk=kwargs.get('pk'))
-            form = SupportForm(data=request.POST, instance=support)
-        self.object = form.instance
-        return self.form_valid(form)
+        support = Support.objects.get(pk=kwargs.get('pk'))
+        support_form = SupportForm(data=request.POST, instance=support)
+        stock_formset = support_form.StockFormSet(data=self.request.POST, instance=support)
+        return self.form_valid(support_form, stock_formset)
 
 
 class CreateArtist(LoginRequiredMixin, CreateView):

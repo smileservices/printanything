@@ -3,14 +3,16 @@
 {% block content %}
 <div class="col-md-12 form-group">
     <div class="row">
+        <form action=""  enctype="multipart/form-data" method="POST">
         <div class="col-md-4">
         <div class="card">
             <div class="card-head style-primary">
                 <header>Support</header>
             </div>
                 <div class="card-body">
-                    <form action=""  enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
+                    {{ stock_forms.management_form }}
+
                     <div class="form-group floating-label {% if form.slug.errors %}has-error{% endif %}">
                         <label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
                         {{ form.slug | add_class:'form-control' }}
@@ -46,17 +48,18 @@
                         {% render_field form.vendor class="form-control" rows=6 %}
                         {{ form.vendor.errors }}
                     </div>
-                    <div class="col-md-12">
-                        <div class="card-actionbar-row">
-                            <button type="submit" class="btn btn-flat btn-primary ink-reaction">Update</button>
-                        </div>
-                    </div>
-                    </form>
                 </div>
                 {{ form.non_field_errors }}
                 {% for field in form.hidden_fields %}
                     {{ field }}
                 {% endfor %}
+            </div>
+            <div class="card">
+                <div class="col-md-12">
+                    <div class="card-actionbar-row">
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction">{{ action }}</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
@@ -65,24 +68,15 @@
                     <header>Stock Options</header>
                 </div>
                 <div class="card-body">
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="support_stock" value="{{ form.instance.id }}">
-                        {{ stock_forms.management_form }}
-                        {% for form in stock_forms %}
-                            {% with form as form %}
-                                {% include "admin/support/stock.html" %}
-                            {% endwith %}
-                        {% endfor %}
-                        <div class="col-md-12">
-                            <div class="card-actionbar-row">
-                                <button type="submit" class="btn btn-flat btn-primary ink-reaction">Update</button>
-                            </div>
-                        </div>
-                    </form>
+                    {% for form in stock_forms %}
+                        {% with form as form %}
+                            {% include "admin/support/stock.html" %}
+                        {% endwith %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
+        </form>
     </div>
 </div>
 {% endblock %}
