@@ -1,0 +1,109 @@
+{% extends 'admin/dashboard.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="text-primary">Order Detail</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>Products</header>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <th>Name</th>
+                            <th>Unit Price</th>
+                            <th>Art</th>
+                            <th>Support</th>
+                            <th>Colour</th>
+                            <th>Size</th>
+                            <th>Quantity</th>
+                        </thead>
+                            {% for product in object.get_orderdetails %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.unit_price }}</td>
+                                <td>{{ product.art }}</td>
+                                <td>{{ product.support }}</td>
+                                <td>{{ product.colour }}</td>
+                                <td>{{ product.size }}</td>
+                                <td>{{ product.qty }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>General Info</header>
+            </div>
+            <div class="card-body">
+                <dl class="dl-horizontal">
+                    <dt>ID</dt>
+                    <dd>{{ object.id }}</dd>
+                    <dt>Placed on</dt>
+                    <dd>{{ object.placed }}</dd>
+                    <dt>Status</dt>
+                    <dd>{{ object.get_status }}</dd>
+                    <dt>Payment Status</dt>
+                    <dd>{{ object.get_payment_status }}</dd>
+                    <dt>Customer</dt>
+                    <dd>{{ object.customer }}</dd>
+                    <dt>Amount</dt>
+                    <dd>{{ object.calculate_price }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>Shipping</header>
+            </div>
+            <div class="card-body">
+                <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>Type</dt>
+                    <dd>{{ object.shippingdetails_set.get.type }}</dd>
+                    <dt>Cost</dt>
+                    <dd>{{ object.shippingdetails_set.get.cost }}</dd>
+                    <dt>Status</dt>
+                    <dd>{{ object.shippingdetails_set.get.status }}</dd>
+                </dl>
+                </div>
+                <div class="col-md-8">
+                    <dl class="dl-horizontal">
+                        <dt>Name</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.name }}</dd>
+                        <dt>Country</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.country }}</dd>
+                        <dt>State</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.state }}</dd>
+                        <dt>City</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.city }}</dd>
+                        <dt>Address</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.address }}</dd>
+                        <dt>ZIP</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.zip }}</dd>
+                        <dt>Phone</dt>
+                        <dd>{{ object.shippingdetails_set.get.contact.phone }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

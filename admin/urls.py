@@ -26,6 +26,7 @@ from django.views import generic
 from vendor.models import Vendor
 from artist.models import Artist
 from product.models import Art, Support
+from order.models import Order, OrderStatus
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {
@@ -107,6 +108,31 @@ urlpatterns += [
         template_name='admin/support/list.html'
     ), name='admin-supports'),
 ]
+
+# ORDER STATUSES
+urlpatterns += [
+    url(r'^orders/statuses', generic.ListView.as_view(
+        queryset=OrderStatus.objects.all(),
+        template_name='admin/order/statuses-list.html'
+    ), name='order-statuses'),
+    url(r'^order/status/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+        model=OrderStatus,
+        success_url=reverse_lazy('order-statuses')
+    ), name="delete-order-status"),
+    url(r'orders/status/edit/(?P<pk>[\d])', views.OrderStatusUpdate.as_view(), name="order-status-edit"),
+    url(r'orders/status/create', views.OrderStatusCreate.as_view(), name="order-status-create")
+]
+
+# ORDERS
+urlpatterns += [
+    url(r'^orders', generic.ListView.as_view(
+        queryset=Order.objects.all(),
+        template_name='admin/order/list.html'
+    ), name='admin-orders'),
+    url(r'^order/view/(?P<pk>[\d])', views.OrderView.as_view(), name="admin-order-view")
+]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

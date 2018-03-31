@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
 from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
@@ -9,13 +10,14 @@ from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
 from product.models import Art, Support, Stock
+from order.models import Order, OrderStatus
 
 
 def dashboard(request):
     if request.user.is_staff:
         return render(request, 'admin/dashboard.html')
     else:
-        return redirect('login')
+        return redirect('admin-login')
 
 
 class CreateUser(LoginRequiredMixin, CreateView):
@@ -66,8 +68,10 @@ class CreateVendor(LoginRequiredMixin, CreateView):
         context = super(CreateView, self).get_context_data(**kwargs)
         context['title'] = 'Create Vendor'
         context['submit_text'] = 'Create'
-        context['size_formset'] = VendorForm.SizeFormset() if "validated_size_form" not in kwargs else kwargs["validated_size_form"]
-        context['colour_formset'] = VendorForm.ColourFormset() if "validated_colour_form" not in kwargs else kwargs["validated_colour_form"]
+        context['size_formset'] = VendorForm.SizeFormset() if "validated_size_form" not in kwargs else kwargs[
+            "validated_size_form"]
+        context['colour_formset'] = VendorForm.ColourFormset() if "validated_colour_form" not in kwargs else kwargs[
+            "validated_colour_form"]
         return context
 
     def form_valid(self, vendor_form):
@@ -101,8 +105,10 @@ class UpdateVendor(LoginRequiredMixin, UpdateView):
         context['title'] = 'Update Vendor'
         context['submit_text'] = 'Update'
         context['supports'] = self.object.support_set.all()
-        context['size_formset'] = VendorForm.SizeFormset(instance=self.object) if "validated_size_form" not in kwargs else kwargs["validated_size_form"]
-        context['colour_formset'] = VendorForm.ColourFormset(instance=self.object) if "validated_colour_form" not in kwargs else kwargs["validated_colour_form"]
+        context['size_formset'] = VendorForm.SizeFormset(
+            instance=self.object) if "validated_size_form" not in kwargs else kwargs["validated_size_form"]
+        context['colour_formset'] = VendorForm.ColourFormset(
+            instance=self.object) if "validated_colour_form" not in kwargs else kwargs["validated_colour_form"]
         return context
 
     def form_valid(self, vendor_form, size_formset, colour_formset):
@@ -112,7 +118,8 @@ class UpdateVendor(LoginRequiredMixin, UpdateView):
             size_formset.save()
             colour_formset.save()
         else:
-            validated_forms_context = self.get_context_data(form=vendor_form, validated_size_form=size_formset, validated_colour_form=colour_formset)
+            validated_forms_context = self.get_context_data(form=vendor_form, validated_size_form=size_formset,
+                                                            validated_colour_form=colour_formset)
             return self.render_to_response(validated_forms_context)
         return success_url
 
@@ -132,7 +139,8 @@ class CreateSupport(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateSupport, self).get_context_data(**kwargs)
-        context['stock_forms'] = SupportForm.StockFormSet() if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        context['stock_forms'] = SupportForm.StockFormSet() if "validated_stocks_form" not in kwargs else kwargs[
+            "validated_stocks_form"]
         context['action'] = 'Create'
         return context
 
@@ -158,7 +166,8 @@ class UpdateSupport(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UpdateSupport, self).get_context_data(**kwargs)
-        context['stock_forms'] = SupportForm.StockFormSet(instance=self.object) if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        context['stock_forms'] = SupportForm.StockFormSet(
+            instance=self.object) if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
         context['action'] = 'Update'
         return context
 
@@ -259,3 +268,22 @@ class UpdateArt(LoginRequiredMixin, UpdateView):
         art_form = ArtForm(data=request.POST, files=request.FILES, instance=art)
         images_formset = art_form.ImagesFormSet(request.POST, request.FILES, instance=art)
         return self.form_valid(art_form, images_formset)
+
+
+class OrderView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = "admin/order/view.html"
+
+
+class OrderStatusUpdate(LoginRequiredMixin, UpdateView):
+    model = OrderStatus
+    template_name = "admin/order/status-form.html"
+    fields = ("id", "text")
+    success_url = reverse_lazy("order-statuses")
+
+
+class OrderStatusCreate(LoginRequiredMixin, CreateView):
+    model = OrderStatus
+    template_name = "admin/order/status-form.html"
+    fields = ("id", "text")
+    success_url = reverse_lazy("order-statuses")

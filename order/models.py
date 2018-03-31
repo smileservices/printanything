@@ -6,6 +6,7 @@ from customer.models import Customer as Customer
 from contact.models import Contact
 from product.models import Art, Support
 from vendor.models import Size, Colour
+from django.core.exceptions import ObjectDoesNotExist
 
 try:
     from django.utils import timezone
@@ -88,11 +89,17 @@ class Order(models.Model):
     def get_status(self):
         return self.status.text.title()
 
+    def get_orderdetails(self):
+        return self.orderdetails_set.all()
+
     def get_id(self):
         return self.id
 
     def get_payment_status(self):
-        return self.payment_set.get().status.upper()
+        try:
+            return self.payment_set.get().status.upper()
+        except ObjectDoesNotExist:
+            return "No payment info"
 
     get_id.short_description = 'ID'
     calculate_price.short_description = 'Price'
@@ -132,4 +139,5 @@ class ShippingDetails(models.Model):
     status = models.CharField(max_length=255)
 
     def update_shipping_info(self, *args, **kwargs):
+        #todo
         return self
