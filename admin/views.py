@@ -274,6 +274,25 @@ class OrderView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = "admin/order/view.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['orders_statuses'] = OrderStatus.objects.all()
+        return context
+
+
+def order_update(request, *args, **kwargs):
+    section = request.POST['order-section']
+    order = Order.objects.get(pk=kwargs.get('pk'))
+    if section == "order-info":
+        order.status_id = request.POST['order-status']
+        order.info = request.POST['order-info']
+        order.save()
+    elif section == "order-shipping":
+        shipping_detail = order.shippingdetails_set.get()
+        shipping_detail.status = request.POST['shipping-status']
+        shipping_detail.save()
+    return HttpResponseRedirect(reverse_lazy("admin-orders"))
+
 
 class OrderStatusUpdate(LoginRequiredMixin, UpdateView):
     model = OrderStatus

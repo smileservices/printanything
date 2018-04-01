@@ -129,9 +129,9 @@ urlpatterns += [
         queryset=Order.objects.all(),
         template_name='admin/order/list.html'
     ), name='admin-orders'),
-    url(r'^order/view/(?P<pk>[\d])', views.OrderView.as_view(), name="admin-order-view")
+    url(r'^order/view/(?P<pk>[\d])', views.OrderView.as_view(), name="admin-order-view"),
+    url(r'^order/update/(?P<pk>[\d])', views.order_update, name="admin-order-update")
 ]
-
 
 
 if settings.DEBUG:

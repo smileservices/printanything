@@ -56,14 +56,34 @@
                     <dd>{{ object.id }}</dd>
                     <dt>Placed on</dt>
                     <dd>{{ object.placed }}</dd>
-                    <dt>Status</dt>
-                    <dd>{{ object.get_status }}</dd>
                     <dt>Payment Status</dt>
                     <dd>{{ object.get_payment_status }}</dd>
                     <dt>Customer</dt>
                     <dd>{{ object.customer }}</dd>
                     <dt>Amount</dt>
                     <dd>{{ object.calculate_price }}</dd>
+                    <hr>
+                    <form action="{% url "admin-order-update" pk=order.id %}" class="form-horizontal" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="order-section" value="order-info">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="order-status">Status</label>
+                            <div class="col-md-10">
+                                <select name="order-status" id="order-status" class="form-control">
+                                    {% for status in orders_statuses %}
+                                    <option value="{{ status.id }}" {% if status.id == order.status.id %}selected="selected"{% endif %}>{{ status.text }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="order-info">Info</label>
+                            <div class="col-md-10">
+                              <textarea id="order-info" name="order-info" class="form-control">{{ object.info }}</textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction pull-right">Submit Change</button>
+                    </form>
                 </dl>
             </div>
         </div>
@@ -74,14 +94,13 @@
                 <header>Shipping</header>
             </div>
             <div class="card-body">
+                <div class="row">
                 <div class="col-md-4">
                 <dl class="dl-horizontal">
                     <dt>Type</dt>
                     <dd>{{ object.shippingdetails_set.get.type }}</dd>
                     <dt>Cost</dt>
                     <dd>{{ object.shippingdetails_set.get.cost }}</dd>
-                    <dt>Status</dt>
-                    <dd>{{ object.shippingdetails_set.get.status }}</dd>
                 </dl>
                 </div>
                 <div class="col-md-8">
@@ -101,6 +120,23 @@
                         <dt>Phone</dt>
                         <dd>{{ object.shippingdetails_set.get.contact.phone }}</dd>
                     </dl>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    <hr>
+                    <form action="{% url "admin-order-update" pk=order.id %}" class="form-horizontal" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="order-section" value="order-shipping">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="shipping-status">Status</label>
+                            <div class="col-md-10">
+                              <textarea id="shipping-status" name="shipping-status" class="form-control">{{ object.shippingdetails_set.get.status }}</textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction pull-right">Submit Change</button>
+                    </form>
+                    </div>
                 </div>
             </div>
         </div>
