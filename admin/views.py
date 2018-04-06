@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
+from django.conf import settings
+
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
-from braces.views import LoginRequiredMixin
+from admin.mixins import IsAdminMixin
 from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
 from django.urls import reverse_lazy
 from vendor.models import Vendor
@@ -17,10 +19,10 @@ def dashboard(request):
     if request.user.is_staff:
         return render(request, 'admin/dashboard.html')
     else:
-        return redirect('admin-login')
+        return redirect(settings.LOGIN_URL)
 
 
-class CreateUser(LoginRequiredMixin, CreateView):
+class CreateUser(IsAdminMixin, CreateView):
     model = User
     form_class = UserForm
     template_name = 'admin/user/user_form.html'
@@ -39,7 +41,7 @@ class CreateUser(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 
-class UpdateUser(LoginRequiredMixin, UpdateView):
+class UpdateUser(IsAdminMixin, UpdateView):
     model = User
     form_class = UserForm
     template_name = 'admin/user/user_form.html'
@@ -58,7 +60,7 @@ class UpdateUser(LoginRequiredMixin, UpdateView):
         return redirect(self.success_url)
 
 
-class CreateVendor(LoginRequiredMixin, CreateView):
+class CreateVendor(IsAdminMixin, CreateView):
     form_class = VendorForm
     template_name = 'admin/vendor/vendor_form.html'
     success_url = reverse_lazy('admin-vendors')
@@ -94,7 +96,7 @@ class CreateVendor(LoginRequiredMixin, CreateView):
         return self.form_valid(vendor_form)
 
 
-class UpdateVendor(LoginRequiredMixin, UpdateView):
+class UpdateVendor(IsAdminMixin, UpdateView):
     model = Vendor
     form_class = VendorForm
     template_name = 'admin/vendor/vendor_form.html'
@@ -131,7 +133,7 @@ class UpdateVendor(LoginRequiredMixin, UpdateView):
         return self.form_valid(vendor_form, size_formset, colour_formset)
 
 
-class CreateSupport(LoginRequiredMixin, CreateView):
+class CreateSupport(IsAdminMixin, CreateView):
     model = Support
     form_class = SupportForm
     template_name = 'admin/support/form.html'
@@ -158,7 +160,7 @@ class CreateSupport(LoginRequiredMixin, CreateView):
         return self.form_valid(support_form)
 
 
-class UpdateSupport(LoginRequiredMixin, UpdateView):
+class UpdateSupport(IsAdminMixin, UpdateView):
     model = Support
     form_class = SupportForm
     template_name = 'admin/support/form.html'
@@ -186,7 +188,7 @@ class UpdateSupport(LoginRequiredMixin, UpdateView):
         return self.form_valid(support_form, stock_formset)
 
 
-class CreateArtist(LoginRequiredMixin, CreateView):
+class CreateArtist(IsAdminMixin, CreateView):
     form_class = ArtistForm
     template_name = 'admin/vendor/vendor_form.html'
     success_url = reverse_lazy('admin-vendors')
@@ -199,7 +201,7 @@ class CreateArtist(LoginRequiredMixin, CreateView):
         return context
 
 
-class UpdateArtist(LoginRequiredMixin, UpdateView):
+class UpdateArtist(IsAdminMixin, UpdateView):
     model = Artist
     form_class = ArtistForm
     template_name = 'admin/vendor/vendor_form.html'
@@ -212,7 +214,7 @@ class UpdateArtist(LoginRequiredMixin, UpdateView):
         return context
 
 
-class CreateArt(LoginRequiredMixin, CreateView):
+class CreateArt(IsAdminMixin, CreateView):
     form_class = ArtForm
     template_name = 'admin/art/art_form.html'
     success_url = reverse_lazy('admin-art')
@@ -241,7 +243,7 @@ class CreateArt(LoginRequiredMixin, CreateView):
         return self.form_valid(art_form)
 
 
-class UpdateArt(LoginRequiredMixin, UpdateView):
+class UpdateArt(IsAdminMixin, UpdateView):
     model = Art
     form_class = ArtForm
     template_name = 'admin/art/art_form.html'
@@ -270,7 +272,7 @@ class UpdateArt(LoginRequiredMixin, UpdateView):
         return self.form_valid(art_form, images_formset)
 
 
-class OrderView(LoginRequiredMixin, DetailView):
+class OrderView(IsAdminMixin, DetailView):
     model = Order
     template_name = "admin/order/view.html"
 
@@ -294,14 +296,14 @@ def order_update(request, *args, **kwargs):
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
-class OrderStatusUpdate(LoginRequiredMixin, UpdateView):
+class OrderStatusUpdate(IsAdminMixin, UpdateView):
     model = OrderStatus
     template_name = "admin/order/status-form.html"
     fields = ("id", "text")
     success_url = reverse_lazy("order-statuses")
 
 
-class OrderStatusCreate(LoginRequiredMixin, CreateView):
+class OrderStatusCreate(IsAdminMixin, CreateView):
     model = OrderStatus
     template_name = "admin/order/status-form.html"
     fields = ("id", "text")

@@ -22,7 +22,6 @@
 
 - Extra fields - add them in js
 - test forms errors handling
-- !!! check if user is admin, not only logged!
 
 ## ORDER
 - email notifications

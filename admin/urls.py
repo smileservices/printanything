@@ -21,7 +21,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 
 from admin import views
-from django.views import generic
+from admin import generic_views
 
 from vendor.models import Vendor
 from artist.models import Artist
@@ -43,11 +43,11 @@ urlpatterns = [
 urlpatterns += [
     url(r'^users/create$', views.CreateUser.as_view(), name='create-user'),
     url(r'^users/edit/(?P<pk>[\d])', views.UpdateUser.as_view(), name='update-user'),
-    url(r'^users/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^users/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=User,
         success_url=reverse_lazy('admin-users')
     ), name="delete-user"),
-    url(r'^users', generic.ListView.as_view(
+    url(r'^users', generic_views.ListView.as_view(
         queryset=User.objects.all(),
         template_name='admin/user/list.html'
     ), name='admin-users'),
@@ -57,11 +57,11 @@ urlpatterns += [
 urlpatterns += [
     url(r'^vendors/create$', views.CreateVendor.as_view(), name='create-vendor'),
     url(r'^vendors/edit/(?P<pk>[\d])', views.UpdateVendor.as_view(), name='update-vendor'),
-    url(r'^vendors/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^vendors/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=Vendor,
         success_url=reverse_lazy('admin-vendors')
     ), name='delete-vendor'),
-    url(r'^vendors', generic.ListView.as_view(
+    url(r'^vendors', generic_views.ListView.as_view(
         queryset=Vendor.objects.all(),
         template_name='admin/vendor/list.html'
     ), name='admin-vendors'),
@@ -71,11 +71,11 @@ urlpatterns += [
 urlpatterns += [
     url(r'^artists/create$', views.CreateArtist.as_view(), name='create-artist'),
     url(r'^artists/edit/(?P<pk>[\d])', views.UpdateArtist.as_view(), name='update-artist'),
-    url(r'^artists/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^artists/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=Artist,
         success_url=reverse_lazy('admin-artists')
     ), name='delete-artist'),
-    url(r'^artists', generic.ListView.as_view(
+    url(r'^artists', generic_views.ListView.as_view(
         queryset=Artist.objects.all(),
         template_name='admin/artist/list.html'
     ), name='admin-artists'),
@@ -85,11 +85,11 @@ urlpatterns += [
 urlpatterns += [
     url(r'^art/create$', views.CreateArt.as_view(), name='create-art'),
     url(r'^art/edit/(?P<pk>[\d])', views.UpdateArt.as_view(), name='update-art'),
-    url(r'^art/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^art/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=Art,
         success_url=reverse_lazy('admin-art')
     ), name='delete-art'),
-    url(r'^art', generic.ListView.as_view(
+    url(r'^art', generic_views.ListView.as_view(
         queryset=Art.objects.all(),
         template_name='admin/art/list.html'
     ), name='admin-art'),
@@ -99,11 +99,11 @@ urlpatterns += [
 urlpatterns += [
     url(r'^supports/create$', views.CreateSupport.as_view(), name='create-support'),
     url(r'^supports/edit/(?P<pk>[\d])', views.UpdateSupport.as_view(), name='update-support'),
-    url(r'^supports/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^supports/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=Support,
         success_url=reverse_lazy('admin-supports')
     ), name='delete-support'),
-    url(r'^supports', generic.ListView.as_view(
+    url(r'^supports', generic_views.ListView.as_view(
         queryset=Support.objects.all(),
         template_name='admin/support/list.html'
     ), name='admin-supports'),
@@ -111,11 +111,11 @@ urlpatterns += [
 
 # ORDER STATUSES
 urlpatterns += [
-    url(r'^orders/statuses', generic.ListView.as_view(
+    url(r'^orders/statuses', generic_views.ListView.as_view(
         queryset=OrderStatus.objects.all(),
         template_name='admin/order/statuses-list.html'
     ), name='order-statuses'),
-    url(r'^order/status/delete/(?P<pk>[\d])', generic.DeleteView.as_view(
+    url(r'^order/status/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
         model=OrderStatus,
         success_url=reverse_lazy('order-statuses')
     ), name="delete-order-status"),
@@ -125,7 +125,7 @@ urlpatterns += [
 
 # ORDERS
 urlpatterns += [
-    url(r'^orders', generic.ListView.as_view(
+    url(r'^orders', generic_views.ListView.as_view(
         queryset=Order.objects.all(),
         template_name='admin/order/list.html'
     ), name='admin-orders'),
