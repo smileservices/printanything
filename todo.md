@@ -2,14 +2,11 @@
 - Finish the order phase
     - Order processing (place to vendor/status/shipment)
     - Implement cart/order reservation limited time
-    - after clicking "place order"
-        - clear up cart
-        - send email with order
-    - admin order management
 - Implement UI
     - redirect to paypal
     - payment success/cancel
 - Add option to act as if no stock is needed (something like unlimited stock)
+- clean up old carts (chron job)
 
 ## USERS
 - admin users
@@ -24,8 +21,9 @@
 - test forms errors handling
 
 ## ORDER
-- email notifications
+- email template for notifications
 - ticketing system
+- after payment confirm delete cart
 
 # Fixtures:
  - Useful for populating the database

@@ -12,6 +12,7 @@ from tshirtstore import settings
 from django.urls import reverse
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -70,6 +71,9 @@ def process_payment(request, order):
 
 
 def payment_complete(request):
+    cart_proxy = CartProxy(request)
+    cart_proxy.clear()
+    cart_proxy.cart.delete()
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment'
     })

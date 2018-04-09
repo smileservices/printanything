@@ -6,3 +6,4 @@ media/
 */migrations/*
 tshirtstore/settings.py
 static_col/*
+*.log
