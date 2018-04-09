@@ -9,7 +9,6 @@
 - clean up old carts (chron job)
 
 ## USERS
-- admin users
 - regular users
 
 ## ADMIN
@@ -24,6 +23,7 @@
 - email template for notifications
 - ticketing system
 - after payment confirm delete cart
+- invoices
 
 # Fixtures:
  - Useful for populating the database

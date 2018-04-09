@@ -13,6 +13,9 @@ from django.urls import reverse
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 
 
 # Create your views here.
@@ -64,6 +67,7 @@ def process_payment(request, order):
         "return_url": request.build_absolute_uri(reverse('payment-return')),
         "cancel_return": request.build_absolute_uri(reverse('payment-cancel')),
     }
+    request.session['order_id'] = order.id
     # Create the instance.
     form = PayPalPaymentsForm(initial=paypal_dict)
     context = {"form": form}
@@ -74,6 +78,19 @@ def payment_complete(request):
     cart_proxy = CartProxy(request)
     cart_proxy.clear()
     cart_proxy.cart.delete()
+    order = Order.objects.get(pk=request.session['order_id'])
+    context = {
+        'order': order,
+        'items': order.orderdetails_set.all(),
+        'contact': order.shippingdetails_set.first().contact,
+        'shipping': order.shippingdetails_set.first()
+    }
+    html_msg = render_to_string('order/customer_email.html', context=context)
+    text_msg = strip_tags(html_msg)
+    msg = EmailMultiAlternatives('Your order', body=text_msg, from_email='noreply@tshirtstore.com',
+              to=[order.customer.email, ])
+    msg.attach_alternative(html_msg, "text/html")
+    msg.send()
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment'
     })
@@ -89,7 +106,6 @@ class PaymentException(Exception):
     pass
 
 
-#TODO Must test this when online
 def show_me_the_money(sender, **kwargs):
     ipn_obj = sender
     if ipn_obj.payment_status == ST_PP_COMPLETED:
@@ -103,7 +119,7 @@ def show_me_the_money(sender, **kwargs):
         if ipn_obj.mc_gross == order.calculate_price() and ipn_obj.mc_currency == 'USD':
             # add to valid payments
             payment = Payment(
-                id=ipn_obj.txn_id, #yes?
+                id=ipn_obj.txn_id,  # yes?
                 type='paypal',
                 amount=ipn_obj.mc_gross,
                 status='complete',
