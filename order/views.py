@@ -87,10 +87,13 @@ def payment_complete(request):
     }
     html_msg = render_to_string('order/customer_email.html', context=context)
     text_msg = strip_tags(html_msg)
+    # send email to customer
     msg = EmailMultiAlternatives('Your order', body=text_msg, from_email='noreply@tshirtstore.com',
-              to=[order.customer.email, ])
+                                 to=[order.customer.email, ], bcc=__get_admins_email())
     msg.attach_alternative(html_msg, "text/html")
     msg.send()
+    # send email to admins
+
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment'
     })
@@ -165,3 +168,8 @@ def __get_customer_contact(request):
 def __get_shipping(id):
     shipping = Shipping.objects.get(id=id)
     return shipping.name, shipping.price
+
+
+def __get_admins_email():
+    from django.contrib.auth.models import User
+    return [user.email for user in User.objects.filter(is_staff=1).all()]
