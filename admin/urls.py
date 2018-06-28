@@ -42,8 +42,8 @@ urlpatterns = [
 # USERS
 urlpatterns += [
     url(r'^users/create$', views.CreateUser.as_view(), name='create-user'),
-    url(r'^users/edit/(?P<pk>[\d])', views.UpdateUser.as_view(), name='update-user'),
-    url(r'^users/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^users/edit/(?P<pk>\d+)', views.UpdateUser.as_view(), name='update-user'),
+    url(r'^users/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=User,
         success_url=reverse_lazy('admin-users')
     ), name="delete-user"),
@@ -56,8 +56,8 @@ urlpatterns += [
 # VENDORS
 urlpatterns += [
     url(r'^vendors/create$', views.CreateVendor.as_view(), name='create-vendor'),
-    url(r'^vendors/edit/(?P<pk>[\d])', views.UpdateVendor.as_view(), name='update-vendor'),
-    url(r'^vendors/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^vendors/edit/(?P<pk>\d+)', views.UpdateVendor.as_view(), name='update-vendor'),
+    url(r'^vendors/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Vendor,
         success_url=reverse_lazy('admin-vendors')
     ), name='delete-vendor'),
@@ -70,8 +70,8 @@ urlpatterns += [
 # ARTISTS
 urlpatterns += [
     url(r'^artists/create$', views.CreateArtist.as_view(), name='create-artist'),
-    url(r'^artists/edit/(?P<pk>[\d])', views.UpdateArtist.as_view(), name='update-artist'),
-    url(r'^artists/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^artists/edit/(?P<pk>\d+)', views.UpdateArtist.as_view(), name='update-artist'),
+    url(r'^artists/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Artist,
         success_url=reverse_lazy('admin-artists')
     ), name='delete-artist'),
@@ -84,8 +84,8 @@ urlpatterns += [
 # ART
 urlpatterns += [
     url(r'^art/create$', views.CreateArt.as_view(), name='create-art'),
-    url(r'^art/edit/(?P<pk>[\d])', views.UpdateArt.as_view(), name='update-art'),
-    url(r'^art/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^art/edit/(?P<pk>\d+)', views.UpdateArt.as_view(), name='update-art'),
+    url(r'^art/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Art,
         success_url=reverse_lazy('admin-art')
     ), name='delete-art'),
@@ -98,8 +98,8 @@ urlpatterns += [
 # SUPPORTS
 urlpatterns += [
     url(r'^supports/create$', views.CreateSupport.as_view(), name='create-support'),
-    url(r'^supports/edit/(?P<pk>[\d])', views.UpdateSupport.as_view(), name='update-support'),
-    url(r'^supports/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^supports/edit/(?P<pk>\d+)', views.UpdateSupport.as_view(), name='update-support'),
+    url(r'^supports/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Support,
         success_url=reverse_lazy('admin-supports')
     ), name='delete-support'),
@@ -115,11 +115,11 @@ urlpatterns += [
         queryset=OrderStatus.objects.all(),
         template_name='admin/order/statuses-list.html'
     ), name='order-statuses'),
-    url(r'^order/status/delete/(?P<pk>[\d])', generic_views.DeleteView.as_view(
+    url(r'^order/status/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=OrderStatus,
         success_url=reverse_lazy('order-statuses')
     ), name="delete-order-status"),
-    url(r'orders/status/edit/(?P<pk>[\d])', views.OrderStatusUpdate.as_view(), name="order-status-edit"),
+    url(r'orders/status/edit/(?P<pk>\d+)', views.OrderStatusUpdate.as_view(), name="order-status-edit"),
     url(r'orders/status/create', views.OrderStatusCreate.as_view(), name="order-status-create")
 ]
 
@@ -129,8 +129,8 @@ urlpatterns += [
         queryset=Order.objects.all(),
         template_name='admin/order/list.html'
     ), name='admin-orders'),
-    url(r'^order/view/(?P<pk>[\d])', views.OrderView.as_view(), name="admin-order-view"),
-    url(r'^order/update/(?P<pk>[\d])', views.order_update, name="admin-order-update")
+    url(r'^order/view/(?P<pk>\d+)', views.OrderView.as_view(), name="admin-order-view"),
+    url(r'^order/update/(?P<pk>\d+)', views.order_update, name="admin-order-update")
 ]
 
 
