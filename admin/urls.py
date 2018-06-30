@@ -97,7 +97,7 @@ urlpatterns += [
 
 # SUPPORTS
 urlpatterns += [
-    url(r'^supports/create$', views.CreateSupport.as_view(), name='create-support'),
+    url(r'^vendor/(?P<vendorid>\d+)/supports/create$', views.CreateSupport.as_view(), name='create-support'),
     url(r'^supports/edit/(?P<pk>\d+)', views.UpdateSupport.as_view(), name='update-support'),
     url(r'^supports/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Support,

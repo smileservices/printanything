@@ -11,7 +11,7 @@ from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
 from django.urls import reverse_lazy
 from vendor.models import Vendor
 from artist.models import Artist
-from product.models import Art, Support, Stock
+from product.models import Art, Support, Stock, Colour, Size
 from order.models import Order, OrderStatus
 
 
@@ -141,8 +141,13 @@ class CreateSupport(IsAdminMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateSupport, self).get_context_data(**kwargs)
-        context['stock_forms'] = SupportForm.StockFormSet() if "validated_stocks_form" not in kwargs else kwargs[
+        context['stock_forms'] = SupportForm().StockFormSet() if "validated_stocks_form" not in kwargs else kwargs[
             "validated_stocks_form"]
+        #filter the colour and size options for current vendor
+        curr_vend = Vendor.objects.get(id=self.kwargs['vendorid'])
+        for form in context['stock_forms']:
+            form.fields['colour'].queryset = Colour.objects.filter(vendor=curr_vend)
+            form.fields['size'].queryset = Size.objects.filter(vendor=curr_vend)
         context['action'] = 'Create'
         return context
 

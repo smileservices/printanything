@@ -1,30 +1,38 @@
 # TODO:
 
-Admin
-- add supports screen should be locked on a certain vendor
+# CRITICAL
 
+## Order,Product Page,Support
+- add updated at
+- add shipping for each vendor items
+- move focus on art then show available printing supports
+- add photos for supports
+
+## Admin
+- add supports screen should be locked on a certain vendor
+- supports inventory in tabular mode
+- add photos for supports
+- add option to act as if no stock is needed (something like unlimited stock)
+- order change statuses & delete
+
+
+# Normal
+
+## Admin
 - Finish the order phase
     - Order processing (place to vendor/status/shipment)
 
+## FRONTEND UI
 - Implement UI
     - redirect to paypal
     - payment success/cancel
-- Add option to act as if no stock is needed (something like unlimited stock)
 
 ## USERS
 - regular users
-
-## ADMIN
-- notification for new orders
-- orders:
-    - change statuses & delete
-
-- Extra fields - add them in js
-- test forms errors handling
+- check order status
 
 ## ORDER
 - email template for notifications
-- ticketing system
 - after payment confirm delete cart
 - invoices
 
@@ -34,3 +42,5 @@ FUTURE RELEASES
 - Implement cart/order reservation limited time
 - clean up old carts (chron job)
 - add "edited on" time column in view/detail
+- ticketing system for customer/vendor/admin
+
