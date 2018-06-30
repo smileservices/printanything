@@ -1,4 +1,8 @@
 # TODO:
+
+Admin
+- add supports screen should be locked on a certain vendor
+
 - Finish the order phase
     - Order processing (place to vendor/status/shipment)
 

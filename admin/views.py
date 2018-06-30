@@ -295,6 +295,11 @@ def order_update(request, *args, **kwargs):
         shipping_detail.save()
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
+def order_to_vendor(request, *args, **kwargs):
+    order = Order.objects.get(pk=kwargs.get('pk'))
+    return HttpResponseRedirect(reverse_lazy("admin-orders"))
+
+
 
 class OrderStatusUpdate(IsAdminMixin, UpdateView):
     model = OrderStatus

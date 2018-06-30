@@ -1,5 +1,6 @@
 {% extends 'admin/dashboard.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
 <div class="row">
@@ -22,6 +23,7 @@
                             <th>Unit Price</th>
                             <th>Art</th>
                             <th>Support</th>
+                            <th>Support Vendor Cost</th>
                             <th>Colour</th>
                             <th>Size</th>
                             <th>Quantity</th>
@@ -30,8 +32,9 @@
                             <tr>
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.unit_price }}</td>
-                                <td>{{ product.art }}</td>
-                                <td>{{ product.support }}</td>
+                                <td><a href="/media/{{ product.art.big_image }}">{{ product.art }}</a></td>
+                                <td>{{ product.support.name }}</td>
+                                <td>{{ product.support.vendor_price }}</td>
                                 <td>{{ product.colour }}</td>
                                 <td>{{ product.size }}</td>
                                 <td>{{ product.qty }}</td>
@@ -140,6 +143,12 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-12">
+        <form action="{% url "admin-order-to-vendor" pk=order.id %}" class="form-horizontal" method="POST">
+        {% csrf_token %}
+            <button class="btn btn-primary ink-reaction pull-right">Send to vendor</button>
+        </form>
     </div>
 </div>
 {% endblock %}
