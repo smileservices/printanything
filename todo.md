@@ -9,7 +9,6 @@
 - add photos for supports
 
 ## Admin
-- add supports screen should be locked on a certain vendor
 - supports inventory in tabular mode
 - add photos for supports
 - add option to act as if no stock is needed (something like unlimited stock)
