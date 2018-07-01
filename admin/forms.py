@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from vendor.models import Vendor, Size, Colour
 from artist.models import Artist
 from product.models import Art, Support, Stock
-from gallery.models import Image
+from gallery.models import ArtImage, SupportImage
 
 from admin.widgets import BoostrapCheckbox, BoostrapFileInput
 
@@ -61,6 +61,12 @@ class VendorForm(forms.ModelForm):
         }
 
 
+class BaseProductImageFormSet(forms.BaseInlineFormSet):
+    class Meta:
+        model = SupportImage
+        fields = ("relative_path", "primary", "colour")
+
+
 class SupportForm(forms.ModelForm):
     StockFormSet = forms.inlineformset_factory(
         Support,
@@ -68,6 +74,17 @@ class SupportForm(forms.ModelForm):
         formset=BaseStockFormSet,
         extra=3,
         fields=("stock", "colour", "size")
+    )
+    ProductImageFormSet = forms.inlineformset_factory(
+        Support,
+        SupportImage,
+        formset=BaseProductImageFormSet,
+        extra=1,
+        fields=("relative_path", "primary", "colour"),
+        widgets={
+            "primary": BoostrapCheckbox(attrs={'field_name': 'Primary'}),
+            "relative_path": BoostrapFileInput,
+        }
     )
 
     class Meta:
@@ -81,17 +98,17 @@ class ArtistForm(forms.ModelForm):
         fields = ("name",)
 
 
-class BaseImageFormSet(forms.BaseInlineFormSet):
+class ArtBaseImageFormSet(forms.BaseInlineFormSet):
     class Meta:
-        model = Image
+        model = ArtImage
         fields = ("relative_path", "primary")
 
 
 class ArtForm(forms.ModelForm):
     ImagesFormSet = forms.inlineformset_factory(
         Art,
-        Image,
-        formset=BaseImageFormSet,
+        ArtImage,
+        formset=ArtBaseImageFormSet,
         fields=["relative_path", "primary"],
         extra=3,
         widgets={

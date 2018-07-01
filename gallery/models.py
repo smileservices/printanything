@@ -4,14 +4,14 @@ from PIL import Image as PIL_Image
 from django.utils.crypto import get_random_string
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
-from django.conf import settings
-from product.models import Art
+from product.models import Art, Support, Colour
 from django_cleanup.signals import cleanup_pre_delete
+from gallery.image_class import Image
 
 
 # Create your models here.
 
-def get_save_path(instance, filename):
+def get_art_save_path(instance, filename):
     return "art/{0}/{1}.{2}".format(
         instance.art.id,
         get_random_string(24),
@@ -19,50 +19,46 @@ def get_save_path(instance, filename):
     )
 
 
-def get_thumb_url(instance, size):
-    filename, extension = os.path.splitext(instance.relative_path.url)
-    thumb_name = filename + "_thumb_{0}".format("_".join(map(str, size))) + extension
-    return thumb_name
+def get_support_save_path(instance, filename):
+    return "support/{0}/{1}/{2}.{3}".format(
+        instance.support.id,
+        instance.colour.id,
+        get_random_string(24),
+        filename.split(".")[-1].lower()
+    )
 
 
-class Image(models.Model):
-    relative_path = models.ImageField(upload_to=get_save_path)
+class ArtImage(Image, models.Model):
+    relative_path = models.ImageField(upload_to=get_art_save_path)
     art = models.ForeignKey(Art, on_delete=models.CASCADE, related_name='images', db_constraint=False)
     primary = models.BooleanField()
-    thumb_sizes = {'med': (600, 900), 'small': (600, 682), 'big': (800, 1128)}
 
-    def get_image_path(self):
-        return os.path.join(settings.BASE_DIR, self.relative_path.url[1:])
 
-    def get_image_url(self):
-        return self.relative_path.url
-
-    def get_thumb_big_url(self):
-        return get_thumb_url(self, self.thumb_sizes['big'])
-
-    def get_thumb_med_url(self):
-        return get_thumb_url(self, self.thumb_sizes['med'])
-
-    def get_thumb_small_url(self):
-        return get_thumb_url(self, self.thumb_sizes['small'])
+class SupportImage(Image, models.Model):
+    relative_path = models.ImageField(upload_to=get_support_save_path)
+    support = models.ForeignKey(Support, on_delete=models.CASCADE, related_name='images', db_constraint=False)
+    colour = models.ForeignKey(Colour, on_delete=models.CASCADE, related_name='images', db_constraint=False)
+    primary = models.BooleanField()
 
 
 # @receiver(cleanup_post_delete, sender=Image)
 def clean_thumbnails(**kwargs):
     filename, extension = os.path.splitext(kwargs['file'].path)
-    for k, size in Image.thumb_sizes.items():
+    for k, size in ArtImage.thumb_sizes.items():
         try:
             os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
         except FileNotFoundError:
             pass
-        
+
 
 cleanup_pre_delete.connect(clean_thumbnails)
 
-@receiver(post_save, sender=Image)
+
+@receiver(post_save, sender=SupportImage)
+@receiver(post_save, sender=ArtImage)
 def save_thumbnail(sender, **kwargs):
     filename, extension = os.path.splitext(kwargs['instance'].get_image_path())
-    for k, size in Image.thumb_sizes.items():
+    for k, size in ArtImage.thumb_sizes.items():
         img = PIL_Image.open(kwargs['instance'].get_image_path())
         img.thumbnail(size)
         img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)

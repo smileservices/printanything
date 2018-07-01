@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from .models import Tag, Art, Support, Stock
-from gallery.models import Image
+from gallery.models import ArtImage
 
 # Register your models here.
 
@@ -12,7 +12,7 @@ admin.site.register(Tag)
 
 # ART ADMIN SECTION
 class ArtImage(admin.TabularInline):
-    model = Image
+    model = ArtImage
     extra = 1
 
 

@@ -143,11 +143,15 @@ class CreateSupport(IsAdminMixin, CreateView):
         context = super(CreateSupport, self).get_context_data(**kwargs)
         context['stock_forms'] = SupportForm().StockFormSet() if "validated_stocks_form" not in kwargs else kwargs[
             "validated_stocks_form"]
-        #filter the colour and size options for current vendor
+        context['images_form'] = SupportForm.ProductImageFormSet(
+            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
+
+        # filter the colour and size options for current vendor
         curr_vend = Vendor.objects.get(id=self.kwargs['vendorid'])
         for form in context['stock_forms']:
             form.fields['colour'].queryset = Colour.objects.filter(vendor=curr_vend)
             form.fields['size'].queryset = Size.objects.filter(vendor=curr_vend)
+        context['vendor_id'] = self.kwargs['vendorid']
         context['action'] = 'Create'
         return context
 
@@ -175,22 +179,35 @@ class UpdateSupport(IsAdminMixin, UpdateView):
         context = super(UpdateSupport, self).get_context_data(**kwargs)
         context['stock_forms'] = SupportForm.StockFormSet(
             instance=self.object) if "validated_stocks_form" not in kwargs else kwargs["validated_stocks_form"]
+        context['images_form'] = SupportForm.ProductImageFormSet(
+            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
+        # filter the colour and size options for current vendor
+        curr_vend = context['object'].vendor
+        for form in context['stock_forms']:
+            form.fields['colour'].queryset = Colour.objects.filter(vendor=curr_vend)
+            form.fields['size'].queryset = Size.objects.filter(vendor=curr_vend)
+        for form in context['images_form']:
+            form.fields['colour'].queryset = Colour.objects.filter(vendor=curr_vend)
         context['action'] = 'Update'
+        context['vendor_id'] = curr_vend.id
         return context
 
-    def form_valid(self, form, stock_formset):
+    def form_valid(self, form):
+        support = form.save()
         success_redirect = super(UpdateSupport, self).form_valid(form)
-        valid = stock_formset.is_valid()
+        stock_formset = form.StockFormSet(self.request.POST, instance=support)
+        images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES,instance=support)
+        valid = stock_formset.is_valid() and images_formset.is_valid()
         if valid:
             stock_formset.save()
-        validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset)
+            images_formset.save()
+        validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset, validated_images_form=images_formset)
         return success_redirect if valid else self.render_to_response(validated_forms_context)
 
     def post(self, request, *args, **kwargs):
         support = Support.objects.get(pk=kwargs.get('pk'))
         support_form = SupportForm(data=request.POST, instance=support)
-        stock_formset = support_form.StockFormSet(data=self.request.POST, instance=support)
-        return self.form_valid(support_form, stock_formset)
+        return self.form_valid(support_form)
 
 
 class CreateArtist(IsAdminMixin, CreateView):
@@ -300,10 +317,10 @@ def order_update(request, *args, **kwargs):
         shipping_detail.save()
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
+
 def order_to_vendor(request, *args, **kwargs):
     order = Order.objects.get(pk=kwargs.get('pk'))
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
-
 
 
 class OrderStatusUpdate(IsAdminMixin, UpdateView):

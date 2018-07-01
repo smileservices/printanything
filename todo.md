@@ -3,23 +3,25 @@
 # CRITICAL
 
 ## Order,Product Page,Support
-- add updated at
-- add shipping for each vendor items
 - move focus on art then show available printing supports
+- add shipping for each vendor items
 - add photos for supports
 
 ## Admin
-- supports inventory in tabular mode
-- add photos for supports
-- add option to act as if no stock is needed (something like unlimited stock)
+- tags for art
+- finish artist section
 - order change statuses & delete
+- Finish the order phase
+    - Order processing (place to vendor/status/shipment)
 
 
 # Normal
 
 ## Admin
-- Finish the order phase
-    - Order processing (place to vendor/status/shipment)
+- supports inventory in tabular mode
+- add option to act as if no stock is needed (something like unlimited stock)
+- make supports photos look good
+
 
 ## FRONTEND UI
 - Implement UI
@@ -31,6 +33,7 @@
 - check order status
 
 ## ORDER
+- add updated at
 - email template for notifications
 - after payment confirm delete cart
 - invoices

@@ -10,6 +10,7 @@ An ecommerce app built on top of Django for selling personalized merchandise
 ```
 - Make db migrations
 ```
+    python manage.py makemigrations
     python manage.py migrate
 ```
 - Change settings.py - STATIC_ROOT to point to a newly created folder that will store all project's static files
