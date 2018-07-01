@@ -1,6 +1,12 @@
 $(document).ready(function(){
 
+    /*
+* after selecting support a request is made to get back associated stock items.
+* upon that the templates are populated and rendered
+*
+* */
     var supports = {
+
         'data_by_id': {},
         'rendered_by_id': {},
         'get_stock_url': function(id) {
@@ -8,25 +14,28 @@ $(document).ready(function(){
         },
         'select_support': function(id) {
             var self = this;
+            var data = self.data_by_id[id];
+            var supportSection = $('#support_section');
+            self.gallery_rendered = self.render_gallery(data);
+            self.sizes_rendered = self.render_sizes(data);
             if (!self.rendered_by_id[id]) {
-                var data = self.data_by_id[id];
                 var colours_rendered = self.render_colours(data);
-                self.sizes_rendered = self.render_sizes(data);
-                first_colour = Object.keys(data)[0]
-                $('#support_section').template({
+                var first_colour = Object.keys(data)[0];
+                supportSection.template({
                     'colours': colours_rendered,
-                    'sizes': self.sizes_rendered[first_colour],
+                    'support_gallery': self.gallery_rendered[first_colour],
+                    'sizes': self.sizes_rendered[first_colour]
                 }, '#sup_sec_tmpl');
-                self.rendered_by_id[id] = $('#support_section').html();
+                self.rendered_by_id[id] = supportSection.html();
             } else {
-                $('#support_section').html(self.rendered_by_id[id]);
+                supportSection.html(self.rendered_by_id[id]);
             }
             //change colours listener
-            $('#support_section input[name="colour"]').click(function(){
+            $('input[name="colour"]').click(function(){
                 var self_elem = $(this);
-                $('#support_section input[name="colour"]').removeAttr('checked');
+                self_elem.removeAttr('checked');
                 supports.colour_select(self_elem)
-            })
+            });
             $('#support_sizes a').click(function(e){
                 e.preventDefault();
                 self.size_select($(this))
@@ -35,7 +44,7 @@ $(document).ready(function(){
         'render_colours': function(data) {
             var rendered = $('<div id="available_colours"></div>');
             var index = 0;
-            $.each(data, function(key, val){
+            $.each(data, function(key, colorData){
                 rendered.template({
                     'colour_lower': key.toLowerCase(),
                     'colour': key,
@@ -45,11 +54,26 @@ $(document).ready(function(){
             })
             return rendered.html();
         },
+        'render_gallery': function(data) {
+            var gallery_by_colours = {};
+            $.each(data, function(key, colorData){
+                var rendered = $('<div id="support_gallery"></div>');
+                $.each(colorData['gallery'], function(key, img){
+                    rendered.template({
+                        'primary': img['primary'],
+                        'url': img['url'],
+                        'thumb_url': img['thumb'],
+                    }, '#sup_sec_tmpl_colour_gallery', true)
+                });
+                gallery_by_colours[key] = rendered.html();
+            });
+            return gallery_by_colours;
+        },
         'render_sizes': function(data) {
             var sizes_by_colours = {};
-            $.each(data, function(key, sizes){
+            $.each(data, function(key, colorData){
                 var rendered = $('<div id="available_sizes"></div>');
-                $.each(sizes, function(key, size){
+                $.each(colorData['sizes'], function(key, size){
                     rendered.template({
                         'size': size.size,
                         'size-id': size.id
@@ -61,8 +85,10 @@ $(document).ready(function(){
         },
         'colour_select': function(self_elem) {
             var self = this;
+            // this changes both sizes and support gallery
             self_elem.prop("checked",true);
-            $('#support_sizes ul').html(self.sizes_rendered[self_elem.val()])
+            $('#support_gallery').html(self.gallery_rendered[self_elem.val()]);
+            $('#support_sizes ul').html(self.sizes_rendered[self_elem.val()]);
             $('#support_sizes a').click(function(e){
                 e.preventDefault();
                 self.size_select($(this))

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import os
 from django.db import models
 from PIL import Image as PIL_Image

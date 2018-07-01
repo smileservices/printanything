@@ -31,10 +31,15 @@ def support_stock(request, support_id):
     support = Support.objects.get(id=support_id)
     stock = support.stock_set.exclude(stock=0).all()
     data = {}
+    # group available sizez by colours
     for item in stock:
         if str(item.colour) not in data:
-            data[str(item.colour)] = []
-        data[str(item.colour)].append({
+            gallery = [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in item.get_images()]
+            data[str(item.colour)] = {
+                'gallery': gallery,
+                'sizes': []
+            }
+        data[str(item.colour)]['sizes'].append({
             'size': str(item.size),
             'stock': str(item.stock),
             'id': str(item.id),

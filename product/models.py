@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from vendor.models import Vendor, Size, Colour
 from artist.models import Artist
-
 from django.urls import reverse
 
 
@@ -114,6 +113,10 @@ class Stock(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.colour, self.size)
+
+    def get_images(self):
+        from gallery.models import SupportImage
+        return SupportImage.objects.filter(colour=self.colour, support=self.support).all()
 
 
 @receiver(pre_save, sender=Art)

@@ -80,6 +80,11 @@
         </div>
  </section>
 
+{# TEMPLATES for jquery.template #}
+
+{#  {!val} is from jquery template language. read the readme  #}
+
+{#    main template for colours and sizes #}
 <script type="text/template" id="sup_sec_tmpl">
     <div class="widget color">
         <h6 class="widget-title">Color</h6>
@@ -87,6 +92,14 @@
             {!colours}
         </div>
     </div>
+
+    <div class="widget color">
+        <h6 class="widget-title">Support gallery</h6>
+        <div class="widget-desc custom-controls-inline" id="support_gallery">
+            {!support_gallery}
+        </div>
+    </div>
+
 
     <div class="widget size mb-15">
         <h6 class="widget-title">Size</h6>
@@ -97,14 +110,20 @@
         </div>
     </div>
 </script>
+
 <script type="text/template" id="sup_sec_tmpl_colours">
+{# partial template for colours #}
     <label class="custom-control custom-radio">
         <input name="colour" type="radio" {!checked} value="{colour}" class="custom-control-input">
         <span class="custom-control-indicator"></span>
         <span class="custom-control-description">{colour}</span>
     </label>
 </script>
+<script type="text/template" id="sup_sec_tmpl_colour_gallery">
+    <a href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}" alt=""></a>
+</script>
 <script type="text/template" id="sup_sec_tmpl_size">
+{# partial template for sizes #}
     <li><a href="#" data-id="{size-id}">{size}</a></li>
 </script>
 
