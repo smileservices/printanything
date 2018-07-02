@@ -3,12 +3,10 @@
 # CRITICAL
 
 ## Order,Product Page,Support
-- move focus on art then show available printing supports
-- add shipping for each vendor items
-- add photos for supports
+- add shipping for each vendor
 
 ## Admin
-- tags for art
+- tags for art - add tags from tags input - js
 - finish artist section
 - order change statuses & delete
 - Finish the order phase
@@ -24,6 +22,7 @@
 
 
 ## FRONTEND UI
+- Product page
 - Implement UI
     - redirect to paypal
     - payment success/cancel
