@@ -44,4 +44,5 @@ FUTURE RELEASES
 - clean up old carts (chron job)
 - add "edited on" time column in view/detail
 - ticketing system for customer/vendor/admin
+- add elasticsearch
 
