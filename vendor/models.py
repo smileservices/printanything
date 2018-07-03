@@ -40,3 +40,13 @@ class Colour(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Shipping(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.FloatField()
+    description = models.TextField()
+    vendor = models.ForeignKey(Vendor,on_delete=models.CASCADE, db_constraint=False)
+
+    def __str__(self):
+        return self.name

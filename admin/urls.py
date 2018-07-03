@@ -23,7 +23,7 @@ from django.urls import reverse_lazy
 from admin import views
 from admin import generic_views
 
-from vendor.models import Vendor
+from vendor.models import Vendor,Shipping
 from artist.models import Artist
 from product.models import Art, Support
 from order.models import Order, OrderStatus
@@ -65,6 +65,13 @@ urlpatterns += [
         queryset=Vendor.objects.all(),
         template_name='admin/vendor/list.html'
     ), name='admin-vendors'),
+]
+
+# SHIPPING
+urlpatterns += [
+    url(r'^vendor/(?P<vendor>\d+)/shipping/create', views.VendorShippingCreate.as_view(), name='create-shipping'),
+    url(r'^shipping/edit/(?P<pk>\d+)', views.VendorShippingUpdate.as_view(), name='update-shipping'),
+    url(r'^shipping/delete/(?P<pk>\d+)', views.VendorShippingDelete.as_view(), name='delete-shipping')
 ]
 
 # ARTISTS

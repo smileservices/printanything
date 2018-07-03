@@ -1,0 +1,23 @@
+<div class="table-responsive">
+    <table class="table no-margin">
+        <thead>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Delete</th>
+        </thead>
+        {% for shipping in shippings %}
+            <tr>
+                <td><a href="{% url 'update-shipping' pk=shipping.id %}">{{ shipping.name }}</a></td>
+                <td>{{ shipping.price }}</td>
+                <td>{{ shipping.description }}</td>
+                <td>
+                    <form action="{% url "delete-shipping" pk=shipping.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction"><i class="md md-delete"></i></button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

@@ -3,13 +3,14 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.conf import settings
 
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from admin.mixins import IsAdminMixin
 from admin.forms import UserForm, VendorForm, ArtistForm, ArtForm, SupportForm
 from django.urls import reverse_lazy
-from vendor.models import Vendor
+from django.shortcuts import get_object_or_404
+from vendor.models import Vendor, Shipping
 from artist.models import Artist
 from product.models import Art, Support, Stock, Colour, Size
 from order.models import Order, OrderStatus
@@ -196,18 +197,52 @@ class UpdateSupport(IsAdminMixin, UpdateView):
         support = form.save()
         success_redirect = super(UpdateSupport, self).form_valid(form)
         stock_formset = form.StockFormSet(self.request.POST, instance=support)
-        images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES,instance=support)
+        images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES, instance=support)
         valid = stock_formset.is_valid() and images_formset.is_valid()
         if valid:
             stock_formset.save()
             images_formset.save()
-        validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset, validated_images_form=images_formset)
+        validated_forms_context = self.get_context_data(form=form, validated_stocks_form=stock_formset,
+                                                        validated_images_form=images_formset)
         return success_redirect if valid else self.render_to_response(validated_forms_context)
 
     def post(self, request, *args, **kwargs):
         support = Support.objects.get(pk=kwargs.get('pk'))
         support_form = SupportForm(data=request.POST, instance=support)
         return self.form_valid(support_form)
+
+
+class VendorShippingUpdate(IsAdminMixin, UpdateView):
+    model = Shipping
+    template_name = "admin/shipping/form.html"
+    fields = ("name", "price", "description")
+
+    def get_success_url(self):
+        return reverse_lazy('update-vendor', kwargs={'pk': self.object.vendor.id})
+
+
+class VendorShippingCreate(IsAdminMixin, CreateView):
+    model = Shipping
+    template_name = "admin/shipping/form.html"
+    fields = ("name", "price", "description")
+
+    def get_success_url(self):
+        return reverse_lazy('update-vendor', kwargs={'pk': self.vendor.id})
+
+    def dispatch(self, request, *args, **kwargs):
+        self.vendor = get_object_or_404(Vendor, pk=kwargs['vendor'])
+        return super(CreateView, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.vendor = self.vendor
+        return super(CreateView, self).form_valid(form)
+
+
+class VendorShippingDelete(IsAdminMixin, DeleteView):
+    model = Shipping
+
+    def get_success_url(self):
+        return reverse_lazy('update-vendor', kwargs={'pk': self.object.vendor.id})
 
 
 class CreateArtist(IsAdminMixin, CreateView):
