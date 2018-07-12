@@ -10,57 +10,93 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    {% if grouped_items.count > 1 %}
+                        <alert class="alert alert-info">You have selected to have the art printed on supports sold by multiple vendors. There will be shipping charges from each vendor.</alert>
+                    {% endif %}
                     <div class="cart-table clearfix">
                         <table class="table table-responsive">
                             <thead>
-                                <tr>
-                                    <th><i class="fa fa-trash-o" aria-hidden="true"></i></th>
-                                    <th></th>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                </tr>
+                            <tr>
+                                <th><i class="fa fa-trash-o" aria-hidden="true"></i></th>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
                             </thead>
                             <tbody>
-
-                                {% for item in cart %}
-                                <tr id="item_{{ item.id }}">
-                                    <td class="action"><a class="remove_item" href="#" data-id="{{ item.id }}"><i class="fa fa-times" aria-hidden="true"></i></a></td>
-                                    <td class="cart_product_img">
-                                        <a href="#"><img class="img img-thumbnail" src="{{ item.product.get_primary_image.get_thumb_small_url }}" alt="Product"></a>
-                                    </td>
-                                    <td class="cart_product_desc">
-                                        <h5>{{ item.product.name }} on {{ item.stock.support }} ({{ item.stock }})</h5>
-                                    </td>
-                                    <td class="price"><span>$</span><span class="number">{{ item.unit_price }}</span></td>
-                                    <td class="qty">
-                                        <div class="quantity">
-                                            <input type="number" data-id="{{ item.id }}" class="qty-text" id="qty-3" step="1" min="1" max="99" name="quantity_{{ item.id }}" value="{{ item.quantity|floatformat:"0" }}">
-                                        </div>
-                                    </td>
-                                    <td class="total_price"><span>$</span><span class="number">{{ item.total_price }}</span></td>
-                                </tr>
+                            {% for vendor,items in grouped_items.items %}
+                                {% for item in items %}
+                                    <tr id="item_{{ item.id }}">
+                                        <td class="action"><a class="remove_item" href="#" data-id="{{ item.id }}" data-vendor="{{ vendor.id }}"><i
+                                                class="fa fa-times" aria-hidden="true"></i></a></td>
+                                        <td class="cart_product_img">
+                                            <a href="#"><img class="img img-thumbnail"
+                                                             src="{{ item.product.get_primary_image.get_thumb_small_url }}"
+                                                             alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5>{{ item.product.name }} on {{ item.stock.support }}
+                                                ({{ item.stock }})</h5>
+                                        </td>
+                                        <td class="price"><span>$</span><span
+                                                class="number">{{ item.unit_price }}</span></td>
+                                        <td class="qty">
+                                            <div class="quantity">
+                                                <input type="number" data-id="{{ item.id }}" class="qty-text" id="qty-3"
+                                                       step="1" min="1" max="99" name="quantity_{{ item.id }}"
+                                                       value="{{ item.quantity|floatformat:"0" }}">
+                                            </div>
+                                        </td>
+                                        <td class="total_price"><span>$</span><span
+                                                class="number">{{ item.total_price }}</span></td>
+                                    </tr>
                                 {% endfor %}
-
+                                <tr data-shipping="{{ vendor.id }}">
+                                    <td colspan="4"></td>
+                                    <td>Shipping</td>
+                                    <td colspan="2">
+                                        <ul class="textalignleft">
+                                            {% for option in vendor.shipping_set.all %}
+                                                <li>
+                                                    <div class="shipping">
+                                                        <label class="custom-control custom-radio">
+                                                            <input type="radio" class="shipping custom-control-input"
+                                                                    {% if forloop.first %} checked="checked" {% endif %}
+                                                                   name="shipping-{{ vendor.id }}"
+                                                                   data-vendor="{{ vendor.id }}"
+                                                                   data-cost="{{ option.price }}"
+                                                                   value="{{ option.id }}">
+                                                            <span class="custom-control-indicator"></span>
+                                                            <span class="custom-control-description small-text"> ${{ option.price }} <span
+                                                                    data-toggle="tooltip"
+                                                                    title="{{ option.description }}">{{ option.name }}</span></span>
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr id="total">
-                                    <td colspan="5"><strong>Total</strong></td>
-                                    <td colspan="4"><strong>$<span class="number">{{ cart_total }}</span></strong></td>
-                                </tr>
+                            <tr id="total">
+                                <td colspan="5"><strong>Total</strong></td>
+                                <td colspan="4"><strong>$<span class="number">{{ cart_total }}</span></strong></td>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
-                    <a class="btn btn-success pull-right" href="{% url 'checkout' %}">Checkout</a>
+                    <a id="update_cart" data-update-url="{% url 'update-cart' %}" class="btn btn-success pull-right" href="{% url 'checkout' %}">Checkout</a>
                 </div>
             </div>
         </div>
     </div>
-
     {% csrf_token %}
 
 {% endblock %}
 {% block custom_javascript %}
-    <script src="{% static 'js/cart_page.js'%}"></script>
+    <script src="{% static 'js/cart_page.js' %}"></script>
 {% endblock custom_javascript %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from product.models import Stock
+from vendor.models import Vendor
 
 try:
     from django.conf import settings
@@ -22,6 +23,7 @@ class Cart(models.Model):
                                          default=timezone.now)
     checked_out = models.BooleanField(default=False,
                                       verbose_name=_('checked out'))
+    shipping = models.TextField()
 
     class Meta:
         verbose_name = _('cart')
@@ -63,6 +65,7 @@ class Item(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     stock = models.ForeignKey(Stock)
+    vendor = models.ForeignKey(Vendor)
 
     objects = ItemManager()
 

@@ -56,6 +56,7 @@
     {!products}
     <li class="total">
         <span class="pull-right">Total: ${total}</span>
+        <span class="pull-right">{! has_shipping }</span>
         <a href="{% url 'cart-inspect' %}" class="btn btn-sm btn-cart">Cart</a>
         <a href="{% url 'checkout' %}" class="btn btn-sm btn-checkout">Checkout</a>
     </li>

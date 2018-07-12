@@ -31,8 +31,7 @@ def support_stock(request, support_id):
     support = Support.objects.get(id=support_id)
     stock = support.stock_set.exclude(stock=0).all()
     data = {
-        'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship
-                     in support.vendor.shipping_set.all()]
+        # 'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship in support.vendor.shipping_set.all()]
     }
     # group available sizez by colours
     for item in stock:

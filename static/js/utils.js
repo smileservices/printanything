@@ -1,16 +1,16 @@
 var ajax_object = {
     'ajax_calls': {},
-    'retrieve': function(url, done, before=null, after=null, fail=null) {
+    'retrieve': function(url, done, before, after, fail) {
         var self = this;
         if (!self.ajax_calls[url]) {
-            if (before) {
+            if (Boolean(before)) {
                 before();
             }
             self.ajax_calls[url] = $.get(url, done)
-            if (after) {
+            if (Boolean(after)) {
                 self.ajax_calls[url].done(after);
             }
-            if (fail) {
+            if (Boolean(fail)) {
                 self.ajax_calls[url].fail(fail);
             }
         } else {
@@ -80,6 +80,7 @@ var cart = {
                     'products': products.html(),
                     'total': data['total'],
                     'total_qty': data['total_qty'],
+                    'has_shipping': data['has_shipping'] ? 'Shipping included' : 'Go to cart screen to add shipping',
                 }, '#top_cart');
 
             //add remove listeners

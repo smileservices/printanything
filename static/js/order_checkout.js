@@ -5,11 +5,11 @@ $(document).ready(function(){
     //set up shipping cost
 //    $('.checkout_details_area .alert td').text('Select shipping option!');
     var default_shipping_cost = $('.checkout_details_area .shipping input[name="shipping"]:checked').attr('data-price');
-    change_shipping(parseFloat(default_shipping_cost));
+    // change_shipping(parseFloat(default_shipping_cost));
 
     $('.checkout_details_area .shipping input[name="shipping"]').change(function(){
         var ship_price = parseFloat($(this).attr('data-price'));
-        change_shipping(ship_price);
+        // change_shipping(ship_price);
     })
 
     function change_shipping(price) {

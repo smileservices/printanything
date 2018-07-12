@@ -28,15 +28,8 @@
                     <input type="text" class="form-control" id="ship-state" placeholder="State" name="state" value="" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <select class="custom-select d-block w-100" id="ship-country" name="country">
+                    <select disabled="disabled" class="custom-select d-block w-100" id="ship-country" name="country">
                         <option value="usa">United States</option>
-                        <option value="uk">United Kingdom</option>
-                        <option value="ger">Germany</option>
-                        <option value="fra">France</option>
-                        <option value="ind">India</option>
-                        <option value="aus">Australia</option>
-                        <option value="bra">Brazil</option>
-                        <option value="cana">Canada</option>
                     </select>
                 </div>
 
@@ -49,20 +42,7 @@
 
             </div>
         </div>
-        <!-- Shipping -->
-        <div class="checkout_details_area mt-30">
-            <h5>Shipping</h5>
-            {% for option in shipping_options %}
-            <div class="shipping">
-                <label class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" {% if forloop.first %} checked="checked" {% endif %}  name="shipping" data-price="{{ option.price }}" value="{{ option.id }}">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description small-text">{{ option.name }} ${{ option.price }}</span>
-                </label>
-                <span class="shipping-description">{{ option.description }}</span>
-            </div>
-            {% endfor %}
-        </div>
+
         {% csrf_token %}
         <!-- Payment -->
         <div class="checkout_details_area mt-30">

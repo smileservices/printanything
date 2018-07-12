@@ -9,10 +9,11 @@ def add_to_cart(request):
         product = Art.objects.get(id=request.POST['product_id'])
         quantity = int(request.POST['qty'])
         stock = Stock.objects.get(id=request.POST['stock'])
+        vendor = stock.support.vendor
         cart = request.cart
         price = product.unit_price + stock.support.unit_price
         try:
-            cart.add(product, stock, price, quantity)
+            cart.add(product, vendor, stock, price, quantity)
             res = 'Successfully selected product to your shopping cart!'
         except ItemDoesNotExist:
             res = 'Something went very wrong! The selected product could not be added to your cart because it doesn\'t exist!'
@@ -32,10 +33,13 @@ def get_cart(request):
     cart_proxy = CartProxy(request)
     items = []
     cart_total = 0
+    grouped_items = {}
     for i in cart_proxy:
+        vendor = i.stock.support.vendor
         items.append(i)
+        grouped_items.setdefault(vendor, []).append(i)
         cart_total += i.total_price
-    return render(request, 'changuito/cart.html', dict(section='Cart', cart=items, cart_total=cart_total))
+    return render(request, 'changuito/cart.html', dict(section='Cart', grouped_items=grouped_items, cart_total=cart_total))
 
 
 def update_cart(request):
@@ -47,6 +51,8 @@ def update_cart(request):
                 cart_proxy.update(item_id, qty)
             for item_id in json.loads(request.POST['remove']):
                 cart_proxy.remove_item(item_id)
+            if request.POST['shipping']:
+                cart_proxy.update_shipping(request.POST['shipping'])
             result = 'Cart updated successfully!'
         except StockEmpty as e:
             result = str(e)
@@ -59,7 +65,8 @@ def update_cart(request):
 def get_cart_json(request):
     cart = CartProxy(request)
     items_list = []
-    total = cart.get_cart(request).total_price()
+    has_shipping = True if len(json.loads(cart.cart.shipping)) > 0 else False
+    total = cart.calculate_total()
     total_qty = cart.get_cart(request).total_quantity()
     for item in cart:
         items_list.append({
@@ -74,6 +81,7 @@ def get_cart_json(request):
     return JsonResponse({
         'items': items_list,
         'total_qty': int(total_qty),
+        'has_shipping': has_shipping,
         'total': total
     })
 

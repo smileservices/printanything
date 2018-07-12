@@ -7,7 +7,6 @@ from order.models import Order, OrderDetails, ShippingDetails, Payment
 from customer.models import Customer
 from contact.models import Contact
 from changuito.proxy import CartProxy
-from shipping.models import Shipping
 from tshirtstore import settings
 from django.urls import reverse
 from paypal.standard.models import ST_PP_COMPLETED
@@ -29,9 +28,8 @@ def checkout(request):
         cart_total += i.total_price
     return render(request, 'order/checkout.html', dict(
         section='Cart',
-        cart=items,
-        cart_total=cart_total,
-        shipping_options=Shipping.objects.all()
+        cart=cart_proxy.get_formatted_cart(),
+        cart_total=cart_proxy.calculate_total(),
     ))
 
 
