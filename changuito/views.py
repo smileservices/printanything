@@ -65,7 +65,7 @@ def update_cart(request):
 def get_cart_json(request):
     cart = CartProxy(request)
     items_list = []
-    has_shipping = True if len(json.loads(cart.cart.shipping)) > 0 else False
+    has_shipping = True if cart.cart.shipping !='' else False
     total = cart.calculate_total()
     total_qty = cart.get_cart(request).total_quantity()
     for item in cart:

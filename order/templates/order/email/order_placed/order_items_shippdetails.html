@@ -1,0 +1,77 @@
+{% for item in order.orderdetails_set.all %}
+    <tr>
+        <td colspan="3" valign="middle"
+            style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px"
+            align="left">
+            <div style="min-width:300px;max-width:396px;display:inline-block;vertical-align:top"
+                 class="m_4506392813453690003columnLeft">
+                <table style="border-collapse:collapse;border-spacing:0;margin-top:0px" width="100%"
+                       cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                    <tr>
+                        <td width="20%" style="padding:0.5em 0" valign="middle" align="left">
+                            <a href="">
+                                <img src="{{ item.art.get_primary_image.get_thumb_med_url }}"
+                                     border="0" alt="" width="100%"
+                                     style="max-width:80px;display:block" class="CToWUd">
+                            </a>
+                        </td>
+                        <td width="4%">&nbsp;</td>
+                        <td width="75%"
+                            style="font-family:sans-serif,Helvetica,Arial;font-size:14px;padding:0.5em 0"
+                            valign="middle" align="left">
+                            <a href="">
+                                {{ item.name }}
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="min-width:268px;display:inline-block;vertical-align:top;text-align:center">
+                <table style="border-collapse:collapse;border-spacing:0" width="100%"
+                       cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                    <tr>
+                        <td style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0.5em 0"
+                            width="50%" valign="middle" align="right"
+                            class="m_4506392813453690003tdRightWithImage">
+                            {{ item.qty }}
+                        </td>
+                        <td style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0.5em 0"
+                            width="50%" valign="middle" align="right"
+                            class="m_4506392813453690003tdRightWithImage">
+                            {{ item.calculate_price }} $
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+{% endfor %}
+
+<tr>
+    <td colspan="3" valign="middle"
+        style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px"
+        align="right">
+        <div style="min-width:268px;max-width:320px;display:inline-block;vertical-align:middle;text-align:right">
+            <table style="border-collapse:collapse;border-spacing:0" width="100%" cellspacing="0"
+                   cellpadding="0" align="right">
+                <tbody>
+                <tr>
+                    <td style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0.5em 0;border-top:1px dotted #dbdbdb"
+                        width="50%" valign="middle" align="right">
+                        Shipping:
+                    </td>
+                    <td style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0.5em 0;border-top:1px dotted #dbdbdb"
+                        width="50%" valign="middle" align="right">
+                        <strong>{{ order.shippingdetails_set.get.type }}: {{ order.shippingdetails_set.get.cost }}
+                            $</strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </td>
+</tr>

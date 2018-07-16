@@ -14,7 +14,7 @@ order_shippingdetails is linked to the selected vendor shipping
 
 
 ## Order,Product Page,Support
-- add shipping for each vendor in the checkout section
+- remove shipping when removing product
 
 ## Admin
 - tags for art - add tags from tags input - js

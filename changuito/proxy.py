@@ -185,8 +185,9 @@ class CartProxy(MiddlewareMixin):
     def get_shipping(self):
         import json
         res = {}
-        for vendor,shipping in json.loads(self.cart.shipping).items():
-            res[vendor] = Shipping.objects.get(pk=shipping)
+        if self.cart.shipping != '':
+            for vendor,shipping in json.loads(self.cart.shipping).items():
+                res[vendor] = Shipping.objects.get(pk=shipping)
         return res
 
     def calculate_total(self):

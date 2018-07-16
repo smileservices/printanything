@@ -24,16 +24,37 @@ class OrderStatus(models.Model):
         return self.text.title()
 
 
-class Order(models.Model):
+class OrderGroup(models.Model):
     placed = models.DateTimeField(verbose_name='creation date',
                                   default=timezone.now)
     customer = models.ForeignKey(Customer)
+    contact = models.ForeignKey(Contact)
+    total_amount = models.FloatField()
+
+    def calculate_total(self):
+        total = 0
+        for order in self.order_set:
+            total += order.calculate_price()
+        return total
+
+    def get_payment_status(self):
+        try:
+            return self.payment_set.get().status.upper()
+        except ObjectDoesNotExist:
+            return "No payment info"
+
+    get_payment_status.short_description = 'Payment Status'
+
+
+class Order(models.Model):
     status = models.ForeignKey(OrderStatus, default=1)
     info = models.TextField(default="")
+    # field for grouping orders for multiple vendors split orders
+    order_group = models.ForeignKey(OrderGroup)
 
-    def place_order(self, cart, shipping_details):
+    def place_order(self, items, shipping_details):
         # convert cart into order
-        for item in cart.item_set.all():
+        for item in items:
             art = item.get_product()
             stock = item.stock
             support = stock.support
@@ -57,17 +78,6 @@ class Order(models.Model):
             status=shipping_details['status'],
         )
         shipping.save()
-        # add shipping costs to order
-        detail_shipping = OrderDetails(
-            name='Shipping',
-            art=art,
-            support=support,
-            size=stock.size,
-            colour=stock.colour,
-            unit_price=item.unit_price,
-            qty=item.quantity,
-            order=self,
-        )
         return self
 
     def mark_shipped(self):
@@ -95,16 +105,9 @@ class Order(models.Model):
     def get_id(self):
         return self.id
 
-    def get_payment_status(self):
-        try:
-            return self.payment_set.get().status.upper()
-        except ObjectDoesNotExist:
-            return "No payment info"
-
     get_id.short_description = 'ID'
     calculate_price.short_description = 'Price'
     get_status.short_description = 'Status'
-    get_payment_status.short_description = 'Payment Status'
 
 
 class Payment(models.Model):
@@ -113,7 +116,7 @@ class Payment(models.Model):
     amount = models.FloatField()
     status = models.CharField(max_length=128, verbose_name="Payment Status")
     date = models.DateTimeField()
-    order = models.ForeignKey(Order)
+    order_group = models.ForeignKey(OrderGroup)
 
 
 class OrderDetails(models.Model):
@@ -139,5 +142,5 @@ class ShippingDetails(models.Model):
     status = models.CharField(max_length=255)
 
     def update_shipping_info(self, *args, **kwargs):
-        #todo
+        # todo
         return self
