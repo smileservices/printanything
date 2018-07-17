@@ -41,7 +41,20 @@ class OrderGroup(models.Model):
         try:
             return self.payment_set.get().status.upper()
         except ObjectDoesNotExist:
-            return "No payment info"
+            return "NO PAYMENT INFO"
+
+    def set_payment_status(self,message):
+        try:
+            payment_status = self.payment_set.first()
+            payment_status.status = message
+            payment_status.save()
+        except ObjectDoesNotExist:
+            return False
+
+    def set_orders_status(self, message):
+        for order in self.order_set:
+            order.status = message
+            order.save()
 
     get_payment_status.short_description = 'Payment Status'
 

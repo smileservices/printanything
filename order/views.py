@@ -37,7 +37,11 @@ def place_order(request):
     cart_grouped = cart_proxy.get_formatted_cart()
     customer, contact = __get_customer_contact(request)
     total_amount = cart_proxy.calculate_total()
-    # create order group and delete the other that existed in memory and has not been paid
+    # delete the other that existed in memory and has not been paid
+    previous_order_group = OrderGroup.objects.get(pk=request.session['order_group'])
+    if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED',]:
+        previous_order_group.delete()
+    # create order group
     order_group = OrderGroup(customer=customer, contact=contact, total_amount=total_amount)
     order_group.save()
     for vendor, cart in cart_grouped.items():
@@ -85,7 +89,6 @@ def payment_complete(request):
         'order_group': order_group,
         'contact': order_group.contact,
     }
-    # todo modify template for rendering with order_group
     html_msg = render_to_string('order/email/order_placed/customer_main.html', context=context)
     text_msg = strip_tags(html_msg)
     # send email to customer
@@ -101,7 +104,6 @@ def payment_complete(request):
 
 
 def payment_canceled(request):
-    # todo delete order group
     return render(request, 'payment/payment_canceled.html', {
         'section': 'Payment'
     })
@@ -132,8 +134,7 @@ def show_me_the_money(sender, **kwargs):
                 order_group=order_group
             )
             payment.save()
-            order_group.status = 'Payment received'
-            order_group.save()
+            order_group.set_orders_status('Payment Received')
         else:
             return
     else:

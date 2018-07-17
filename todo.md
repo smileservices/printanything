@@ -8,10 +8,6 @@
 3. shipping can be selected in the review cart section
 4. only after having selected shipping for every vendor can the user place the order
 
-changuito cart model - add shipping info {(vendorid: option), ..}
-upon placing the order it is split according to its vendors
-order_shippingdetails is linked to the selected vendor shipping
-
 
 ## Order,Product Page,Support
 - remove shipping when removing product
