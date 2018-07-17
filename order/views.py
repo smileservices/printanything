@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from paypal.standard.forms import PayPalPaymentsForm
-from order.models import OrderGroup, Order, Payment
+from order.models import OrderGroup, Order, OrderStatus, Payment
 from customer.models import Customer
 from contact.models import Contact
 from changuito.proxy import CartProxy
@@ -134,7 +134,7 @@ def show_me_the_money(sender, **kwargs):
                 order_group=order_group
             )
             payment.save()
-            order_group.set_orders_status('Payment Received')
+            order_group.set_orders_status(OrderStatus.objects.first())
         else:
             return
     else:

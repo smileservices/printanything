@@ -51,9 +51,9 @@ class OrderGroup(models.Model):
         except ObjectDoesNotExist:
             return False
 
-    def set_orders_status(self, message):
+    def set_orders_status(self, orderStatus):
         for order in self.order_set:
-            order.status = message
+            order.status = orderStatus
             order.save()
 
     get_payment_status.short_description = 'Payment Status'
