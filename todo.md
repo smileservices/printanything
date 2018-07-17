@@ -10,7 +10,7 @@
 
 
 ## Order,Product Page,Support
-- remove shipping when removing product
+-
 
 ## Admin
 - tags for art - add tags from tags input - js

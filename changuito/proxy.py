@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.utils.deprecation import MiddlewareMixin
+import json
 
 from . import models
 from vendor.models import Vendor,Shipping
@@ -104,8 +105,21 @@ class CartProxy(MiddlewareMixin):
                 item.stock.stock += item.quantity
                 item.stock.save()
             item.delete()
+            self.recalculate_shipping()
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
+
+    def recalculate_shipping(self):
+        # check if only item from specific vendor
+        shipping = json.loads(self.cart.shipping)
+        items_grouped = self.get_items_by_vendor()
+        existent_vendors_ids = [vendor.pk for vendor,items in items_grouped.items()]
+        for vendorid in list(shipping.keys()):
+            if int(vendorid) not in existent_vendors_ids:
+                del shipping[vendorid]
+        self.cart.shipping = json.dumps(shipping)
+        self.cart.save()
+
 
     def update(self, id, quantity, *args):
         try:
@@ -153,6 +167,8 @@ class CartProxy(MiddlewareMixin):
     def clear(self):
         for item in self.cart.item_set.all():
             item.delete()
+        self.cart.shipping = ''
+        self.cart.save()
 
     def get_item(self, item):
         try:
@@ -190,6 +206,14 @@ class CartProxy(MiddlewareMixin):
                 res[vendor] = Shipping.objects.get(pk=shipping)
         return res
 
+    def get_items_by_vendor(self):
+        from collections import defaultdict
+        # groups items and shipping by vendors
+        items = defaultdict(list)
+        for item in self:
+            items[item.vendor].append(item)
+        return items
+
     def calculate_total(self):
         total_price = self.cart.total_price()
         shipping = self.get_shipping()
@@ -199,12 +223,8 @@ class CartProxy(MiddlewareMixin):
         return total_price
 
     def get_formatted_cart(self):
-        # groups items and shipping by vendors
-        from collections import defaultdict
         #returns items and shipping
-        items = defaultdict(list)
-        for item in self:
-            items[item.vendor].append(item)
+        items = self.get_items_by_vendor()
         #group by vendors
         shipping = self.get_shipping()
         grouped_by_vendors = {}
