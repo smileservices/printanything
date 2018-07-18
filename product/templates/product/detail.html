@@ -109,6 +109,16 @@
             </ul>
         </div>
     </div>
+
+    <div class="widget size mb-15">
+        <h6 class="widget-title">Shipping options:</h6>
+        <div class="widget-desc" id="support_shipping">
+            <ul>
+                {!shipping}
+            </ul>
+        </div>
+    </div>
+
 </script>
 
 <script type="text/template" id="sup_sec_tmpl_colours">
@@ -125,6 +135,13 @@
 <script type="text/template" id="sup_sec_tmpl_size">
 {# partial template for sizes #}
     <li><a href="#" data-id="{size-id}">{size}</a></li>
+</script>
+<script type="text/template" id="sup_sec_tmpl_shipping">
+{# partial template for sizes #}
+    <li>
+        <p>{!name}: ${!price}</p>
+        <p>{!description}</p>
+    </li>
 </script>
 
 <form id="add_to_cart" action="{% url 'cart-add' %}" method="post">

@@ -64,6 +64,15 @@
         background-color: black
     }
 
+    #support_shipping li {
+        display: block;
+        border-bottom: #019688 1px solid;
+    }
+
+    #support_shipping li:last-child {
+        border-bottom: none;
+    }
+
 
 /*
     CART DROPDOWN

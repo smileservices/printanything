@@ -80,7 +80,6 @@ var cart = {
                     'products': products.html(),
                     'total': data['total'],
                     'total_qty': data['total_qty'],
-                    'has_shipping': data['has_shipping'] ? 'Shipping included' : 'Go to cart screen to add shipping',
                 }, '#top_cart');
 
             //add remove listeners

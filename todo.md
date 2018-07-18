@@ -2,16 +2,6 @@
 
 # CRITICAL
 
-**todo**
-1. product is placed into cart
-2. user is displayed that he must chose shipping
-3. shipping can be selected in the review cart section
-4. only after having selected shipping for every vendor can the user place the order
-
-
-## Order,Product Page,Support
--
-
 ## Admin
 - tags for art - add tags from tags input - js
 - finish artist section
