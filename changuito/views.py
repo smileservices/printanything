@@ -39,7 +39,7 @@ def get_cart(request):
         items.append(i)
         grouped_items.setdefault(vendor, []).append(i)
         cart_total += i.total_price
-    return render(request, 'changuito/cart.html', dict(section='Cart', grouped_items=grouped_items, cart_total=cart_total))
+    return render(request, 'changuito/cart.html', dict(section='Cart', grouped_items=grouped_items, cart_total=cart_total, hideTopCart=True))
 
 
 def update_cart(request):

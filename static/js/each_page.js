@@ -1,3 +1,6 @@
 $(document).ready(function(){
-    cart.refresh();
+    console.log(hideTopCart);
+    if (Boolean(hideTopCart) !== true) {
+         cart.refresh();
+    }
 })

@@ -28,6 +28,7 @@ def checkout(request):
         section='Cart',
         cart=cart_proxy.get_formatted_cart(),
         cart_total=cart_proxy.calculate_total(),
+        hideTopCart=True,
     ))
 
 

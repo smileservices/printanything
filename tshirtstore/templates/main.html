@@ -72,6 +72,9 @@
         <span class="dropdown-product-remove"><a href="#" data-id="{id}"><i class="fa fa-times fa-lx"></i></a></span>
     </li>
 </script>
+<script>
+    var hideTopCart = '{{ hideTopCart }}';
+</script>
 {% block javascript %}
     <!-- ============= jQuery (Necessary for All JavaScript Plugins) ============= -->
     <script src={% static "js/jquery/jquery-2.2.4.min.js" %}></script>
@@ -89,7 +92,8 @@
 
     <!-- Active js -->
 {% endblock javascript %}
-{% block custom_javascript %}{% endblock custom_javascript %}
+{% block custom_javascript %}
+{% endblock custom_javascript %}
 
 </body>
 
