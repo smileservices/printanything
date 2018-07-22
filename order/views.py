@@ -49,7 +49,7 @@ def place_order(request):
     order_group = OrderGroup(customer=customer, contact=contact, total_amount=total_amount)
     order_group.save()
     for vendor, cart in cart_grouped.items():
-        order = Order(order_group=order_group)
+        order = Order(order_group=order_group, vendor=vendor)
         order.save()
         order.place_order(cart['items'], {
             # shipping details

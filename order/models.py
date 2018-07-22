@@ -5,7 +5,7 @@ from django.db import models
 from customer.models import Customer as Customer
 from contact.models import Contact
 from product.models import Art, Support
-from vendor.models import Size, Colour
+from vendor.models import Size, Colour, Vendor
 from django.core.exceptions import ObjectDoesNotExist
 
 try:
@@ -15,6 +15,9 @@ except ImportError:
 
 
 # Create your models here.
+
+class OrderException(Exception):
+    pass
 
 
 class OrderStatus(models.Model):
@@ -46,7 +49,7 @@ class OrderGroup(models.Model):
         except ObjectDoesNotExist:
             return "NO PAYMENT INFO"
 
-    def set_payment_status(self,message):
+    def set_payment_status(self, message):
         try:
             payment_status = self.payment_set.first()
             payment_status.status = message
@@ -68,10 +71,12 @@ class OrderGroup(models.Model):
 
 
 class Order(models.Model):
+    # one order for vendor
     status = models.ForeignKey(OrderStatus, default=1)
     info = models.TextField(default="")
     # field for grouping orders for multiple vendors split orders
     order_group = models.ForeignKey(OrderGroup)
+    vendor = models.ForeignKey(Vendor)
 
     def place_order(self, items, shipping_details):
         # convert cart into order
@@ -125,6 +130,9 @@ class Order(models.Model):
 
     def get_id(self):
         return self.id
+
+    def get_big_pictures(self):
+        return [item.art.big_image for item in self.orderdetails_set.all()]
 
     get_id.short_description = 'ID'
     calculate_price.short_description = 'Price'

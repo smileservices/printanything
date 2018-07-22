@@ -1,0 +1,20 @@
+<tr>
+    <table>
+        <thead>
+            <th>Support</th>
+            <th>Colour</th>
+            <th>Size</th>
+            <th>Print with</th>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.support }}</td>
+                    <td>{{ item.colour }}</td>
+                    <td>{{ item.size }}</td>
+                    <td>{{ item.art }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</tr>

@@ -5,9 +5,6 @@
 ## Admin
 - tags for art - add tags from tags input - js
 - finish artist section
-- Finish the order phase
-    - Order processing (place to vendor/status/shipment)
-
 
 # Normal
 

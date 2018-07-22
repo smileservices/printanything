@@ -7,6 +7,7 @@
             <th>Total</th>
             <th>Payment Status</th>
             <th>Status</th>
+            <th>Info</th>
         </thead>
         {% for order in orders %}
             <tr>
@@ -16,6 +17,7 @@
                 <td>{{ order.calculate_price }}</td>
                 <td>{{ order.get_payment_status }}</td>
                 <td>{{ order.get_status }}</td>
+                <td>{{ order.info }}</td>
             </tr>
         {% endfor %}
     </table>

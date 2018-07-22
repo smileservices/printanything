@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.conf import settings
-
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+import datetime
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
@@ -355,6 +357,22 @@ def order_update(request, *args, **kwargs):
 
 def order_to_vendor(request, *args, **kwargs):
     order = Order.objects.get(pk=kwargs.get('pk'))
+    context = {
+        'order': order,
+        'items': order.orderdetails_set.all(),
+        'shipping': order.shippingdetails_set.first(),
+    }
+    # return render(request, 'order/email/to_vendor/send_to_vendor.html', context)
+    messageHtml = render_to_string('order/email/to_vendor/send_to_vendor.html', context)
+    # send email to customer
+    msg = EmailMultiAlternatives('Your order', body=messageHtml, from_email='noreply@tshirtstore.com',
+                                 to=['vladimir.gorea@gmail.com', ])
+    msg.attach_alternative(messageHtml, "text/html")
+    for bigImage in order.get_big_pictures():
+        msg.attach_file(bigImage.path)
+    msg.send()
+    order.info = 'Sent to vendor on {}'.format(datetime.date.today())
+    order.save()
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
