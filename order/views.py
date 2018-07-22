@@ -39,9 +39,12 @@ def place_order(request):
     customer, contact = __get_customer_contact(request)
     total_amount = cart_proxy.calculate_total()
     # delete the other that existed in memory and has not been paid
-    previous_order_group = OrderGroup.objects.get(pk=request.session['order_group'])
-    if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED',]:
-        previous_order_group.delete()
+    try:
+        previous_order_group = OrderGroup.objects.get(pk=request.session['order_group'])
+        if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED', ]:
+            previous_order_group.delete()
+    except OrderGroup.DoesNotExist:
+        pass
     # create order group
     order_group = OrderGroup(customer=customer, contact=contact, total_amount=total_amount)
     order_group.save()
@@ -135,7 +138,7 @@ def show_me_the_money(sender, **kwargs):
                 order_group=order_group
             )
             payment.save()
-            order_group.set_orders_status(OrderStatus.objects.first())
+            order_group.set_orders_status(OrderStatus.objects.get(id='2'))
         else:
             return
     else:

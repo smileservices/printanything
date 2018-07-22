@@ -31,6 +31,9 @@ class OrderGroup(models.Model):
     contact = models.ForeignKey(Contact)
     total_amount = models.FloatField()
 
+    def __str__(self):
+        return str(self.id)
+
     def calculate_total(self):
         total = 0
         for order in self.order_set:
@@ -55,6 +58,11 @@ class OrderGroup(models.Model):
         for order in self.order_set:
             order.status = orderStatus
             order.save()
+
+    def delete_order(self, order):
+        order.delete()
+        if self.order_set.count() == 0:
+            self.delete()
 
     get_payment_status.short_description = 'Payment Status'
 

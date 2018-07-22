@@ -1,6 +1,7 @@
 <div class="table-responsive">
     <table class="table no-margin">
         <thead>
+            <th>Order Group</th>
             <th>ID</th>
             <th>Placed</th>
             <th>Total</th>
@@ -9,8 +10,9 @@
         </thead>
         {% for order in orders %}
             <tr>
+                <td>{{ order.order_group }}</td>
                 <td>{{ order.id }}</td>
-                <td><a href="{% url "admin-order-view" pk=order.id %}">{{ order.placed }}</a></td>
+                <td><a href="{% url "admin-order-view" pk=order.id %}">{{ order.order_group.placed }}</a></td>
                 <td>{{ order.calculate_price }}</td>
                 <td>{{ order.get_payment_status }}</td>
                 <td>{{ order.get_status }}</td>

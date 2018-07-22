@@ -358,6 +358,12 @@ def order_to_vendor(request, *args, **kwargs):
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
+def order_delete(request, *args, **kwargs):
+    order = Order.objects.get(pk=kwargs.get('pk'))
+    order.order_group.delete_order(order)
+    return HttpResponseRedirect(reverse_lazy("admin-orders"))
+
+
 class OrderStatusUpdate(IsAdminMixin, UpdateView):
     model = OrderStatus
     template_name = "admin/order/status-form.html"

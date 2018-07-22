@@ -138,6 +138,7 @@ urlpatterns += [
     ), name='admin-orders'),
     url(r'^order/view/(?P<pk>\d+)', views.OrderView.as_view(), name="admin-order-view"),
     url(r'^order/update/(?P<pk>\d+)', views.order_update, name="admin-order-update"),
+    url(r'^order/delete/(?P<pk>\d+)', views.order_delete, name="admin-order-delete"),
     url(r'^order/send-to-vendor/(?P<pk>\d+)', views.order_to_vendor, name="admin-order-to-vendor")
 ]
 
