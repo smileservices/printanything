@@ -9,6 +9,7 @@ from product.models import Art, Support, Stock
 from gallery.models import ArtImage, SupportImage
 
 from admin.widgets import BoostrapCheckbox, BoostrapFileInput
+from django.forms.widgets import SelectMultiple
 
 
 class UserForm(UserCreationForm):

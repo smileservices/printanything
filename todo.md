@@ -3,7 +3,6 @@
 # CRITICAL
 
 ## Admin
-- tags for art - add tags from tags input - js
 - finish artist section
 
 # Normal

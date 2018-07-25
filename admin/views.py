@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from vendor.models import Vendor, Shipping
 from artist.models import Artist
-from product.models import Art, Support, Stock, Colour, Size
+from product.models import Art, Support, Stock, Colour, Size, Tag
 from order.models import Order, OrderStatus
 
 
@@ -317,6 +317,18 @@ class UpdateArt(IsAdminMixin, UpdateView):
         return context
 
     def form_valid(self, form, images_formset):
+        #save newly created tags
+        form.is_valid()
+        form.cleaned_data['tags'] = []
+        for tagId in form['tags'].data:
+            try:
+                tag = Tag.objects.get(id=tagId)
+            except:
+                tag = Tag(name=tagId)
+                tag.save()
+            form.cleaned_data['tags'].append(tag)
+        #remove errors related to unexistant tags from form
+        form._errors.pop('tags', None)
         success_redirect = super(UpdateArt, self).form_valid(form)
         valid = images_formset.is_valid()
         if valid:

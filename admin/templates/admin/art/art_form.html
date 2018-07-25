@@ -38,3 +38,15 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('select').select2();
+        $('select[name="tags"]').select2({
+            tags: true,
+            tokenSeparators: [',', ' ']
+        });
+    });
+</script>
+{% endblock %}
