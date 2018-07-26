@@ -1,11 +1,10 @@
 # TODO:
 
-# CRITICAL
-
-## Admin
-- finish artist section
-
-# Normal
+## ORDER
+- mark order complete/closed
+- email template for notifications
+- after payment confirm delete cart
+- invoices
 
 ## Admin
 - supports inventory in tabular mode
@@ -22,12 +21,6 @@
 ## USERS
 - regular users
 - check order status
-
-## ORDER
-- add updated at
-- email template for notifications
-- after payment confirm delete cart
-- invoices
 
 
 FUTURE RELEASES

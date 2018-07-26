@@ -4,6 +4,7 @@
             <th>Order Group</th>
             <th>ID</th>
             <th>Placed</th>
+            <th>Updated</th>
             <th>Total</th>
             <th>Payment Status</th>
             <th>Status</th>
@@ -14,6 +15,7 @@
                 <td>{{ order.order_group }}</td>
                 <td>{{ order.id }}</td>
                 <td><a href="{% url "admin-order-view" pk=order.id %}">{{ order.order_group.placed }}</a></td>
+                <td>{{ order.updated_at }}</td>
                 <td>{{ order.calculate_price }}</td>
                 <td>{{ order.get_payment_status }}</td>
                 <td>{{ order.get_status }}</td>

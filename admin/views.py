@@ -249,8 +249,8 @@ class VendorShippingDelete(IsAdminMixin, DeleteView):
 
 class CreateArtist(IsAdminMixin, CreateView):
     form_class = ArtistForm
-    template_name = 'admin/vendor/vendor_form.html'
-    success_url = reverse_lazy('admin-vendors')
+    template_name = 'admin/artist/artist_form.html'
+    success_url = reverse_lazy('admin-artists')
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -263,7 +263,7 @@ class CreateArtist(IsAdminMixin, CreateView):
 class UpdateArtist(IsAdminMixin, UpdateView):
     model = Artist
     form_class = ArtistForm
-    template_name = 'admin/vendor/vendor_form.html'
+    template_name = 'admin/artist/artist_form.html'
     success_url = reverse_lazy('admin-artists')
 
     def get_context_data(self, **kwargs):
@@ -317,7 +317,7 @@ class UpdateArt(IsAdminMixin, UpdateView):
         return context
 
     def form_valid(self, form, images_formset):
-        #save newly created tags
+        # save newly created tags
         form.is_valid()
         form.cleaned_data['tags'] = []
         for tagId in form['tags'].data:
@@ -327,7 +327,7 @@ class UpdateArt(IsAdminMixin, UpdateView):
                 tag = Tag(name=tagId)
                 tag.save()
             form.cleaned_data['tags'].append(tag)
-        #remove errors related to unexistant tags from form
+        # remove errors related to unexistant tags from form
         form._errors.pop('tags', None)
         success_redirect = super(UpdateArt, self).form_valid(form)
         valid = images_formset.is_valid()
@@ -385,6 +385,12 @@ def order_to_vendor(request, *args, **kwargs):
     msg.send()
     order.info = 'Sent to vendor on {}'.format(datetime.date.today())
     order.save()
+    return HttpResponseRedirect(reverse_lazy("admin-orders"))
+
+
+def order_close(request, *args, **kwargs):
+    order = Order.objects.get(pk=kwargs.get('pk'))
+    order.mark_shipped()
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 

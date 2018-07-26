@@ -77,6 +77,13 @@ class Order(models.Model):
     # field for grouping orders for multiple vendors split orders
     order_group = models.ForeignKey(OrderGroup)
     vendor = models.ForeignKey(Vendor)
+    updated_at = models.DateTimeField()
+    closed = models.BooleanField()
+
+    def save(self, *args, **kwargs):
+        from datetime import datetime
+        self.updated_at = datetime.now()
+        super(Order, self).save(*args, **kwargs)
 
     def place_order(self, items, shipping_details):
         # convert cart into order
@@ -108,11 +115,17 @@ class Order(models.Model):
 
     def mark_shipped(self):
         self.status = 'Shipped'
+        self.closed = True
         self.save()
         shipping = self.shippingdetails_set.get()
         shipping.status = 'Shipped'
         shipping.save()
         return self
+
+    def set_updated_time(self):
+        from datetime import datetime
+        self.updated_at = datetime.now()
+        self.save()
 
     def calculate_price(self):
         total_price = 0
