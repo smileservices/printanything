@@ -132,6 +132,10 @@ urlpatterns += [
 
 # ORDERS
 urlpatterns += [
+    url(r'^orders-closed', generic_views.ListView.as_view(
+        queryset=Order.objects.filter(closed=True),
+        template_name='admin/order/list.html'
+    ), name='admin-orders-closed'),
     url(r'^orders', generic_views.ListView.as_view(
         queryset=Order.objects.filter(closed=False),
         template_name='admin/order/list.html'

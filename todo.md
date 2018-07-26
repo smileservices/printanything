@@ -1,19 +1,12 @@
 # TODO:
 
-## ORDER
-- mark order complete/closed
-- email template for notifications
-- after payment confirm delete cart
-- invoices
-
 ## Admin
 - supports inventory in tabular mode
 - add option to act as if no stock is needed (something like unlimited stock)
-- make supports photos look good
-
 
 ## FRONTEND UI
 - Product page
+    - make supports photos look good
 - Implement UI
     - redirect to paypal
     - payment success/cancel
@@ -22,6 +15,9 @@
 - regular users
 - check order status
 
+## ORDER
+- email template for notifications
+- invoices
 
 FUTURE RELEASES
 ### Order
