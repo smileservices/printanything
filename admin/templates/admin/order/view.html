@@ -149,15 +149,13 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <form action="{% url "admin-order-delete" pk=order.id %}" class="form-horizontal" method="POST">
+        <form action="{% url "admin-order-process" pk=order.id %}" class="form-horizontal" method="POST">
         {% csrf_token %}
-            <button class="btn btn-danger ink-reaction pull-right">Delete</button>
-        </form>
-    </div>
-    <div class="col-lg-6">
-        <form action="{% url "admin-order-to-vendor" pk=order.id %}" class="form-horizontal" method="POST">
-        {% csrf_token %}
-            <button class="btn btn-primary ink-reaction pull-right">Send to vendor</button>
+        <div class="form-group">
+            <button type="submit" name="action" value="to_vendor" class="btn btn-info ink-reaction pull-right">To Vendor</button>
+            <button type="submit" name="action" value="close" class="btn btn-info ink-reaction pull-right">Close Order</button>
+            <button type="submit" name="action" value="delete" class="btn btn-danger ink-reaction pull-right">Delete</button>
+        </div>
         </form>
     </div>
 </div>

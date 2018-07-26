@@ -367,8 +367,7 @@ def order_update(request, *args, **kwargs):
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
-def order_to_vendor(request, *args, **kwargs):
-    order = Order.objects.get(pk=kwargs.get('pk'))
+def order_to_vendor(order):
     context = {
         'order': order,
         'items': order.orderdetails_set.all(),
@@ -378,25 +377,24 @@ def order_to_vendor(request, *args, **kwargs):
     messageHtml = render_to_string('order/email/to_vendor/send_to_vendor.html', context)
     # send email to customer
     msg = EmailMultiAlternatives('Your order', body=messageHtml, from_email='noreply@tshirtstore.com',
-                                 to=['vladimir.gorea@gmail.com', ])
+                                 to=[order.vendor.email, ])
     msg.attach_alternative(messageHtml, "text/html")
     for bigImage in order.get_big_pictures():
         msg.attach_file(bigImage.path)
     msg.send()
     order.info = 'Sent to vendor on {}'.format(datetime.date.today())
     order.save()
-    return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
-def order_close(request, *args, **kwargs):
+def order_process(request, *args, **kwargs):
     order = Order.objects.get(pk=kwargs.get('pk'))
-    order.mark_shipped()
-    return HttpResponseRedirect(reverse_lazy("admin-orders"))
-
-
-def order_delete(request, *args, **kwargs):
-    order = Order.objects.get(pk=kwargs.get('pk'))
-    order.order_group.delete_order(order)
+    action = request.POST['action']
+    if action == 'delete':
+        order.order_group.delete_order(order)
+    if action == 'close':
+        order.mark_shipped()
+    if action == 'to_vendor':
+        order_to_vendor(order)
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 

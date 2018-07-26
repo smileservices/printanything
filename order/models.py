@@ -114,12 +114,12 @@ class Order(models.Model):
         return self
 
     def mark_shipped(self):
-        self.status = 'Shipped'
+        # self.status = 'Shipped'
         self.closed = True
         self.save()
-        shipping = self.shippingdetails_set.get()
-        shipping.status = 'Shipped'
-        shipping.save()
+        # shipping = self.shippingdetails_set.get()
+        # shipping.status = 'Shipped'
+        # shipping.save()
         return self
 
     def set_updated_time(self):

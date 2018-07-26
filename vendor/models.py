@@ -15,6 +15,7 @@ def get_save_path(instance, filename):
 class Vendor(models.Model):
     name = models.CharField(max_length=255)
     sizes_chart = models.ImageField(default=None, upload_to=get_save_path)
+    email = models.EmailField()
 
     def __str__(self):
         return self.name
