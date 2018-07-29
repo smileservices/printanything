@@ -1,15 +1,13 @@
 # TODO:
 
-## Admin
-- supports inventory in tabular mode
-- add option to act as if no stock is needed (something like unlimited stock)
-
 ## FRONTEND UI
-- Product page
-    - make supports photos look good
 - Implement UI
     - redirect to paypal
     - payment success/cancel
+
+## Admin
+- supports inventory in tabular mode
+- add option to act as if no stock is needed (something like unlimited stock)
 
 ## USERS
 - regular users

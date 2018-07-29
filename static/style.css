@@ -64,15 +64,25 @@
         background-color: black
     }
 
+    #support_shipping {
+        padding: 10px;
+        background-color: #f5fdfc;
+    }
+
     #support_shipping li {
         display: block;
         border-bottom: #019688 1px solid;
+        padding-top: 8px;
     }
 
     #support_shipping li:last-child {
         border-bottom: none;
     }
 
+    #support_gallery img {
+        max-height: 115px;
+        display: inline-block;
+    }
 
 /*
     CART DROPDOWN

@@ -130,7 +130,7 @@
     </label>
 </script>
 <script type="text/template" id="sup_sec_tmpl_colour_gallery">
-    <a href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}" alt=""></a>
+    <a class="gallery_img" href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}" alt=""></a>
 </script>
 <script type="text/template" id="sup_sec_tmpl_size">
 {# partial template for sizes #}
@@ -139,8 +139,10 @@
 <script type="text/template" id="sup_sec_tmpl_shipping">
 {# partial template for sizes #}
     <li>
-        <p>{!name}: ${!price}</p>
-        <p>{!description}</p>
+        <div class="row">
+            <div class="col-3"><p><strong>{!name}</strong>: ${!price}</p></div>
+            <div class="col-9"><p>{!description}</p></div>
+        </div>
     </li>
 </script>
 
