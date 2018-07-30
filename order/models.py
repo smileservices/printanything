@@ -7,6 +7,7 @@ from contact.models import Contact
 from product.models import Art, Support
 from vendor.models import Size, Colour, Vendor
 from django.core.exceptions import ObjectDoesNotExist
+import uuid
 
 try:
     from django.utils import timezone
@@ -33,6 +34,7 @@ class OrderGroup(models.Model):
     customer = models.ForeignKey(Customer)
     contact = models.ForeignKey(Contact)
     total_amount = models.FloatField()
+    hash = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return str(self.id)
@@ -66,6 +68,9 @@ class OrderGroup(models.Model):
         order.delete()
         if self.order_set.count() == 0:
             self.delete()
+
+    def get_easy_hash(self):
+        return self.hash.hex[:8]
 
     get_payment_status.short_description = 'Payment Status'
 

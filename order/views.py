@@ -184,3 +184,14 @@ def test_checkout(request):
         'contact': order_group.contact,
     }
     return render(request, 'order/email/order_placed/customer_main.html', context)
+
+
+def show_order_group_status(request,*args,**kwargs):
+    # publicly available for purchasers to verify the status of their order
+    order_group = OrderGroup.objects.get(hash=kwargs['hash'])
+    context = {
+        'order_group': order_group,
+        'shipping': order_group.order_set.first().shippingdetails_set.first(),
+        'section': 'Order Group Status'
+    }
+    return render(request, 'order/order_group_details.html', context)

@@ -1,0 +1,84 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    {% block breadcrumos %}
+        {% include "order/breadcrumbs.html" %}
+    {% endblock breadcrumos %}
+
+
+    <div class="checkout_area section_padding_100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-30">
+                    <h3>Details for Order #{{ order_group.get_easy_hash }}</h3>
+                </div>
+                <div class="col-8">
+                    <table class="table bigshop-table table-responsive">
+                        <thead>
+                            <th>#</th>
+                            <th>Art</th>
+                            <th>Printed On</th>
+                            <th>Colour</th>
+                            <th>Size</th>
+                        </thead>
+                        <tbody>
+                        {% for order in order_group.order_set.all %}
+                                <tr>
+                                    <td colspan="5">From {{ order.vendor }}</td>
+                                </tr>
+                            {% for item in order.get_orderdetails %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ item.art }}</td>
+                                    <td>{{ item.support }}</td>
+                                    <td>{{ item.colour }}</td>
+                                    <td>{{ item.size }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="5">Status: {{ order.status }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <table class="table bigshop-table table-responsive">
+                        <thead>
+                            <th colspan="2">Shipping</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>To</td><td>{{ order_group.contact }}</td>
+                            </tr>
+                            <tr>
+                                <td>State</td><td>{{ order_group.contact.state }}</td>
+                            </tr>
+                            <tr>
+                                <td>City</td><td>{{ order_group.contact.city }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td><td>{{ order_group.contact.address }}</td>
+                            </tr>
+                            <tr>
+                                <td>ZIP</td><td>{{ order_group.contact.zip }}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td><td>{{ order_group.contact.phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Company</td><td>{{ shipping.type }}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td><td>{{ shipping.status }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

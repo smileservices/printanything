@@ -5,7 +5,7 @@ from order import views
 
 urlpatterns = [
     url(r'^checkout', views.checkout, name='checkout'),
-    url(r'^test_checkout', views.test_checkout, name='test_checkout'),
+    url(r'^order-details/(?P<hash>[-\w]+)', views.show_order_group_status, name='order-details'),
     url(r'^place', views.place_order, name='place-order'),
     url(r'^paypal/', include('paypal.standard.ipn.urls'), name='paypal-ipn'),
     url(r'payment-return', views.payment_complete, name='payment-return'),

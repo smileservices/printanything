@@ -11,8 +11,8 @@
     <tr>
         <td align="left"
             style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0 0 15px">
-            Your order has been registered and will soon be processed by our staff. We'll let you know at each step of
-            the process!
+            Your order has been registered and will soon be processed by our staff. You can check its status at this link:
+            <a href="{% url 'order-details' hash=order.hash %}">Order Details #{{ order.hash }}</a>
         </td>
     </tr>
     <tr>
