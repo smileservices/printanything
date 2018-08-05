@@ -15,7 +15,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
-
+from easy_pdf.rendering import render_to_pdf
+import tempfile
 
 def checkout(request):
     cart_proxy = CartProxy(request)
@@ -85,22 +86,36 @@ def process_payment(request, order_group):
 
 
 def payment_complete(request):
+    import os
+
     cart_proxy = CartProxy(request)
     cart_proxy.clear()
     cart_proxy.cart.delete()
     order_group = OrderGroup.objects.get(pk=request.session['order_group'])
     context = {
         'order_group': order_group,
+        'invoice_no': order_group.hash.hex[:6],
         'contact': order_group.contact,
+        'settings': settings.INVOICE_SETTINGS
     }
     html_msg = render_to_string('order/email/order_placed/customer_main.html', context=context)
     text_msg = strip_tags(html_msg)
     # send email to customer
     msg = EmailMultiAlternatives('Your order', body=text_msg, from_email='noreply@tshirtstore.com',
                                  to=[order_group.customer.email, ], bcc=__get_admins_email())
+    #create invoice pdf
+    invoice_pdf = render_to_pdf('order/email/order_placed/invoice.html', context)
+    temp = tempfile.NamedTemporaryFile(mode='wb', delete=False)
+    temp.write(invoice_pdf)
+    temp.close()
+    file_name = 'invoice_{}.pdf'.format(order_group.hash.hex[:6])
+    os.rename(temp.name, file_name)
+    #attach and send
     msg.attach_alternative(html_msg, "text/html")
+    msg.attach_file(file_name)
     msg.send()
-    # send email to admins
+    #clean up
+    os.remove(file_name)
 
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment'
@@ -175,15 +190,6 @@ def __get_customer_contact(request):
 def __get_admins_email():
     from django.contrib.auth.models import User
     return [user.email for user in User.objects.filter(is_staff=1).all()]
-
-
-def test_checkout(request):
-    order_group = OrderGroup.objects.get(pk=request.session['order_group'])
-    context = {
-        'order_group': order_group,
-        'contact': order_group.contact,
-    }
-    return render(request, 'order/email/order_placed/customer_main.html', context)
 
 
 def show_order_group_status(request,*args,**kwargs):

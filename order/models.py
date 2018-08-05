@@ -41,7 +41,7 @@ class OrderGroup(models.Model):
 
     def calculate_total(self):
         total = 0
-        for order in self.order_set:
+        for order in self.order_set.all():
             total += order.calculate_price()
         return total
 
