@@ -12,7 +12,7 @@
         <td align="left"
             style="font-family:sans-serif,Helvetica,Arial;font-size:14px;line-height:18px;padding:0 0 15px">
             Your order has been registered and will soon be processed by our staff. You can check its status at this link:
-            <a href="{% url 'order-details' hash=order_group.hash %}">Order Details #{{ order_group.hash }}</a>
+            <a href="{{ order_group_detail_url }}">Order Details #{{ order_group.hash }}</a>
         </td>
     </tr>
     <tr>

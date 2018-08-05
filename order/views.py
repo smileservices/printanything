@@ -94,6 +94,7 @@ def payment_complete(request):
     order_group = OrderGroup.objects.get(pk=request.session['order_group'])
     context = {
         'order_group': order_group,
+        'order_group_detail_url': request.build_absolute_uri(reverse('order-details', args={order_group.hash})),
         'invoice_no': order_group.hash.hex[:6],
         'contact': order_group.contact,
         'settings': settings.INVOICE_SETTINGS
