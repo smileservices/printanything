@@ -57,11 +57,11 @@
                     <header>Stock Options</header>
                 </div>
                 <div class="card-body">
-                    {% for form in stock_forms %}
-                        {% with form as form %}
-                            {% include "admin/support/stock.html" %}
-                        {% endwith %}
-                    {% endfor %}
+                    {% if action == 'Create' %}
+                        {% include "admin/support/stock_tabular_create.html" %}
+                    {% else %}
+                        {% include "admin/support/stock_tabular_update.html" %}
+                    {% endif %}
                 </div>
             </div>
         </div>

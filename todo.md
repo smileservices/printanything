@@ -1,4 +1,8 @@
 # TODO:
+## Admin
+- supports inventory in tabular mode
+- add size/colour fields in js
+
 
 ## FRONTEND UI
 - Design UI (designer)
@@ -6,11 +10,9 @@
     - payment success/cancel - use big shop one
 
 FUTURE RELEASES
-## Admin
-- supports inventory in tabular mode
-- add option to act as if no stock is needed (something like unlimited stock)
 
 ### Order
+- add option to act as if no stock is needed (something like unlimited stock)
 - Implement cart/order reservation limited time
 - clean up old carts (chron job)
 - add "edited on" time column in view/detail

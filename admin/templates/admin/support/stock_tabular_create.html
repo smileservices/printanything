@@ -1,0 +1,24 @@
+{% load widget_tweaks %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info">-1 means unlimited quantity</div>
+        <table>
+            <thead>
+                <th></th>
+                {% for size in sizes %}
+                <th>{{ size }}</th>
+                {% endfor %}
+                <tbody>
+                {% for colour in colours %}
+                    <tr>
+                        <td>{{ colour }}</td>
+                        {% for size in sizes %}
+                            <td><input type="number" name="stock_{{ colour.id }}_{{ size.id }}" value="-1"></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </thead>
+        </table>
+    </div>
+</div>

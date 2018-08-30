@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+{% regroup stocks by colour as stocks_by_colours %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info">-1 means unlimited quantity</div>
+        <table>
+            <thead>
+                <th></th>
+                {% for size in sizes %}
+                <th>{{ size }}</th>
+                {% endfor %}
+                <tbody>
+                {% for colour_stock in stocks_by_colours %}
+                    <tr>
+                        <td>{{ colour_stock.grouper }}</td>
+                        {% for stock in colour_stock.list %}
+                            <td><input type="number" name="stock_{{ stock.colour.id }}_{{ stock.size.id }}_{{ stock.id }}" value="{{ stock.stock }}"></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </thead>
+        </table>
+    </div>
+</div>

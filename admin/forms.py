@@ -69,13 +69,6 @@ class BaseProductImageFormSet(forms.BaseInlineFormSet):
 
 
 class SupportForm(forms.ModelForm):
-    StockFormSet = forms.inlineformset_factory(
-        Support,
-        Stock,
-        formset=BaseStockFormSet,
-        extra=3,
-        fields=("stock", "colour", "size")
-    )
     ProductImageFormSet = forms.inlineformset_factory(
         Support,
         SupportImage,
