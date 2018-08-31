@@ -1,6 +1,5 @@
 # TODO:
 ## Admin
-- supports inventory in tabular mode
 - add size/colour fields in js
 
 

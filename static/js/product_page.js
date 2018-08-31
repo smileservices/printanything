@@ -88,7 +88,7 @@ $(document).ready(function () {
             var sizes_by_colours = {};
             $.each(data, function (key, colorData) {
                 var rendered = $('<div id="available_sizes"></div>');
-                $.each(colorData['sizes'], function (key, size) {
+                $.each(colorData['sizes'].sort(function(a,b){return (a.size>b.size ? 1 : -1)}), function (key, size) {
                     rendered.template({
                         'size': size.size,
                         'size-id': size.id

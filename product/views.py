@@ -36,7 +36,7 @@ def support_stock(request, support_id):
     }
     # group available sizez by colours
     for item in stock:
-        if str(item.colour) not in data:
+        if str(item.colour) not in data['colours']:
             gallery = [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img
                        in item.get_images()]
             data['colours'][str(item.colour)] = {

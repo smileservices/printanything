@@ -197,14 +197,41 @@ class UpdateSupport(IsAdminMixin, UpdateView):
         # filter the colour and size options for current vendor
         context['colours'] = Colour.objects.filter(vendor=self.object.vendor)
         context['sizes'] = Size.objects.filter(vendor=self.object.vendor)
-        #arrange stocks by colours/sizes
-        context['stocks'] = self.object.stock_set.order_by('colour', 'size').all()
+        context['stocks'] = self.get_grouped_stocks(context['colours'], context['sizes'])
 
         for form in context['images_form']:
             form.fields['colour'].queryset = Colour.objects.filter(vendor=self.object.vendor)
         context['action'] = 'Update'
         context['vendor_id'] = self.object.vendor.id
         return context
+
+    def get_grouped_stocks(self, colours, sizes):
+        #arrange stocks by colours/sizes
+        stocks_query = self.object.stock_set.order_by('colour', 'size').all()
+        stocks = {}
+        for stock in stocks_query:
+            if stock.colour not in stocks:
+                stocks[stock.colour] = {}
+            stocks[stock.colour][stock.size] = {
+                'stock':stock.stock,
+                'id':stock.id
+            }
+        for colour in colours:
+            if colour in stocks:
+                for size in sizes:
+                    if size not in stocks[colour]:
+                        stocks[colour][size] = {
+                            'stock': 0,
+                            'id': 'new'
+                        }
+            else:
+                stocks[colour] = {}
+                for size in sizes:
+                    stocks[colour][size] = {
+                        'stock': 0,
+                        'id': 'new'
+                    }
+        return stocks
 
     def form_valid(self, form):
         support = form.save()
@@ -213,7 +240,16 @@ class UpdateSupport(IsAdminMixin, UpdateView):
         for field, val in form.data.items():
             if field.startswith('stock'):
                 stock_arr = field.split('_')
-                Stock.objects.filter(id=stock_arr[3]).update(stock=val)
+                if stock_arr[3] == 'new' and val != 0:
+                    stock = Stock.objects.create(
+                        colour_id=stock_arr[1],
+                        size_id=stock_arr[2],
+                        stock=val,
+                        support=self.object
+                    )
+                    stock.save()
+                else:
+                    Stock.objects.filter(id=stock_arr[3]).update(stock=val)
 
         images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES, instance=support)
         valid = images_formset.is_valid()
