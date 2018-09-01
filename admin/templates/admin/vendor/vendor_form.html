@@ -51,7 +51,7 @@
                 <div class="card-head style-primary">
                     <header>Sizes</header>
                 </div>
-                <div class="card-body">
+                <div id='sizes_form' class="card-body">
                     {{ size_formset.management_form }}
                     {% for form in size_formset %}
                         {% include "admin/vendor/size_colour_form.html" %}
@@ -64,7 +64,7 @@
                 <div class="card-head style-primary">
                     <header>Colours</header>
                 </div>
-                <div class="card-body">
+                <div id="colours_form" class="card-body">
                     {{ colour_formset.management_form }}
                     {% for form in colour_formset %}
                         {% include "admin/vendor/size_colour_form.html" %}
@@ -112,3 +112,7 @@
     </div>
     {% endif %}
 {% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'admin/js/vendor_form.js' %}"></script>
+{% endblock %}

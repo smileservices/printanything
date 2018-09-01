@@ -1,6 +1,4 @@
 # TODO:
-## Admin
-- add size/colour fields in js
 
 
 ## FRONTEND UI
