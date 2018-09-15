@@ -1,5 +1,7 @@
 {% extends "admin/dashboard_template/main.html" %}
 {% load widget_tweaks %}
+{% load static %}
+
 {% block content %}
 <div class="col-md-12 form-group">
     <div class="row">
@@ -70,7 +72,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="images_form">
                 {{ images_form.management_form }}
                 {% for form in images_form %}
                     {% include 'admin/support/_support_image.html' with form=form %}
@@ -85,4 +87,7 @@
         </div>
     </form>
 </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'admin/js/support_form.js' %}"></script>
 {% endblock %}

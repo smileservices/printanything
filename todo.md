@@ -1,4 +1,10 @@
 # TODO:
+Overlay art on support
+- set up printable area
+- use html canvas to overlay art on said area
+
+Admin
+- fix uploading multiple imgs to supports
 
 
 ## FRONTEND UI
