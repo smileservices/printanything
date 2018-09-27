@@ -1,4 +1,4 @@
-$(document).ready(function () {
+// $(document).ready(function () {
 
     /*
     * after selecting support a request is made to get back associated stock items.
@@ -12,6 +12,7 @@ $(document).ready(function () {
         'get_stock_url': function (id) {
             return '/products/get_support/' + id;
         },
+        'indexed_images': [],
         'select_support': function (id) {
             var self = this;
             var data = self.data_by_id[id];
@@ -119,6 +120,16 @@ $(document).ready(function () {
             ajax_object.retrieve(self.get_stock_url(support_id),
                 done = function (data) {
                     supports.data_by_id[support_id] = data;
+                    //arrange gallery of supports by primary
+                    supports.indexed_images[support_id] = [];
+                    $.each(data['colours'], function(colourName,colourArr){
+                        $.each(colourArr['gallery'], function(i,val){
+                          if (val['primary']) {
+                              if (!supports.indexed_images[support_id][colourName]) supports.indexed_images[support_id][colourName] = null;
+                              supports.indexed_images[support_id][colourName] = val;
+                          }
+                        })
+                    })
                 },
                 before = function () {
                     $('.support-types').removeClass('selected');
@@ -129,11 +140,29 @@ $(document).ready(function () {
                 after = function () {
                     alert_box.hide('#add_to_cart_alert_box');
                     supports.select_support(support_id);
+                    //show on canvas
+                    var first_key = Object.keys(self.indexed_images[support_id])[0];
+                    //must refactor after refactoring support colours
+                    support_image.render_support(
+                        self.indexed_images[support_id][first_key]['url'],
+                        'green',
+                        {
+                            'width': 200,
+                            'height': 250,
+                            'x': 230,
+                            'y': 210,
+                        }
+                    );
+                    support_image.render_art();
                 }
             )
         }
-    }
+    };
 
+
+
+    //initialize support image object
+    support_image.init();
     //initialize first support
     supports.trigger_support_select($('.support-types').first())
 
@@ -172,4 +201,4 @@ $(document).ready(function () {
             cart.refresh()
         })
     })
-})
+// })

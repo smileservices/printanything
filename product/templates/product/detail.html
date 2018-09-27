@@ -4,48 +4,17 @@
     {% block breadcrumos %}
         {% include "product/breadcrumbs.html" %}
     {% endblock breadcrumos %}
-<section class="single_product_details_area section_padding_100">
+    <section class="single_product_details_area section_padding_100">
         <div class="container">
             <div class="row">
 
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-7">
                     <div class="single_product_thumb">
-                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                {% for img in product.images.all %}
-                                <li class="active" data-target="#product_details_slider" data-slide-to="{{ forloop.counter0 }}" style="background-image: url({{ img.get_thumb_small_url }});">
-                                </li>
-                                {% endfor %}
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="gallery_img" href="{{ product.get_primary_image.get_image_url}}">
-                                        <img class="d-block w-100" src="{{ product.get_primary_image.get_thumb_big_url }}" alt="slide {{ forloop.counter }}">
-                                    </a>
-                                    <!-- Product Badge -->
-                                    <div class="product_badge">
-                                        <span class="badge-new">New</span>
-                                    </div>
-                                </div>
-                                {% for img in product.images.all %}
-                                {% if not img.primary %}
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="{{ img.get_image_url }}">
-                                        <img class="d-block w-100" src="{{ img.get_thumb_big_url }}" alt="slide {{ forloop.counter }}">
-                                    </a>
-                                    <!-- Product Badge -->
-                                    <div class="product_badge">
-                                        <span class="badge-new">New</span>
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
+                        <canvas id="product_canvas" width="657" height="657"></canvas>
                     </div>
                 </div>
 
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-5">
                     <div class="single_product_desc">
                         <h4 class="title"><a href="#">{{ product.name }}</a></h4>
                         <div class="short_overview">
@@ -55,7 +24,8 @@
                         <div class="widget support mb-15">
                             <h6 class="widget-title">Put it on</h6>
                             {% for support in supports %}
-                                <span data-id="{{ support.id }}" class="support-types{% if forloop.counter == 1 %} selected{% endif %}">{{ support }}</span>
+                                <span data-id="{{ support.id }}"
+                                      class="support-types{% if forloop.counter == 1 %} selected{% endif %}">{{ support }}</span>
                             {% endfor %}
                         </div>
 
@@ -67,9 +37,14 @@
 
                         <div class="cart clearfix mb-15">
                             <div class="quantity">
-                                <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                <input type="number" class="qty-text" id="qty" step="1" min="1" max="12" name="qty" value="1">
-                                <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                <span class="qty-minus"
+                                      onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i
+                                        class="fa fa-minus" aria-hidden="true"></i></span>
+                                <input type="number" class="qty-text" id="qty" step="1" min="1" max="12" name="qty"
+                                       value="1">
+                                <span class="qty-plus"
+                                      onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
+                                        class="fa fa-plus" aria-hidden="true"></i></span>
                             </div>
                             <button value="5" class="btn cart-submit">Add to cart</button>
                         </div>
@@ -78,80 +53,85 @@
                 </div>
             </div>
         </div>
- </section>
+    </section>
 
-{# TEMPLATES for jquery.template #}
+    {# TEMPLATES for jquery.template #}
 
-{#  {!val} is from jquery template language. read the readme  #}
+    {#  {!val} is from jquery template language. read the readme  #}
 
-{#    main template for colours and sizes #}
-<script type="text/template" id="sup_sec_tmpl">
-    <div class="widget color">
-        <h6 class="widget-title">Color</h6>
-        <div class="widget-desc custom-controls-inline" id="support_colours">
-            {!colours}
+    {#    main template for colours and sizes #}
+    <script type="text/template" id="sup_sec_tmpl">
+        <div class="widget color">
+            <h6 class="widget-title">Color</h6>
+            <div class="widget-desc custom-controls-inline" id="support_colours">
+                {!colours}
+            </div>
         </div>
-    </div>
 
-    <div class="widget color">
-        <h6 class="widget-title">Support gallery</h6>
-        <div class="widget-desc custom-controls-inline" id="support_gallery">
-            {!support_gallery}
+        <div class="widget color">
+            <h6 class="widget-title">Support gallery</h6>
+            <div class="widget-desc custom-controls-inline" id="support_gallery">
+                {!support_gallery}
+            </div>
         </div>
-    </div>
 
 
-    <div class="widget size mb-15">
-        <h6 class="widget-title">Size</h6>
-        <div class="widget-desc" id="support_sizes">
-            <ul>
-                {!sizes}
-            </ul>
+        <div class="widget size mb-15">
+            <h6 class="widget-title">Size</h6>
+            <div class="widget-desc" id="support_sizes">
+                <ul>
+                    {!sizes}
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <div class="widget size mb-15">
-        <h6 class="widget-title">Shipping options:</h6>
-        <div class="widget-desc" id="support_shipping">
-            <ul>
-                {!shipping}
-            </ul>
+        <div class="widget size mb-15">
+            <h6 class="widget-title">Shipping options:</h6>
+            <div class="widget-desc" id="support_shipping">
+                <ul>
+                    {!shipping}
+                </ul>
+            </div>
         </div>
-    </div>
 
-</script>
+    </script>
 
-<script type="text/template" id="sup_sec_tmpl_colours">
-{# partial template for colours #}
-    <label class="custom-control custom-radio">
-        <input name="colour" type="radio" {!checked} value="{colour}" class="custom-control-input">
-        <span class="custom-control-indicator"></span>
-        <span class="custom-control-description">{colour}</span>
-    </label>
-</script>
-<script type="text/template" id="sup_sec_tmpl_colour_gallery">
-    <a class="gallery_img" href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}" alt=""></a>
-</script>
-<script type="text/template" id="sup_sec_tmpl_size">
-{# partial template for sizes #}
-    <li><a href="#" data-id="{size-id}">{size}</a></li>
-</script>
-<script type="text/template" id="sup_sec_tmpl_shipping">
-{# partial template for sizes #}
-    <li>
-        <div class="row">
-            <div class="col-3"><p><strong>{!name}</strong>: ${!price}</p></div>
-            <div class="col-9"><p>{!description}</p></div>
-        </div>
-    </li>
-</script>
+    <script type="text/template" id="sup_sec_tmpl_colours">
+        {# partial template for colours #}
+        <label class="custom-control custom-radio">
+            <input name="colour" type="radio" {!checked} value="{colour}" class="custom-control-input">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">{colour}</span>
+        </label>
+    </script>
+    <script type="text/template" id="sup_sec_tmpl_colour_gallery">
+        <a class="gallery_img" href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}"
+                                                  alt=""></a>
+    </script>
+    <script type="text/template" id="sup_sec_tmpl_size">
+        {# partial template for sizes #}
+        <li><a href="#" data-id="{size-id}">{size}</a></li>
+    </script>
+    <script type="text/template" id="sup_sec_tmpl_shipping">
+        {# partial template for sizes #}
+        <li>
+            <div class="row">
+                <div class="col-3"><p><strong>{!name}</strong>: ${!price}</p></div>
+                <div class="col-9"><p>{!description}</p></div>
+            </div>
+        </li>
+    </script>
 
-<form id="add_to_cart" action="{% url 'cart-add' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-</form>
+    <form id="add_to_cart" action="{% url 'cart-add' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+    </form>
+    <script type="application/javascript">
+        var placeable_art = '{{ art_placeable_image.get_thumb_small_url }}';
+    </script>
 {% endblock content %}
 
 {% block custom_javascript %}
-    <script src="{% static 'js/product_page.js'%}"></script>
+    <script src="{% static 'js/support_mockup.js' %}"></script>
+    <script src="{% static 'js/product_page.js' %}"></script>
 {% endblock custom_javascript %}
