@@ -1,5 +1,5 @@
 <div class="col-md-3 form-group">
-<div class="row{% if not form.initial %} extra_record{% endif %}">
+<div class="row{% if not form.instance.pk %} extra_record{% endif %}">
     <div class="col-md-6">
 {#    {{ form.errors }}#}
 {#    {{ form.non_field_errors }}#}
@@ -19,14 +19,16 @@
     </div>
     <div class="col-md-6">
         {{ form.primary }}
+        {% if form.instance.pk %}
         {{ form.DELETE }}
+        {% endif %}
     </div>
-    <div class="col-md-6">
-        {{ form.colour }}
-    </div>
+        {% if form.instance.pk %}
+        <a href="#" class="set_print_area" data-image-id="{{ form.instance.id }}" data-image-url="{{ form.instance.get_thumb_big_url }}" data-printarea="{{ form.instance.print_area }}">Set Print Area</a>
+        {% endif %}
+        {{ form.print_area }}
     {% for field in form.hidden_fields %}
         {{ field }}
     {% endfor %}
-
 </div>
 </div>

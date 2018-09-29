@@ -38,6 +38,7 @@ class Size(models.Model):
 class Colour(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, db_constraint=False)
     name = models.CharField(max_length=254)
+    hex_code = models.CharField(max_length=7)
 
     def __str__(self):
         return self.name

@@ -3,6 +3,7 @@ var FormHandler = function(formId, prefix, appendTo) {
     self.formId = formId;
     self.prefix = prefix;
     self.formContainer = $('#' + formId);
+    self.newFormcallback = function() {};
     self.init = function () {
         self.currentIndex = self.__getIndex() - 1;
         self.extraForm = self.__prepareNextExtraForm();

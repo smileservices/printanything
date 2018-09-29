@@ -13,19 +13,71 @@
             return '/products/get_support/' + id;
         },
         'indexed_images': [],
-        'select_support': function (id) {
+
+        'current_support': null,
+        'current_color': null,
+
+        'trigger_support_select': function (self_elem) {
+            var self = this;
+            self.current_support_id = self_elem.attr('data-id');
+            ajax_object.retrieve(self.get_stock_url(self.current_support_id),
+                done = function (data) {
+                    supports.data_by_id[self.current_support_id] = data;
+                    //arrange gallery of supports by primary
+                    supports.indexed_images[self.current_support_id] = [];
+                    $.each(data['mockup_images'], function(key,mockup_image){
+                      if (mockup_image['primary']) supports.indexed_images[self.current_support_id] = mockup_image;
+                    })
+                },
+                before = function () {
+                    $('.support-types').removeClass('selected');
+                    self_elem.addClass('selected');
+                    //show alert
+                    alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', 'Retrieving support options', true)
+                },
+                after = function (data) {
+                    alert_box.hide('#add_to_cart_alert_box');
+                    self.__select_support(self.current_support_id);
+                    //get first color
+                    self.current_color = data['colours'][Object.keys(data['colours'])[0]];
+
+                    //add listeners
+                    $('.color_support').click(function () {
+                        supports.__colour_select($(this))
+                    });
+                    $('#support_sizes a').click(function (e) {
+                        e.preventDefault();
+                        self.__size_select($(this))
+                    });
+
+                    //show on canvas
+                    support_image.render_support(
+                        self.indexed_images[self.current_support_id]['url'],
+                        self.current_color['hex_code'],
+                        {
+                            'width': 200,
+                            'height': 250,
+                            'x': 230,
+                            'y': 210,
+                        }
+                    );
+                    support_image.render_art();
+                }
+            )
+        },
+
+        '__select_support': function (id) {
             var self = this;
             var data = self.data_by_id[id];
             var supportSection = $('#support_section');
-            self.gallery_rendered = self.render_gallery(data['colours']);
-            self.sizes_rendered = self.render_sizes(data['colours']);
-            self.shipping_rendered = self.render_shipping(data['shipping']);
+            // self.gallery_rendered = self.__render_gallery(data['mockup_images']);
+            self.sizes_rendered = self.__render_sizes(data['colours']);
+            self.shipping_rendered = self.__render_shipping(data['shipping']);
             if (!self.rendered_by_id[id]) {
-                var colours_rendered = self.render_colours(data['colours']);
+                var colours_rendered = self.__render_colours(data['colours']);
                 var first_colour = Object.keys(data['colours'])[0];
                 supportSection.template({
                     'colours': colours_rendered,
-                    'support_gallery': self.gallery_rendered[first_colour],
                     'sizes': self.sizes_rendered[first_colour],
                     'shipping': self.shipping_rendered
                 }, '#sup_sec_tmpl');
@@ -33,31 +85,22 @@
             } else {
                 supportSection.html(self.rendered_by_id[id]);
             }
-            //change colours listener
-            $('input[name="colour"]').click(function () {
-                var self_elem = $(this);
-                self_elem.removeAttr('checked');
-                supports.colour_select(self_elem)
-            });
-            $('#support_sizes a').click(function (e) {
-                e.preventDefault();
-                self.size_select($(this))
-            })
         },
-        'render_colours': function (data) {
+
+        '__render_colours': function (data) {
             var rendered = $('<div id="available_colours"></div>');
             var index = 0;
             $.each(data, function (key, colorData) {
                 rendered.template({
-                    'colour_lower': key.toLowerCase(),
-                    'colour': key,
-                    'checked': index == 0 ? 'checked="checked"' : ''
+                    'hex_code': colorData.hex_code,
+                    'name': key,
                 }, '#sup_sec_tmpl_colours', true)
                 index += 1;
-            })
+            });
             return rendered.html();
         },
-        'render_gallery': function (data) {
+
+        '__render_gallery': function (data) {
             var gallery_by_colours = {};
             $.each(data, function (key, colorData) {
                 var rendered = $('<div id="support_gallery"></div>');
@@ -72,7 +115,8 @@
             });
             return gallery_by_colours;
         },
-        'render_shipping': function (data) {
+
+        '__render_shipping': function (data) {
             var rendered = $('<div id="shipping"></div>');
             var index = 0;
             $.each(data, function (k, shipper) {
@@ -85,7 +129,8 @@
             })
             return rendered.html();
         },
-        'render_sizes': function (data) {
+
+        '__render_sizes': function (data) {
             var sizes_by_colours = {};
             $.each(data, function (key, colorData) {
                 var rendered = $('<div id="available_sizes"></div>');
@@ -99,63 +144,38 @@
             })
             return sizes_by_colours;
         },
-        'colour_select': function (self_elem) {
+
+        '__colour_select': function (self_elem) {
             var self = this;
-            // this changes both sizes and support gallery
-            self_elem.prop("checked", true);
-            $('#support_gallery').html(self.gallery_rendered[self_elem.val()]);
+            $('.color_support').removeClass("selected");
+            self_elem.addClass("selected");
             $('#support_sizes ul').html(self.sizes_rendered[self_elem.val()]);
             $('#support_sizes a').click(function (e) {
                 e.preventDefault();
-                self.size_select($(this))
-            })
+                self.__size_select($(this))
+            });
+
+            self.current_color = {
+                hex_code: self_elem.css('background-color'),
+                name: self_elem.attr('data-name')
+            };
+
+            support_image.render_support(
+                self.indexed_images[self.current_support_id]['url'],
+                self.current_color['hex_code'],
+                {
+                    'width': 200,
+                    'height': 250,
+                    'x': 230,
+                    'y': 210,
+                }
+            );
+            support_image.render_art();
         },
-        'size_select': function (self_elem) {
+
+        '__size_select': function (self_elem) {
             $('#support_sizes a').removeClass('selected');
             self_elem.addClass('selected');
-        },
-        'trigger_support_select': function (self_elem) {
-            var self = this;
-            var support_id = self_elem.attr('data-id');
-            ajax_object.retrieve(self.get_stock_url(support_id),
-                done = function (data) {
-                    supports.data_by_id[support_id] = data;
-                    //arrange gallery of supports by primary
-                    supports.indexed_images[support_id] = [];
-                    $.each(data['colours'], function(colourName,colourArr){
-                        $.each(colourArr['gallery'], function(i,val){
-                          if (val['primary']) {
-                              if (!supports.indexed_images[support_id][colourName]) supports.indexed_images[support_id][colourName] = null;
-                              supports.indexed_images[support_id][colourName] = val;
-                          }
-                        })
-                    })
-                },
-                before = function () {
-                    $('.support-types').removeClass('selected');
-                    self_elem.addClass('selected');
-                    //show alert
-                    alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', 'Retrieving support options', true)
-                },
-                after = function () {
-                    alert_box.hide('#add_to_cart_alert_box');
-                    supports.select_support(support_id);
-                    //show on canvas
-                    var first_key = Object.keys(self.indexed_images[support_id])[0];
-                    //must refactor after refactoring support colours
-                    support_image.render_support(
-                        self.indexed_images[support_id][first_key]['url'],
-                        'green',
-                        {
-                            'width': 200,
-                            'height': 250,
-                            'x': 230,
-                            'y': 210,
-                        }
-                    );
-                    support_image.render_art();
-                }
-            )
         }
     };
 

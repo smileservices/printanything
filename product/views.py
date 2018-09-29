@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.core import serializers
-
+from gallery.models import Gallery
 from product.models import Art, Support, Tag
 
 
@@ -30,20 +30,25 @@ def support_stock(request, support_id):
     :param support_id:
     :return: json
     '''
+
+    #todo refactor to accommodate the new structure
+
     support = Support.objects.get(id=support_id)
     stock = support.stock_set.exclude(stock=0).all()
     data = {
         'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship in support.vendor.shipping_set.all()],
-        'colours': {}
+        'colours': {},
+        'mockup_images': [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url(), "print_area": img.print_area} for img in support.images.all()],
+        'gallery': [{"url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in Gallery.get_gallery('support', support.id)]
     }
+
+
     # group available sizez by colours
     for item in stock:
         if str(item.colour) not in data['colours']:
-            gallery = [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img
-                       in item.get_images()]
             data['colours'][str(item.colour)] = {
-                'gallery': gallery,
-                'sizes': []
+                'sizes': [],
+                'hex_code': item.colour.hex_code
             }
         data['colours'][str(item.colour)]['sizes'].append({
             'size': str(item.size),

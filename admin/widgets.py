@@ -2,6 +2,7 @@ from django.forms import widgets
 
 widgets.CheckboxInput.template_name = 'widgets/delete.html'
 
+
 class BoostrapCheckbox(widgets.Input):
     template_name = 'widgets/checkbox.html'
 
@@ -12,3 +13,11 @@ class BoostrapCheckbox(widgets.Input):
 
 class BoostrapFileInput(widgets.FileInput):
     template_name = 'widgets/file_input.html'
+
+
+class ColorInput(widgets.Input):
+    template_name = 'widgets/color.html'
+
+
+class HiddenInput(widgets.Input):
+    template_name = 'widgets/hidden.html'

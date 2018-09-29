@@ -8,8 +8,7 @@ from artist.models import Artist
 from product.models import Art, Support, Stock
 from gallery.models import ArtImage, SupportImage
 
-from admin.widgets import BoostrapCheckbox, BoostrapFileInput
-from django.forms.widgets import SelectMultiple
+from admin.widgets import BoostrapCheckbox, BoostrapFileInput, ColorInput, HiddenInput
 
 
 class UserForm(UserCreationForm):
@@ -35,7 +34,7 @@ class BaseSizeFormSet(forms.BaseInlineFormSet):
 class BaseColourFormSet(forms.BaseInlineFormSet):
     class Meta:
         model = Colour
-        fields = ("name",)
+        fields = ("name", "hex_code")
 
 
 class VendorForm(forms.ModelForm):
@@ -51,22 +50,21 @@ class VendorForm(forms.ModelForm):
         Colour,
         formset=BaseColourFormSet,
         extra=1,
-        fields=("name",)
+        fields=("name", "hex_code")
     )
 
     class Meta:
         model = Vendor
         fields = ("name", "sizes_chart")
         widgets = {
-            'sizes_chart': BoostrapFileInput
+            'sizes_chart': BoostrapFileInput,
         }
 
 
 class BaseProductImageFormSet(forms.BaseInlineFormSet):
     class Meta:
         model = SupportImage
-        fields = ("relative_path", "primary", "colour")
-
+        fields = ("relative_path", "primary", 'print_area')
 
 class SupportForm(forms.ModelForm):
     ProductImageFormSet = forms.inlineformset_factory(
@@ -74,10 +72,11 @@ class SupportForm(forms.ModelForm):
         SupportImage,
         formset=BaseProductImageFormSet,
         extra=1,
-        fields=("relative_path", "primary", "colour"),
+        fields=("relative_path", "primary", 'print_area'),
         widgets={
             "primary": BoostrapCheckbox(attrs={'field_name': 'Primary'}),
             "relative_path": BoostrapFileInput,
+            "print_area": HiddenInput,
         }
     )
 

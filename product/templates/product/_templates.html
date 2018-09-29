@@ -1,0 +1,61 @@
+{# TEMPLATES for jquery.template #}
+
+{#  {!val} is from jquery template language. read the readme  #}
+
+{#    main template for colours and sizes #}
+<script type="text/template" id="sup_sec_tmpl">
+    <div class="widget color">
+        <h6 class="widget-title">Color</h6>
+        <div class="widget-desc custom-controls-inline" id="support_colours">
+            {!colours}
+        </div>
+    </div>
+
+    <div class="widget color">
+        <h6 class="widget-title">Support gallery</h6>
+        <div class="widget-desc custom-controls-inline" id="support_gallery">
+            {!support_gallery}
+        </div>
+    </div>
+
+
+    <div class="widget size mb-15">
+        <h6 class="widget-title">Size</h6>
+        <div class="widget-desc" id="support_sizes">
+            <ul>
+                {!sizes}
+            </ul>
+        </div>
+    </div>
+
+    <div class="widget size mb-15">
+        <h6 class="widget-title">Shipping options:</h6>
+        <div class="widget-desc" id="support_shipping">
+            <ul>
+                {!shipping}
+            </ul>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="sup_sec_tmpl_colours">
+    {# partial template for colours #}
+    <div class="color_support" style="background-color:{!hex_code};" data-name="{!name}"></div>
+</script>
+<script type="text/template" id="sup_sec_tmpl_colour_gallery">
+    <a class="gallery_img" href="{!url}"><img id="{index}" class="{primary | 'primary' : ''}" src="{!thumb_url}"
+                                              alt=""></a>
+</script>
+<script type="text/template" id="sup_sec_tmpl_size">
+    {# partial template for sizes #}
+    <li><a href="#" data-id="{size-id}">{size}</a></li>
+</script>
+<script type="text/template" id="sup_sec_tmpl_shipping">
+    {# partial template for sizes #}
+    <li>
+        <div class="row">
+            <div class="col-3"><p><strong>{!name}</strong>: ${!price}</p></div>
+            <div class="col-9"><p>{!description}</p></div>
+        </div>
+    </li>
+</script>

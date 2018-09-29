@@ -54,7 +54,7 @@
                 <div id='sizes_form' class="card-body">
                     {{ size_formset.management_form }}
                     {% for form in size_formset %}
-                        {% include "admin/vendor/size_colour_form.html" %}
+                        {% include "admin/vendor/size_form.html" %}
                     {% endfor %}
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div id="colours_form" class="card-body">
                     {{ colour_formset.management_form }}
                     {% for form in colour_formset %}
-                        {% include "admin/vendor/size_colour_form.html" %}
+                        {% include "admin/vendor/colour_form.html" %}
                     {% endfor %}
                 </div>
             </div>

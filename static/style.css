@@ -84,6 +84,27 @@
         display: inline-block;
     }
 
+    #support_colours {
+        height: 35px;
+    }
+
+    #support_colours .color_support {
+        height: 20px;
+        width: 20px;
+        display: inline-block;
+        padding-right: 10px;
+        vertical-align: bottom;
+        border: 1px #cce5ff solid;
+    }
+
+    #support_colours .color_support.selected {
+        height: 25px;
+    }
+
+    #support_colours .color_support:hover {
+        height: 25px;
+    }
+
 /*
     CART DROPDOWN
 */

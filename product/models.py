@@ -116,7 +116,7 @@ class Stock(models.Model):
 
     def get_images(self):
         from gallery.models import SupportImage
-        return SupportImage.objects.filter(colour=self.colour, support=self.support).all()
+        return SupportImage.objects.filter(support=self.support).all()
 
 
 @receiver(pre_save, sender=Art)

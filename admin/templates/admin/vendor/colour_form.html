@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+<div class="row{% if not form.initial %} extra_record{% endif %}">
+{{ form.non_field_errors }}
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+<div class="col-md-6">
+    <div class="form-group floating-label {% if form.name.errors %}has-error{% endif %}">
+        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+        {{ form.name | add_class:'form-control' }}
+        {{ form.name.errors }}
+    </div>
+</div>
+<div class="col-md-3">
+    <div class="form-group floating-label {% if form.hex_code.errors %}has-error{% endif %}">
+        <label for="{{ form.hex_code.id_for_label }}">{{ form.hex_code.label }}</label>
+        {{ form.hex_code | add_class:'form-control' }}
+        {{ form.hex_code.errors }}
+    </div>
+</div>
+<div class="col-md-1">
+    <div class="color" id="picker_{{ form.hex_code.id_for_label }}"></div>
+</div>
+{% if form.initial %}
+    <div class="col-md-2">
+        <div class="form-group floating-label {% if form.DELETE.errors %}has-error{% endif %}">
+            <label for="{{ form.DELETE.id_for_label }}"></label>
+            {{ form.DELETE | add_class:'form-control' }}
+            {{ form.DELETE.errors }}
+        </div>
+    </div>
+{% endif %}
+</div>

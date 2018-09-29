@@ -22,8 +22,17 @@ def get_art_save_path(instance, filename):
 
 def get_support_save_path(instance, filename):
     return "support/{0}/{1}/{2}.{3}".format(
+        instance.support.vendor.id,
         instance.support.id,
-        instance.colour.id,
+        get_random_string(24),
+        filename.split(".")[-1].lower()
+    )
+
+
+def get_gallery_save_path(instance, filename):
+    return "gallery/{0}/{1}/{2}.{3}".format(
+        instance.model_name,
+        instance.model_ref,
         get_random_string(24),
         filename.split(".")[-1].lower()
     )
@@ -38,8 +47,18 @@ class ArtImage(Image, models.Model):
 class SupportImage(Image, models.Model):
     relative_path = models.ImageField(upload_to=get_support_save_path)
     support = models.ForeignKey(Support, on_delete=models.CASCADE, related_name='images', db_constraint=False)
-    colour = models.ForeignKey(Colour, on_delete=models.CASCADE, related_name='images', db_constraint=False)
+    print_area = models.TextField()
     primary = models.BooleanField()
+
+
+class Gallery(Image, models.Model):
+    relative_path = models.ImageField(upload_to=get_gallery_save_path)
+    type = models.TextField()
+    type_ref = models.IntegerField()
+
+    @staticmethod
+    def get_gallery(type, type_ref):
+        return Gallery.objects.filter(type=type, type_ref=type_ref).all()
 
 
 # @receiver(cleanup_post_delete, sender=Image)

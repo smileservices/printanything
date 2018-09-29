@@ -72,10 +72,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                <div class="card-head style-primary"><header>Images for art placement</header></div>
                 <div class="card-body" id="images_form">
                 {{ images_form.management_form }}
                 {% for form in images_form %}
-                    {% include 'admin/support/_support_image.html' with form=form %}
+                    {% include 'admin/support/__support_image.html' with form=form %}
                 {% endfor %}
                 </div>
             </div>
@@ -87,7 +88,11 @@
         </div>
     </form>
 </div>
+
+{% include 'admin/support/__mockup_image_modal.html' %}
+
 {% endblock %}
 {% block extra_js %}
+    <script src="{% static 'js/konva.min.js' %}"></script>
     <script src="{% static 'admin/js/support_form.js' %}"></script>
 {% endblock %}

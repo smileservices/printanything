@@ -5,12 +5,12 @@ Overlay art on support
 
 1 new image gallery used for art placement has print coordinates for each image. art is put on that area
     printing area position is relative to the center of image
-2 colour names change to coloured rectangles and they set the print support colour in canvas mode
 3 separate support gallery appears bellow the main image and open in gallery mode
 4 art images gallery
 5 single art image for mockuping
 6 when adding to basket a temp image is created of the art/support and referenced in the order. if the order is canceled/deleted, it will be deleted as well. will be sent to vendor if the order is placed
 7 order details - refactor to use product_image
+8 link to vendor size chart for every support
 
 - stop using inline formset for images; use separate form
 

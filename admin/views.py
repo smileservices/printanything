@@ -189,18 +189,17 @@ class UpdateSupport(IsAdminMixin, UpdateView):
     form_class = SupportForm
     template_name = 'admin/support/form.html'
     success_url = reverse_lazy('admin-supports')
+    initial_product_image_data = [{'print_area':'{"x":100,"y":100,"width":250,"height":250}'}]
 
     def get_context_data(self, **kwargs):
         context = super(UpdateSupport, self).get_context_data(**kwargs)
         context['images_form'] = SupportForm.ProductImageFormSet(
-            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
+            instance=self.object, initial=self.initial_product_image_data) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         # filter the colour and size options for current vendor
         context['colours'] = Colour.objects.filter(vendor=self.object.vendor)
         context['sizes'] = Size.objects.filter(vendor=self.object.vendor)
         context['stocks'] = self.get_grouped_stocks(context['colours'], context['sizes'])
 
-        for form in context['images_form']:
-            form.fields['colour'].queryset = Colour.objects.filter(vendor=self.object.vendor)
         context['action'] = 'Update'
         context['vendor_id'] = self.object.vendor.id
         return context
@@ -251,7 +250,7 @@ class UpdateSupport(IsAdminMixin, UpdateView):
                 else:
                     Stock.objects.filter(id=stock_arr[3]).update(stock=val)
 
-        images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES, instance=support)
+        images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES, instance=support, initial=self.initial_product_image_data)
         valid = images_formset.is_valid()
         if valid:
             images_formset.save()
