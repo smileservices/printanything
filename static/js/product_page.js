@@ -14,8 +14,9 @@
         },
         'indexed_images': [],
 
-        'current_support': null,
+        'current_support_id': null,
         'current_color': null,
+        'current_print_area': null,
 
         'trigger_support_select': function (self_elem) {
             var self = this;
@@ -40,6 +41,7 @@
                     self.__select_support(self.current_support_id);
                     //get first color
                     self.current_color = data['colours'][Object.keys(data['colours'])[0]];
+                    self.current_print_area = JSON.parse(supports.indexed_images[self.current_support_id]['print_area']);
 
                     //add listeners
                     $('.color_support').click(function () {
@@ -50,18 +52,8 @@
                         self.__size_select($(this))
                     });
 
-                    //show on canvas
-                    support_image.render_support(
-                        self.indexed_images[self.current_support_id]['url'],
-                        self.current_color['hex_code'],
-                        {
-                            'width': 200,
-                            'height': 250,
-                            'x': 230,
-                            'y': 210,
-                        }
-                    );
-                    support_image.render_art();
+                    //trigger color select to render the mockup image
+                    self.__colour_select($($('.color_support')[0]));
                 }
             )
         },
@@ -160,17 +152,11 @@
                 name: self_elem.attr('data-name')
             };
 
-            support_image.render_support(
+            support_image.render(
                 self.indexed_images[self.current_support_id]['url'],
                 self.current_color['hex_code'],
-                {
-                    'width': 200,
-                    'height': 250,
-                    'x': 230,
-                    'y': 210,
-                }
+                self.current_print_area
             );
-            support_image.render_art();
         },
 
         '__size_select': function (self_elem) {
@@ -179,10 +165,6 @@
         }
     };
 
-
-
-    //initialize support image object
-    support_image.init();
     //initialize first support
     supports.trigger_support_select($('.support-types').first())
 

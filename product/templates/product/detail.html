@@ -10,7 +10,7 @@
 
                 <div class="col-12 col-md-7">
                     <div class="single_product_thumb">
-                        <canvas id="product_canvas" width="657" height="657"></canvas>
+                        <div id="product_canvas"></div>
                     </div>
                 </div>
 
@@ -67,6 +67,7 @@
 {% endblock content %}
 
 {% block custom_javascript %}
+    <script src="{% static 'js/konva.min.js' %}"></script>
     <script src="{% static 'js/support_mockup.js' %}"></script>
     <script src="{% static 'js/product_page.js' %}"></script>
 {% endblock custom_javascript %}
