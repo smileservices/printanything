@@ -80,10 +80,10 @@ class Order(models.Model):
     status = models.ForeignKey(OrderStatus, default=1)
     info = models.TextField(default="")
     # field for grouping orders for multiple vendors split orders
-    order_group = models.ForeignKey(OrderGroup)
+    order_group = models.ForeignKey(OrderGroup,on_delete=models.CASCADE)
     vendor = models.ForeignKey(Vendor)
     updated_at = models.DateTimeField()
-    closed = models.BooleanField()
+    closed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         from datetime import datetime
@@ -104,6 +104,7 @@ class Order(models.Model):
                 colour=stock.colour,
                 unit_price=item.unit_price,
                 qty=item.quantity,
+                product_img=self.handle_product_img(item.product_img),
                 order=self
             )
             detail.save()
@@ -117,6 +118,11 @@ class Order(models.Model):
         )
         shipping.save()
         return self
+
+    def handle_product_img(self, product_img):
+        from django.core.files.images import ImageFile
+        image_file = ImageFile(product_img)
+        return image_file
 
     def mark_shipped(self):
         # self.status = 'Shipped'
@@ -166,8 +172,17 @@ class Payment(models.Model):
     order_group = models.ForeignKey(OrderGroup)
 
 
+def get_product_img_save_path(instance, filename):
+    from django.utils.crypto import get_random_string
+    return "orders/{0}/{1}.{2}".format(
+        instance.order.id,
+        get_random_string(24),
+        filename.split(".")[-1].lower()
+    )
+
+
 class OrderDetails(models.Model):
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order,on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     art = models.ForeignKey(Art)
     support = models.ForeignKey(Support)
@@ -175,6 +190,7 @@ class OrderDetails(models.Model):
     colour = models.ForeignKey(Colour)
     unit_price = models.FloatField()
     qty = models.IntegerField()
+    product_img = models.ImageField(upload_to=get_product_img_save_path)
 
     def calculate_price(self):
         return self.unit_price * self.qty

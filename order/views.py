@@ -39,16 +39,18 @@ def place_order(request):
     cart_grouped = cart_proxy.get_formatted_cart()
     customer, contact = __get_customer_contact(request)
     total_amount = cart_proxy.calculate_total()
-    # delete the other that existed in memory and has not been paid
-    try:
-        previous_order_group = OrderGroup.objects.get(pk=request.session['order_group'])
-        if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED', ]:
-            previous_order_group.delete()
-    except OrderGroup.DoesNotExist:
-        pass
+    if ('order_group' in request.session):
+        # delete the other that existed in memory and has not been paid
+        try:
+            previous_order_group = OrderGroup.objects.get(pk=request.session['order_group'])
+            if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED', ]:
+                previous_order_group.delete()
+        except OrderGroup.DoesNotExist:
+            pass
     # create order group
     order_group = OrderGroup(customer=customer, contact=contact, total_amount=total_amount)
     order_group.save()
+    request.session['order_group'] = order_group.pk
     for vendor, cart in cart_grouped.items():
         order = Order(order_group=order_group, vendor=vendor)
         order.save()

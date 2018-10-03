@@ -65,7 +65,7 @@ def get_product_img_save_path(instance, filename):
 
 
 class Item(models.Model):
-    cart = models.ForeignKey(Cart, verbose_name=_('cart'))
+    cart = models.ForeignKey(Cart, verbose_name=_('cart'),on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=18, decimal_places=3,
                                    verbose_name=_('quantity'))
     unit_price = models.DecimalField(max_digits=18, decimal_places=2,
