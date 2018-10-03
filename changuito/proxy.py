@@ -70,16 +70,25 @@ class CartProxy(MiddlewareMixin):
         request.session[CART_ID] = cart.id
         return cart
 
-    def add(self, product, vendor, stock, unit_price, quantity=1):
+    def add(self, product, vendor, stock, unit_price, product_img_b64, quantity=1):
         if (stock.stock != -1) and (stock.stock - int(quantity) < 0):
             raise StockEmpty(stock)
         try:
             ctype = ContentType.objects.get_for_model(type(product),
                                                       for_concrete_model=False)
+            # handle product image
+            import base64
+            from django.core.files.base import ContentFile
+
+            format, imgstr = product_img_b64.split(';base64,')
+            ext = format.split('/')[-1]
+            image_contentfile = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+
             item = models.Item.objects.get(cart=self.cart,
                                            product=product,
                                            stock=stock,
-                                           content_type=ctype)
+                                           content_type=ctype,
+                                           product_img=image_contentfile)
         except models.Item.DoesNotExist:
             item = models.Item()
             item.cart = self.cart
@@ -88,6 +97,7 @@ class CartProxy(MiddlewareMixin):
             item.quantity = quantity
             item.stock_id = stock.pk
             item.vendor_id = vendor.pk
+            item.product_img = image_contentfile
             item.save()
         else:
             item.quantity += int(quantity)

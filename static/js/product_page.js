@@ -186,15 +186,20 @@
         var product_id = $('form input[name="product_id"]').val();
         var qty = $('input[name="qty"]').val();
         var stock = $('#support_sizes a.selected').attr('data-id');
+        var final_product_img = support_image.stage.toDataURL();
         if (!stock) {
             alert_box.show_message('#add_to_cart_alert_box', 'alert-danger', 'Please select a size!')
             return false;
         }
-        cart.add_product(url, csrf, {
-            'product_id': product_id,
-            'qty': qty,
-            'stock': stock
-        }, function () {
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', csrf);
+        formData.append('product_id', product_id);
+        formData.append('qty', qty);
+        formData.append('stock', stock);
+        formData.append('product_img', final_product_img);
+
+        cart.add_product(url, formData, function () {
             alert_box.show_message('#add_to_cart_alert_box', 'alert-primary', 'Adding product to cart', true)
         }, function (data) {
             alert_box.hide('#add_to_cart_alert_box')

@@ -1,10 +1,5 @@
 # TODO:
-Overlay art on support
-- set up printable area
-- use html canvas to overlay art on said area
 
-1 new image gallery used for art placement has print coordinates for each image. art is put on that area
-    printing area position is relative to the center of image
 3 separate support gallery appears bellow the main image and open in gallery mode
 4 art images gallery
 5 single art image for mockuping

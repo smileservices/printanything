@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
+from django.utils.crypto import get_random_string
 from product.models import Stock
 from vendor.models import Vendor
 
@@ -55,6 +56,14 @@ class ItemManager(models.Manager):
         return super(ItemManager, self).get(*args, **kwargs)
 
 
+def get_product_img_save_path(instance, filename):
+    return "temp/{0}/{1}.{2}".format(
+        instance.cart.id,
+        get_random_string(24),
+        filename.split(".")[-1].lower()
+    )
+
+
 class Item(models.Model):
     cart = models.ForeignKey(Cart, verbose_name=_('cart'))
     quantity = models.DecimalField(max_digits=18, decimal_places=3,
@@ -66,6 +75,7 @@ class Item(models.Model):
     object_id = models.PositiveIntegerField()
     stock = models.ForeignKey(Stock)
     vendor = models.ForeignKey(Vendor)
+    product_img = models.ImageField(upload_to=get_product_img_save_path)
 
     objects = ItemManager()
 

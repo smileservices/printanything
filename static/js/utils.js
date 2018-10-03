@@ -45,20 +45,17 @@ var alert_box = {
 }
 
 var cart = {
-    'add_product': function(url, csrf, product_data, before, success, complete) {
+    'add_product': function(url, formDataObj, before, success, complete) {
         before();
         $.ajax({
-            'method': 'POST',
-            'url': url,
-            'dataType': 'json',
-            'data': {
-                'csrfmiddlewaretoken': csrf,
-                'product_id': product_data['product_id'],
-                'stock': product_data['stock'],
-                'qty': product_data['qty']
-            },
-            'success': success,
-            'complete': complete,
+            method: 'POST',
+            url: url,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: formDataObj,
+            success: success,
+            complete: complete
         })
     },
     'get_cart_content': function(before, success){

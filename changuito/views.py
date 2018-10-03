@@ -12,8 +12,9 @@ def add_to_cart(request):
         vendor = stock.support.vendor
         cart = request.cart
         price = product.unit_price + stock.support.unit_price
+        product_img = request.POST['product_img']
         try:
-            cart.add(product, vendor, stock, price, quantity)
+            cart.add(product, vendor, stock, price, product_img, quantity)
             res = 'Successfully selected product to your shopping cart!'
         except ItemDoesNotExist:
             res = 'Something went very wrong! The selected product could not be added to your cart because it doesn\'t exist!'
