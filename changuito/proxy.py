@@ -115,7 +115,7 @@ class CartProxy(MiddlewareMixin):
                 item.stock.stock += item.quantity
                 item.stock.save()
             item.delete()
-            self.recalculate_shipping()
+            #self.recalculate_shipping()
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
 

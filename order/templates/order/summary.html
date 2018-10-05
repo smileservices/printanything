@@ -7,7 +7,7 @@
             {% for item in group.items %}
             <tr id="item_{{ item.id }}">
                 <td class="cart_product_img">
-                    <a href="#"><img class="img img-thumbnail" src="{{ item.product.get_primary_image.get_thumb_small_url }}" alt="Product"></a>
+                    <a href="#"><img class="img img-thumbnail" src="{{ item.get_thumb_small }}" alt="Product"></a>
                 </td>
                 <td class="cart_product_desc">
                     <p class="art_name">{{ item.product.name }}</p>

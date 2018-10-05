@@ -73,7 +73,7 @@ def get_cart_json(request):
         items_list.append({
             'name': item.product.name,
             'support': item.stock.support.name + ' - ' + str(item.stock),
-            'photo': item.product.get_primary_image().get_thumb_small_url(),
+            'photo': item.get_thumb_small,
             'url': item.product.get_absolute_url(),
             'qty': int(item.quantity),
             'price': item.unit_price,

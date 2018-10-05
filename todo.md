@@ -1,17 +1,10 @@
 # TODO:
 
-3 separate support gallery appears bellow the main image and open in gallery mode
-4 art images gallery
-5 single art image for mockuping
-6 when adding to basket a temp image is created of the art/support and referenced in the order. if the order is canceled/deleted, it will be deleted as well. will be sent to vendor if the order is placed
-7 order details - refactor to use product_image
-8 link to vendor size chart for every support
-
-- stop using inline formset for images; use separate form
-
+Add product_img to cart items images & order detail & email
+Make product_img multiple sizez
 
 Admin
-- fix uploading multiple imgs to supports
+- fix uploading multiple imgs to supports - restricted by extra forms
 - each support must have at least one img set as primary
 
 ## FRONTEND UI
@@ -30,5 +23,10 @@ FUTURE RELEASES
 - add elasticsearch
 - update shipping info?
 - email template for notifications
+
+### Product detail
+3 separate support gallery appears bellow the main image and open in gallery mode
+4 art images gallery
+8 link to vendor size chart for every support
 
 

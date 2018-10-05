@@ -1,9 +1,16 @@
+import os
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.utils.crypto import get_random_string
 from product.models import Stock
 from vendor.models import Vendor
+
+from gallery.thumbed_image import ThumbedModel
+from django_cleanup.signals import cleanup_post_delete
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
+from PIL import Image as PIL_Image
 
 try:
     from django.conf import settings
@@ -64,8 +71,8 @@ def get_product_img_save_path(instance, filename):
     )
 
 
-class Item(models.Model):
-    cart = models.ForeignKey(Cart, verbose_name=_('cart'),on_delete=models.CASCADE)
+class Item(ThumbedModel, models.Model):
+    cart = models.ForeignKey(Cart, verbose_name=_('cart'), on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=18, decimal_places=3,
                                    verbose_name=_('quantity'))
     unit_price = models.DecimalField(max_digits=18, decimal_places=2,
@@ -84,6 +91,10 @@ class Item(models.Model):
         verbose_name_plural = _('items')
         ordering = ('cart',)
         app_label = 'changuito'
+
+    class ThumbProperties:
+        image_field_name = 'product_img'
+        thumb_sizes = {'small': (300, 600), 'med': (600, 900), 'big': (900, 1200)}
 
     def __unicode__(self):
         return u'{0} units of {1} {2}'.format(self.quantity,
@@ -133,3 +144,24 @@ class Item(models.Model):
     def get_remove_from_cart_url(self):
         from django.urls import reverse
         return reverse('cart-remove', args=[self.id])
+
+
+@receiver(post_delete, sender=Item)
+def clean_thumbnails(sender, **kwargs):
+    filename, extension = os.path.splitext(kwargs['instance'].product_img.path)
+    for k, size in ThumbedModel.ThumbProperties.thumb_sizes.items():
+        try:
+            os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        except FileNotFoundError:
+            pass
+
+
+@receiver(post_save, sender=Item)
+def post_save(sender, **kwargs):
+    img_path = kwargs['instance'].product_img.path
+    filename, extension = os.path.splitext(img_path)
+    for k, size in ThumbedModel.ThumbProperties.thumb_sizes.items():
+        img = PIL_Image.open(img_path)
+        img.thumbnail(size)
+        img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+    return sender
