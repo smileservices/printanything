@@ -19,11 +19,19 @@ class Tag(models.Model):
         verbose_name = 'Tag'
 
 
+def set_path_art_big(instance, filename):
+    return "art_big/{0}/{1}.{2}".format(
+        instance.artist.id,
+        instance.slug,
+        filename.split(".")[-1].lower()
+    )
+
+
 class Art(models.Model):
     externalId = models.CharField(max_length=64)
     slug = models.SlugField(default='xxx', unique=True)
     name = models.CharField(max_length=64)
-    big_image = models.ImageField(upload_to='art_big/', blank=True)
+    big_image = models.ImageField(upload_to=set_path_art_big, blank=True)
     description = models.TextField()
     unit_price = models.FloatField(default=0.0, verbose_name='Unit Price')
     stock = models.IntegerField()

@@ -2,17 +2,23 @@
     <table>
         <thead>
             <th>Support</th>
+            <th>Support External ID</th>
             <th>Colour</th>
             <th>Size</th>
             <th>Print with</th>
+            <th>Product Image</th>
+            <th>Quantity</th>
         </thead>
         <tbody>
             {% for item in items %}
                 <tr>
                     <td>{{ item.support }}</td>
+                    <td>{{ item.support.externalId }}</td>
                     <td>{{ item.colour }}</td>
                     <td>{{ item.size }}</td>
                     <td>{{ item.art }}</td>
+                    <td><a href="{{ base_url }}{{ item.get_thumb_big }}">final product</a></td>
+                    <td>{{ item.qty }}</td>
                 </tr>
             {% endfor %}
         </tbody>

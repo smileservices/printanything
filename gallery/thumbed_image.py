@@ -9,6 +9,8 @@ from PIL import Image as PIL_Image
 
 Maybe we can use this one to replace the Image class usage
 
+Makes thumbs of the image in "image_field_name" property in THumbProperties class
+
 """
 
 

@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 
 from django.db import models
 from customer.models import Customer as Customer
 from contact.models import Contact
 from product.models import Art, Support
 from vendor.models import Size, Colour, Vendor
+from gallery.thumbed_image import ThumbedModel
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
+from PIL import Image as PIL_Image
+
 import uuid
 
 try:
@@ -181,7 +188,7 @@ def get_product_img_save_path(instance, filename):
     )
 
 
-class OrderDetails(models.Model):
+class OrderDetails(ThumbedModel,models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     art = models.ForeignKey(Art)
@@ -191,6 +198,10 @@ class OrderDetails(models.Model):
     unit_price = models.FloatField()
     qty = models.IntegerField()
     product_img = models.ImageField(upload_to=get_product_img_save_path)
+
+    class ThumbProperties:
+        image_field_name = 'product_img'
+        thumb_sizes = {'small': (300, 600), 'med': (600, 900), 'big': (900, 1200)}
 
     def calculate_price(self):
         return self.unit_price * self.qty
@@ -207,3 +218,24 @@ class ShippingDetails(models.Model):
     def update_shipping_info(self, *args, **kwargs):
         # todo
         return self
+
+
+@receiver(post_delete, sender=OrderDetails)
+def clean_thumbnails(sender, **kwargs):
+    filename, extension = os.path.splitext(kwargs['instance'].product_img.path)
+    for k, size in ThumbedModel.ThumbProperties.thumb_sizes.items():
+        try:
+            os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        except FileNotFoundError:
+            pass
+
+
+@receiver(post_save, sender=OrderDetails)
+def post_save(sender, **kwargs):
+    img_path = kwargs['instance'].product_img.path
+    filename, extension = os.path.splitext(img_path)
+    for k, size in ThumbedModel.ThumbProperties.thumb_sizes.items():
+        img = PIL_Image.open(img_path)
+        img.thumbnail(size)
+        img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+    return sender

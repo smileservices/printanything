@@ -1,7 +1,8 @@
 # TODO:
 
-Add product_img to cart items images & order detail & email
-Make product_img multiple sizez
+Add tags easier
+Keep only one primary image for art
+Can add gallery to art
 
 Admin
 - fix uploading multiple imgs to supports - restricted by extra forms

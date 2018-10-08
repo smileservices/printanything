@@ -55,7 +55,7 @@ class VendorForm(forms.ModelForm):
 
     class Meta:
         model = Vendor
-        fields = ("name", "sizes_chart")
+        fields = ("name", "email", "sizes_chart")
         widgets = {
             'sizes_chart': BoostrapFileInput,
         }

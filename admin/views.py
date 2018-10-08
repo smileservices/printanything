@@ -419,11 +419,12 @@ def order_update(request, *args, **kwargs):
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 
-def order_to_vendor(order):
+def order_to_vendor(request, order):
     context = {
         'order': order,
         'items': order.orderdetails_set.all(),
         'shipping': order.shippingdetails_set.first(),
+        'base_url': 'https://' if request.is_secure() else 'http://' + request.get_host()
     }
     # return render(request, 'order/email/to_vendor/send_to_vendor.html', context)
     messageHtml = render_to_string('order/email/to_vendor/send_to_vendor.html', context)
@@ -446,7 +447,7 @@ def order_process(request, *args, **kwargs):
     if action == 'close':
         order.mark_shipped()
     if action == 'to_vendor':
-        order_to_vendor(order)
+        order_to_vendor(request, order)
     return HttpResponseRedirect(reverse_lazy("admin-orders"))
 
 

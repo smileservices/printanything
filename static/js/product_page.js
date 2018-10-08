@@ -1,4 +1,4 @@
-// $(document).ready(function () {
+$(document).ready(function () {
 
     /*
     * after selecting support a request is made to get back associated stock items.
@@ -208,4 +208,4 @@
             cart.refresh()
         })
     })
-// })
+})
