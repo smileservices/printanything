@@ -328,12 +328,32 @@ class CreateArt(IsAdminMixin, CreateView):
     template_name = 'admin/art/art_form.html'
     success_url = reverse_lazy('admin-art')
 
+    def form_valid(self, form):
+        # save newly created tags
+        form.cleaned_data['tags'] = []
+        for tagId in form['tags'].data:
+            try:
+                tag = Tag.objects.get(id=tagId)
+            except:
+                tag = Tag(name=tagId)
+                tag.save()
+            form.cleaned_data['tags'].append(tag)
+        # remove errors related to unexistant tags from form
+        form._errors.pop('tags', None)
+        success_redirect = super(CreateView, self).form_valid(form)
+        return success_redirect
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(CreateView, self).get_context_data(**kwargs)
         context['title'] = 'Create Art'
         context['submit_text'] = 'Create'
         return context
+
+    def post(self, request, *args, **kwargs):
+        art_form = ArtForm(data=request.POST, files=request.FILES)
+        self.object = None
+        return self.form_valid(art_form)
 
 
 class UpdateArt(IsAdminMixin, UpdateView):

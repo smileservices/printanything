@@ -163,7 +163,7 @@ def save_thumbnail(sender, **kwargs):
 
 @receiver(post_delete, sender=Art)
 def clean_thumbnails(**kwargs):
-    filename, extension = os.path.splitext(kwargs['file'].path)
+    filename, extension = os.path.splitext(kwargs['instance'].mock_image.path)
     for k, size in Art.ThumbProperties.thumb_sizes.items():
         try:
             os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
