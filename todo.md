@@ -1,12 +1,5 @@
 # TODO:
 
-## 1.5
-- implement gallery to art
-- implement gallery to support
-- implement thumbed_image model instead of image
-- keep only one primary image for art
-- Can add gallery to art
-
 Admin
 - fix uploading multiple imgs to supports - restricted by extra forms
 - each support must have at least one img set as primary
@@ -17,6 +10,10 @@ Admin
     - payment success/cancel - use big shop one
 
 FUTURE RELEASES
+
+### ART & Support
+- implement gallery to art
+- implement gallery to support
 
 ### Order
 - add option to act as if no stock is needed (something like unlimited stock)
