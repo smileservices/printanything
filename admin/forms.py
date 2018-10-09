@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from vendor.models import Vendor, Size, Colour
 from artist.models import Artist
 from product.models import Art, Support, Stock
-from gallery.models import ArtImage, SupportImage
+from gallery.models import SupportImage
 
 from admin.widgets import BoostrapCheckbox, BoostrapFileInput, ColorInput, HiddenInput
 
@@ -91,25 +91,8 @@ class ArtistForm(forms.ModelForm):
         fields = ("name",)
 
 
-class ArtBaseImageFormSet(forms.BaseInlineFormSet):
-    class Meta:
-        model = ArtImage
-        fields = ("relative_path", "primary")
-
-
 class ArtForm(forms.ModelForm):
-    ImagesFormSet = forms.inlineformset_factory(
-        Art,
-        ArtImage,
-        formset=ArtBaseImageFormSet,
-        fields=["relative_path", "primary"],
-        extra=3,
-        widgets={
-            "primary": BoostrapCheckbox(attrs={'field_name': 'Primary'}),
-            "relative_path": BoostrapFileInput,
-        }
-    )
 
     class Meta:
         model = Art
-        fields = ("externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist", "tags")
+        fields = ("externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist", "tags", "mock_image")

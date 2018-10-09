@@ -333,24 +333,7 @@ class CreateArt(IsAdminMixin, CreateView):
         context = super(CreateView, self).get_context_data(**kwargs)
         context['title'] = 'Create Art'
         context['submit_text'] = 'Create'
-        context['images_form'] = ArtForm.ImagesFormSet(
-            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         return context
-
-    def form_valid(self, form):
-        art = form.save()
-        success_redirect = super(CreateArt, self).form_valid(form)
-        images_formset = form.ImagesFormSet(self.request.POST, self.request.FILES, instance=art)
-        valid = images_formset.is_valid()
-        if valid:
-            images_formset.save()
-        validated_forms_context = self.get_context_data(form=form, validated_images_form=images_formset)
-        return success_redirect if valid else self.render_to_response(validated_forms_context)
-
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        art_form = ArtForm(data=request.POST)
-        return self.form_valid(art_form)
 
 
 class UpdateArt(IsAdminMixin, UpdateView):
@@ -363,11 +346,9 @@ class UpdateArt(IsAdminMixin, UpdateView):
         context = super(UpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Update Art'
         context['submit_text'] = 'Update'
-        context['images_form'] = ArtForm.ImagesFormSet(
-            instance=self.object) if "validated_images_form" not in kwargs else kwargs["validated_images_form"]
         return context
 
-    def form_valid(self, form, images_formset):
+    def form_valid(self, form):
         # save newly created tags
         form.is_valid()
         form.cleaned_data['tags'] = []
@@ -381,18 +362,13 @@ class UpdateArt(IsAdminMixin, UpdateView):
         # remove errors related to unexistant tags from form
         form._errors.pop('tags', None)
         success_redirect = super(UpdateArt, self).form_valid(form)
-        valid = images_formset.is_valid()
-        if valid:
-            images_formset.save()
-        validated_forms_context = self.get_context_data(form=form, validated_images_form=images_formset)
-        return success_redirect if valid else self.render_to_response(validated_forms_context)
+        return success_redirect
 
     def post(self, request, *args, **kwargs):
         art = Art.objects.get(pk=kwargs.get('pk'))
         art_form = ArtForm(data=request.POST, files=request.FILES, instance=art)
-        images_formset = art_form.ImagesFormSet(request.POST, request.FILES, instance=art)
         self.object = self.get_object()
-        return self.form_valid(art_form, images_formset)
+        return self.form_valid(art_form)
 
 
 class OrderView(IsAdminMixin, DetailView):

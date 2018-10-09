@@ -62,7 +62,7 @@
         <input type="hidden" name="product_id" value="{{ product.id }}">
     </form>
     <script type="application/javascript">
-        var placeable_art = '{{ art_placeable_image.get_thumb_small_url }}';
+        var placeable_art = '{{ product.get_thumb_small }}';
     </script>
 {% endblock content %}
 

@@ -21,10 +21,13 @@ class ThumbedModel():
         thumb_name = filename + "_thumb_{0}".format("_".join(map(str, self.ThumbProperties.thumb_sizes[size])) + extension)
         return thumb_name
 
+    def get_image_path(self):
+        return getattr(self, self.ThumbProperties.image_field_name).path
+
     def __getattr__(self, item):
         if item[:9] == 'get_thumb':
             return getattr(self, 'get_thumb_url')(item[10:])
-        raise AttributeError()
+        raise AttributeError('No attribute {}'.format(item))
 
     class ThumbProperties:
         image_field_name = 'relative_path'

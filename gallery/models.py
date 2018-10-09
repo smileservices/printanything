@@ -38,12 +38,6 @@ def get_gallery_save_path(instance, filename):
     )
 
 
-class ArtImage(Image, models.Model):
-    relative_path = models.ImageField(upload_to=get_art_save_path)
-    art = models.ForeignKey(Art, on_delete=models.CASCADE, related_name='images', db_constraint=False)
-    primary = models.BooleanField()
-
-
 class SupportImage(Image, models.Model):
     relative_path = models.ImageField(upload_to=get_support_save_path)
     support = models.ForeignKey(Support, on_delete=models.CASCADE, related_name='images', db_constraint=False)
@@ -61,24 +55,24 @@ class Gallery(Image, models.Model):
         return Gallery.objects.filter(type=type, type_ref=type_ref).all()
 
 
-# @receiver(cleanup_post_delete, sender=Image)
+@receiver(post_delete, sender=Image)
 def clean_thumbnails(**kwargs):
     filename, extension = os.path.splitext(kwargs['file'].path)
-    for k, size in ArtImage.thumb_sizes.items():
+    for k, size in Image.thumb_sizes.items():
         try:
             os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
         except FileNotFoundError:
             pass
 
 
-cleanup_pre_delete.connect(clean_thumbnails)
+# doesn't seem to work
+# cleanup_pre_delete.connect(clean_thumbnails)
 
 
 @receiver(post_save, sender=SupportImage)
-@receiver(post_save, sender=ArtImage)
 def save_thumbnail(sender, **kwargs):
     filename, extension = os.path.splitext(kwargs['instance'].get_image_path())
-    for k, size in ArtImage.thumb_sizes.items():
+    for k, size in Image.thumb_sizes.items():
         img = PIL_Image.open(kwargs['instance'].get_image_path())
         img.thumbnail(size)
         img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)

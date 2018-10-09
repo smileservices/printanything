@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
+
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save, post_delete
+from PIL import Image as PIL_Image
+
 from django.dispatch import receiver
 from django.utils.text import slugify
 from vendor.models import Vendor, Size, Colour
 from artist.models import Artist
 from django.urls import reverse
+from gallery.thumbed_image import ThumbedModel
 
 
 class Tag(models.Model):
@@ -20,18 +25,27 @@ class Tag(models.Model):
 
 
 def set_path_art_big(instance, filename):
-    return "art_big/{0}/{1}.{2}".format(
+    return "art/{0}/{1}.{2}".format(
         instance.artist.id,
-        instance.slug,
+        "big_" + instance.slug,
         filename.split(".")[-1].lower()
     )
 
 
-class Art(models.Model):
+def set_path_art_mock(instance, filename):
+    return "art/{0}/{1}.{2}".format(
+        instance.artist.id,
+        "mock_" + instance.slug,
+        filename.split(".")[-1].lower()
+    )
+
+
+class Art(ThumbedModel, models.Model):
     externalId = models.CharField(max_length=64)
     slug = models.SlugField(default='xxx', unique=True)
     name = models.CharField(max_length=64)
     big_image = models.ImageField(upload_to=set_path_art_big, blank=True)
+    mock_image = models.ImageField(upload_to=set_path_art_mock, blank=True)
     description = models.TextField()
     unit_price = models.FloatField(default=0.0, verbose_name='Unit Price')
     stock = models.IntegerField()
@@ -55,10 +69,14 @@ class Art(models.Model):
         return reverse('product-detail', args=[self.slug])
 
     def get_primary_image(self):
-        return self.images.get(primary=True)
+        return self.mock_image
 
     class Meta:
         verbose_name = 'Art'
+
+    class ThumbProperties:
+        image_field_name = 'mock_image'
+        thumb_sizes = {'small': (300, 600), 'med': (600, 900), 'big': (900, 1200)}
 
 
 class Support(models.Model):
@@ -132,3 +150,22 @@ class Stock(models.Model):
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = instance._get_unique_slug()
+
+
+@receiver(post_save, sender=Art)
+def save_thumbnail(sender, **kwargs):
+    filename, extension = os.path.splitext(kwargs['instance'].get_image_path())
+    for k, size in Art.ThumbProperties.thumb_sizes.items():
+        img = PIL_Image.open(kwargs['instance'].get_image_path())
+        img.thumbnail(size)
+        img.save(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+
+
+@receiver(post_delete, sender=Art)
+def clean_thumbnails(**kwargs):
+    filename, extension = os.path.splitext(kwargs['file'].path)
+    for k, size in Art.ThumbProperties.thumb_sizes.items():
+        try:
+            os.remove(filename + "_thumb_{0}".format("_".join(map(str, size))) + extension)
+        except FileNotFoundError:
+            pass

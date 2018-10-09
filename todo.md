@@ -1,8 +1,12 @@
 # TODO:
 
-Add tags easier
-Keep only one primary image for art
-Can add gallery to art
+## 1.5
+- implement gallery to art
+- implement gallery to support
+- implement thumbed_image model instead of image
+- keep only one primary image for art
+- Add tags easier
+- Can add gallery to art
 
 Admin
 - fix uploading multiple imgs to supports - restricted by extra forms

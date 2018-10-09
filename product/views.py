@@ -17,7 +17,6 @@ def detail(request, slug):
     product = get_object_or_404(Art, slug=slug);
     data = {
         'product': product,
-        'art_placeable_image': product.get_primary_image(),
         'supports': Support.get_available(),
     }
     return render(request, 'product/detail.html', data)
