@@ -30,15 +30,14 @@ def support_stock(request, support_id):
     :return: json
     '''
 
-    #todo refactor to accommodate the new structure
-
     support = Support.objects.get(id=support_id)
     stock = support.stock_set.exclude(stock=0).all()
     data = {
         'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship in support.vendor.shipping_set.all()],
         'colours': {},
         'mockup_images': [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url(), "print_area": img.print_area} for img in support.images.all()],
-        'gallery': [{"url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in Gallery.get_gallery('support', support.id)]
+        'gallery': [{"url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in Gallery.get_gallery('support', support.id)],
+        'sizes_chart': support.vendor.sizes_chart.url
     }
 
 
