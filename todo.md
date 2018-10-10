@@ -1,15 +1,18 @@
 # TODO:
 
-Admin
-- fix uploading multiple imgs to supports - restricted by extra forms
-- each support must have at least one img set as primary
-
 ## FRONTEND UI
-- Design UI (designer)
-    - redirect to paypal
-    - payment success/cancel - use big shop one
+- redirect to paypal
+- payment success/cancel - use big shop one
+- header
+- footer
+- big images
+- homepage
+- sections
 
 FUTURE RELEASES
+
+### Search functionality
+- do search
 
 ### ART & Support
 - implement gallery to art

@@ -253,7 +253,17 @@ class UpdateSupport(IsAdminMixin, UpdateView):
         images_formset = form.ProductImageFormSet(self.request.POST, self.request.FILES, instance=support, initial=self.initial_product_image_data)
         valid = images_formset.is_valid()
         if valid:
+            # cycle through all images and make sure only one is primary
+            primary = False
+            for i,form in enumerate(images_formset):
+                if form.instance.primary == True and not primary:
+                    primary = True
+                elif primary:
+                    form.instance.primary = False
+            if not primary:
+                images_formset[0].instance.primary = True
             images_formset.save()
+
         validated_forms_context = self.get_context_data(form=form, validated_images_form=images_formset)
         return success_redirect if valid else self.render_to_response(validated_forms_context)
 
