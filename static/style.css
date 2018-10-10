@@ -158,6 +158,31 @@ header .dropdown-product-remove {
 }
 
 /*
+    TO PAYMENT
+*/
+
+.checkout_area {
+    min-height: 400px;
+}
+
+.checkout_area .payment_method {
+    margin-top: 50px;
+}
+
+.checkout_area .payment_method .panel-heading {
+    background-color: #f6f6f6;
+    padding: 20px;
+}
+
+
+
+.checkout_area .payment_method .panel-heading .panel-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+
+/*
     UTILS
 */
 

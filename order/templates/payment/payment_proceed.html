@@ -11,8 +11,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Proceed to payment</h3>
-                    {{ form.render }}
+
+                    <div class="payment_method">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                            <h5 class="panel-title">Pay with PayPal</h5>
+                        </div>
+                        <div class="panel-body">
+                            <div class="pay_with_paypal">
+                                <div class="row">
+                                    {{ form.render }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
                 </div>
             </div>
         </div>

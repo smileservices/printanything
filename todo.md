@@ -1,7 +1,6 @@
 # TODO:
 
 ## FRONTEND UI
-- redirect to paypal
 - payment success/cancel - use big shop one
 - header
 - footer
