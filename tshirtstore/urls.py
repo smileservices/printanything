@@ -17,14 +17,17 @@ from django.conf.urls import include, url
 from tshirtstore import views
 from django.conf.urls.static import static
 from django.conf import settings
+from django.shortcuts import render
 
 urlpatterns = [
+
     url(r'^admin/', include('admin.urls')),
     url(r'^customer/', include('customer.urls')),
     url(r'^products/', include('product.urls')),
     url(r'^cart/', include('changuito.urls')),
     url(r'^order/', include('order.urls')),
     url(r'^customer/', include('customer.urls')),
+    url(r'^pages/(?P<page_name>[-\w]+)/$',views.static_page,name='pages'),
     url(r'^$', views.homepage, name="index"),
 ]
 

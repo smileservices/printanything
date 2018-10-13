@@ -7,11 +7,19 @@
     {% endblock breadcrumos %}
 
 
-    <div class="checkout_area">
+    <div class="checkout_area section_padding_100">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h3>PAYMENT Cancelled!</h3>
+                <div class="col-12">
+                    <div class="order_complated_area clearfix">
+                        <h5>Payment has been canceled :(</h5>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="checkout_pagination mt-50">
+                        <a href="{%  url "index" %}">Go Back Shop</a>
+                    </div>
                 </div>
             </div>
         </div>

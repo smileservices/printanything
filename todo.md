@@ -1,7 +1,8 @@
 # TODO:
 
+products
+
 ## FRONTEND UI
-- payment success/cancel - use big shop one
 - header
 - footer
 - big images

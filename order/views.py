@@ -121,7 +121,8 @@ def payment_complete(request):
     os.remove(file_name)
 
     return render(request, 'payment/payment_complete.html', {
-        'section': 'Payment'
+        'section': 'Payment',
+        'order_id': order_group.pk
     })
 
 

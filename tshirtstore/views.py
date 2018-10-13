@@ -13,3 +13,7 @@ def homepage(request):
         'popular_tags': Tag.objects.all()
     }
     return render(request, 'homepage/main.html', data)
+
+
+def static_page(request,page_name=None):
+    return render(request,'static_pages/'+page_name+'.html')
