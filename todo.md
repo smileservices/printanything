@@ -1,18 +1,9 @@
 # TODO:
 
-products
-
-## FRONTEND UI
-- header
-- footer
-- big images
-- homepage
-- sections
-
 FUTURE RELEASES
 
 ### Search functionality
-- do search
+- do better search
 
 ### ART & Support
 - implement gallery to art

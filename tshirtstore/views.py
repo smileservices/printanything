@@ -9,6 +9,7 @@ from product.models import Art, Tag, Support
 def homepage(request):
     data = {
         'popular_products': Art.objects.all(),
+        'latest_products': Art.objects.all().order_by('dateAdded')[:10],
         'cheapest_support': Support.get_cheapest(),
         'popular_tags': Tag.objects.all()
     }

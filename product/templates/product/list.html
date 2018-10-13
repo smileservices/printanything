@@ -1,7 +1,71 @@
 {% extends 'main.html' %}
 {% block content %}
-    <h2>Shows all the products</h2>
-    {% for key, art in products.items %}
-        <li><a href="{{ art.get_absolute_url }}">{{ art.name }}</a></li>
-    {% endfor %}
+
+    <div class="breadcumb_area section_padding_50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ol class="breadcrumb d-inline-block">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products-list' %}">Products</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="shop_list_area section_padding_100_70">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <div class="shop_sidebar_area">
+
+                        <!-- Widget Area Start -->
+                        <div class="widget catagory mb-30">
+                            <h6 class="widget-title">Memes Tags</h6>
+                            <div class="widget-desc">
+                                {% for tag in tags %}
+                                  <div class="custom-control-description"><a href="{% url 'products-search' tag %}">{{ tag }} <span class="text-muted">({{ tag.art_count }})</span></a></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-9">
+
+
+                    {% for product in products %}
+                        <div class="single_product_area mb-30">
+                            <div class="single_arrivals_slide d-flex">
+                                <div class="product_image">
+                                    <!-- Product Image -->
+                                    <a href="{{ product.get_absolute_url }}">
+                                    <img class="normal_img" src="{{ product.get_thumb_small }}" alt="">
+                                    <img class="hover_img" src="{{ product.get_thumb_small }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="product_badge">
+                                    <span class="badge-featured">New</span>
+                                </div>
+                                <!-- Product Description -->
+                                <div class="product_description">
+                                    <h5><a href="{{ product.get_absolute_url }}">{{ product }}</a></h5>
+                                    <p>{{ product.description }}</p>
+                                    <h6>${{ product.unit_price|add:cheapest_support.unit_price }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
 {% endblock content %}

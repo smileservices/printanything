@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.core import serializers
 from gallery.models import Gallery
 from product.models import Art, Support, Tag
-
+from django.db.models import Count
 
 # Create your views here.
 
@@ -33,13 +33,15 @@ def support_stock(request, support_id):
     support = Support.objects.get(id=support_id)
     stock = support.stock_set.exclude(stock=0).all()
     data = {
-        'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship in support.vendor.shipping_set.all()],
+        'shipping': [{'id': ship.id, 'name': ship.name, 'price': ship.price, 'description': ship.description} for ship
+                     in support.vendor.shipping_set.all()],
         'colours': {},
-        'mockup_images': [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url(), "print_area": img.print_area} for img in support.images.all()],
-        'gallery': [{"url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in Gallery.get_gallery('support', support.id)],
+        'mockup_images': [{"primary": img.primary, "url": img.get_image_url(), "thumb": img.get_thumb_small_url(),
+                           "print_area": img.print_area} for img in support.images.all()],
+        'gallery': [{"url": img.get_image_url(), "thumb": img.get_thumb_small_url()} for img in
+                    Gallery.get_gallery('support', support.id)],
         'sizes_chart': support.vendor.sizes_chart.url
     }
-
 
     # group available sizez by colours
     for item in stock:
@@ -64,6 +66,17 @@ def search(request, term):
         for art in t.art_set.all():
             if art.id not in products: products[art.id] = art
     data = {
-        'products': products
+        'products': products,
+        'cheapest_support': Support.get_cheapest(),
+        'tags': Tag.objects.annotate(art_count=Count('art'))
+    }
+    return render(request, 'product/list.html', data)
+
+
+def list(request):
+    data = {
+        'products': Art.objects.all(),
+        'cheapest_support': Support.get_cheapest(),
+        'tags': Tag.objects.annotate(art_count=Count('art'))
     }
     return render(request, 'product/list.html', data)

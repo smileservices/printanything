@@ -39,8 +39,31 @@
     ************ PLACE YOUR CUSTOM CSS HERE ************
     ------------------------------------------------- */
 
+/*
+    HOMEPAGE
+*/
+.welcome_area {
+    padding-top: 10px;
+}
 
+.welcome_area .welcome_slides {
+    background-repeat: no-repeat;
+}
 
+/*
+    PRODUCT LIST
+*/
+.single_product_area .product_image {
+    width: auto;
+}
+
+.single_product_area .product_description {
+    text-align: left;
+}
+.single_product_area .product_description h5 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
 /*
     PRODUCT DETAIL PAGE
 */
@@ -49,6 +72,7 @@
         padding: 10px;
         border: solid darkgrey 3px;
         margin: 5px;
+        display: inline-block;
     }
 
     .support-types:hover {

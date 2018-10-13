@@ -5,7 +5,7 @@
                 <div class="col-12">
                     <div class="popular_section_heading mb-50 text-center">
                         <h5>Popular This Week</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        <p>We make a weekly top of the most ordered products. Here they are.</p>
                     </div>
                 </div>
             </div>
@@ -19,17 +19,8 @@
                         <div class="product_image">
                             <!-- Product Image -->
                             <a href="{{ product.get_absolute_url }}">
-                                <img class="first_img" src="{{ product.get_thumb_med }}" alt="">
+                                <img class="first_img" src="{{ product.get_thumb_small }}" alt="">
                             </a>
-
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span class="badge-offer">On Sale</span>
-                            </div>
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to Cart</a>
-                            </div>
                         </div>
                         <!-- Product Description -->
                         <div class="product_description">
@@ -38,9 +29,15 @@
                         </div>
                     </div>
                     {% endfor %}
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <a href="{% url 'products-list' %}" class="btn btn-outline-primary">Show all the memes!</a>
                 </div>
             </div>
-
         </div>
     </div>
 {% endblock popular_products %}

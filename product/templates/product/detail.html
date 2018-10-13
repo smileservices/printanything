@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
     {% block breadcrumos %}
         {% include "product/breadcrumbs.html" %}
@@ -24,8 +25,8 @@
                         <div class="widget support mb-15">
                             <h6 class="widget-title">Put it on</h6>
                             {% for support in supports %}
-                                <span data-id="{{ support.id }}"
-                                      class="support-types{% if forloop.counter == 1 %} selected{% endif %}">{{ support }}</span>
+                                <div data-id="{{ support.id }}"
+                                      class="support-types{% if forloop.counter == 1 %} selected{% endif %}">{{ support }} - ${% add support.unit_price product.unit_price %}</div>
                             {% endfor %}
                         </div>
 
