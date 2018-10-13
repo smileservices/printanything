@@ -69,6 +69,7 @@ var cart = {
             $('header .cart').append($('<ul class="cart-list animated fadeInUp">Please wait </ul>').append($('#spinner-holder').html()));
         }, function(data) {
             var products = $('<ul></ul>');
+            data['total_qty'] === 0 ? $('header .cart').hide() : $('header .cart').show();
             $.each(data['items'], function(key, item) {
                 products.template(item, '#top_cart_product', true)
             })
