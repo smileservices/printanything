@@ -59,16 +59,17 @@ def support_stock(request, support_id):
     return JsonResponse(data)
 
 
-def search(request, term):
-    tags = Tag.objects.filter(name__icontains=term)
-    products = {}
+def search(request, search_term):
+    tags = Tag.objects.filter(name__icontains=search_term)
+    products = []
     for t in tags:
         for art in t.art_set.all():
-            if art.id not in products: products[art.id] = art
+            if art not in products: products.append(art)
     data = {
         'products': products,
         'cheapest_support': Support.get_cheapest(),
-        'tags': Tag.objects.annotate(art_count=Count('art'))
+        'tags': Tag.objects.annotate(art_count=Count('art')),
+        'search_term': search_term
     }
     return render(request, 'product/list.html', data)
 
