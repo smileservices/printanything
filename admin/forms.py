@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 from vendor.models import Vendor, Size, Colour
+from api_interface.models import ApiInterface
 from artist.models import Artist
 from product.models import Art, Support, Stock
 from gallery.models import SupportImage
@@ -38,6 +39,7 @@ class BaseColourFormSet(forms.BaseInlineFormSet):
 
 
 class VendorForm(forms.ModelForm):
+    api_interface = forms.ModelChoiceField(queryset=ApiInterface.objects.all(),empty_label='No API',required=False)
     SizeFormset = forms.inlineformset_factory(
         Vendor,
         Size,
@@ -55,7 +57,7 @@ class VendorForm(forms.ModelForm):
 
     class Meta:
         model = Vendor
-        fields = ("name", "email", "sizes_chart")
+        fields = ("name", "email", "sizes_chart", "api_interface")
         widgets = {
             'sizes_chart': BoostrapFileInput,
         }
@@ -65,6 +67,7 @@ class BaseProductImageFormSet(forms.BaseInlineFormSet):
     class Meta:
         model = SupportImage
         fields = ("relative_path", "primary", 'print_area')
+
 
 class SupportForm(forms.ModelForm):
     ProductImageFormSet = forms.inlineformset_factory(
@@ -91,8 +94,14 @@ class ArtistForm(forms.ModelForm):
         fields = ("name",)
 
 
-class ArtForm(forms.ModelForm):
+class ApiInterfaceForm(forms.ModelForm):
+    class Meta:
+        model = ApiInterface
+        fields = ("name", "endpoint", "api_user", "api_key", "adapter")
 
+
+class ArtForm(forms.ModelForm):
     class Meta:
         model = Art
-        fields = ("externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist", "tags", "mock_image")
+        fields = (
+        "externalId", "slug", "name", "big_image", "description", "unit_price", "stock", "artist", "tags", "mock_image")

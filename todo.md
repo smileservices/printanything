@@ -1,12 +1,19 @@
 # TODO:
+- implement gallery to art
+- add vendor api (can opt in admin for a vendor and its api)
+
+## Vendor API (printful, pwinty)
+- how to add products
+- how to set up printing area
+- how to implement alongside usual vendors - extend normal vendor class
 
 FUTURE RELEASES
 
 ### Search functionality
 - do better search
+- add elasticsearch
 
 ### ART & Support
-- implement gallery to art
 - implement gallery to support
 
 ### Order
@@ -15,13 +22,9 @@ FUTURE RELEASES
 - clean up old carts (chron job)
 - add "edited on" time column in view/detail
 - ticketing system for customer/vendor/admin
-- add elasticsearch
 - update shipping info?
 - email template for notifications
 
 ### Product detail
-3 separate support gallery appears bellow the main image and open in gallery mode
-4 art images gallery
-8 link to vendor size chart for every support
-
-
+- separate support gallery appears bellow the main image and open in gallery mode
+- art images gallery

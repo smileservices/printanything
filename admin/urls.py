@@ -20,10 +20,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import reverse_lazy
 
-from admin import views
 from admin import generic_views
+from admin.views import dashboard, user, vendor, api_interface, support, shipping, artist, art, order
 
-from vendor.models import Vendor,Shipping
+from vendor.models import Vendor
+from api_interface.models import ApiInterface
 from artist.models import Artist
 from product.models import Art, Support
 from order.models import Order, OrderStatus
@@ -35,14 +36,14 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {
         'next_page': '/'
     }, name='logout'),
-    url(r'^$', views.dashboard, name="admin-dashboard"),
+    url(r'^$', dashboard.dashboard, name="admin-dashboard"),
     #todo add reset
 ]
 
 # USERS
 urlpatterns += [
-    url(r'^users/create$', views.CreateUser.as_view(), name='create-user'),
-    url(r'^users/edit/(?P<pk>\d+)', views.UpdateUser.as_view(), name='update-user'),
+    url(r'^users/create$', user.CreateUser.as_view(), name='create-user'),
+    url(r'^users/edit/(?P<pk>\d+)', user.UpdateUser.as_view(), name='update-user'),
     url(r'^users/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=User,
         success_url=reverse_lazy('admin-users')
@@ -55,8 +56,8 @@ urlpatterns += [
 
 # VENDORS
 urlpatterns += [
-    url(r'^vendors/create$', views.CreateVendor.as_view(), name='create-vendor'),
-    url(r'^vendors/edit/(?P<pk>\d+)', views.UpdateVendor.as_view(), name='update-vendor'),
+    url(r'^vendors/create$', vendor.CreateVendor.as_view(), name='create-vendor'),
+    url(r'^vendors/edit/(?P<pk>\d+)', vendor.UpdateVendor.as_view(), name='update-vendor'),
     url(r'^vendors/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Vendor,
         success_url=reverse_lazy('admin-vendors')
@@ -67,17 +68,31 @@ urlpatterns += [
     ), name='admin-vendors'),
 ]
 
+# API INTERFACES
+urlpatterns += [
+    url(r'^api-interface/create$', api_interface.Create.as_view(), name='create-api_interface'),
+    url(r'^api-interface/edit/(?P<pk>\d+)', api_interface.Update.as_view(), name='update-api_interface'),
+    url(r'^api-interface/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
+        model=ApiInterface,
+        success_url=reverse_lazy('admin-api-interface')
+    ), name='delete-api_interface'),
+    url(r'^api-interface', generic_views.ListView.as_view(
+        queryset=ApiInterface.objects.all(),
+        template_name='admin/api_interface/list.html'
+    ), name='admin-api_interface'),
+]
+
 # SHIPPING
 urlpatterns += [
-    url(r'^vendor/(?P<vendor>\d+)/shipping/create', views.VendorShippingCreate.as_view(), name='create-shipping'),
-    url(r'^shipping/edit/(?P<pk>\d+)', views.VendorShippingUpdate.as_view(), name='update-shipping'),
-    url(r'^shipping/delete/(?P<pk>\d+)', views.VendorShippingDelete.as_view(), name='delete-shipping')
+    url(r'^vendor/(?P<vendor>\d+)/shipping/create', shipping.VendorShippingCreate.as_view(), name='create-shipping'),
+    url(r'^shipping/edit/(?P<pk>\d+)', shipping.VendorShippingUpdate.as_view(), name='update-shipping'),
+    url(r'^shipping/delete/(?P<pk>\d+)', shipping.VendorShippingDelete.as_view(), name='delete-shipping')
 ]
 
 # ARTISTS
 urlpatterns += [
-    url(r'^artists/create$', views.CreateArtist.as_view(), name='create-artist'),
-    url(r'^artists/edit/(?P<pk>\d+)', views.UpdateArtist.as_view(), name='update-artist'),
+    url(r'^artists/create$', artist.CreateArtist.as_view(), name='create-artist'),
+    url(r'^artists/edit/(?P<pk>\d+)', artist.UpdateArtist.as_view(), name='update-artist'),
     url(r'^artists/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Artist,
         success_url=reverse_lazy('admin-artists')
@@ -90,8 +105,8 @@ urlpatterns += [
 
 # ART
 urlpatterns += [
-    url(r'^art/create$', views.CreateArt.as_view(), name='create-art'),
-    url(r'^art/edit/(?P<pk>\d+)', views.UpdateArt.as_view(), name='update-art'),
+    url(r'^art/create$', art.CreateArt.as_view(), name='create-art'),
+    url(r'^art/edit/(?P<pk>\d+)', art.UpdateArt.as_view(), name='update-art'),
     url(r'^art/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Art,
         success_url=reverse_lazy('admin-art')
@@ -104,8 +119,8 @@ urlpatterns += [
 
 # SUPPORTS
 urlpatterns += [
-    url(r'^vendor/(?P<vendorid>\d+)/supports/create$', views.CreateSupport.as_view(), name='create-support'),
-    url(r'^supports/edit/(?P<pk>\d+)', views.UpdateSupport.as_view(), name='update-support'),
+    url(r'^vendor/(?P<vendorid>\d+)/supports/create$', support.CreateSupport.as_view(), name='create-support'),
+    url(r'^supports/edit/(?P<pk>\d+)', support.UpdateSupport.as_view(), name='update-support'),
     url(r'^supports/delete/(?P<pk>\d+)', generic_views.DeleteView.as_view(
         model=Support,
         success_url=reverse_lazy('admin-supports')
@@ -126,8 +141,8 @@ urlpatterns += [
         model=OrderStatus,
         success_url=reverse_lazy('order-statuses')
     ), name="delete-order-status"),
-    url(r'orders/status/edit/(?P<pk>\d+)', views.OrderStatusUpdate.as_view(), name="order-status-edit"),
-    url(r'orders/status/create', views.OrderStatusCreate.as_view(), name="order-status-create")
+    url(r'orders/status/edit/(?P<pk>\d+)', order.OrderStatusUpdate.as_view(), name="order-status-edit"),
+    url(r'orders/status/create', order.OrderStatusCreate.as_view(), name="order-status-create")
 ]
 
 # ORDERS
@@ -140,9 +155,9 @@ urlpatterns += [
         queryset=Order.objects.filter(closed=False),
         template_name='admin/order/list.html'
     ), name='admin-orders'),
-    url(r'^order/view/(?P<pk>\d+)', views.OrderView.as_view(), name="admin-order-view"),
-    url(r'^order/update/(?P<pk>\d+)', views.order_update, name="admin-order-update"),
-    url(r'^order/process/(?P<pk>\d+)', views.order_process, name="admin-order-process")
+    url(r'^order/view/(?P<pk>\d+)', order.OrderView.as_view(), name="admin-order-view"),
+    url(r'^order/update/(?P<pk>\d+)', order.order_update, name="admin-order-update"),
+    url(r'^order/process/(?P<pk>\d+)', order.order_process, name="admin-order-process")
 ]
 
 
