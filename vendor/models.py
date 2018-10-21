@@ -32,10 +32,10 @@ class Vendor(models.Model):
         return os.path.join(self.sizes_chart.url)
 
     def place_order(self, order, base_url=None):
-        if not self.api:
+        if not self.api_interface:
             return self.place_no_api(order, base_url)
         else:
-            return self.api.place(order)
+            return self.api_interface.place(order)
 
     def place_no_api(self, order, base_url):
         context = {
