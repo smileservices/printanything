@@ -3,6 +3,9 @@ from api_interface import adapters
 
 
 class ApiInterface(models.Model):
+    '''
+    Interface to various vendor api adapters
+    '''
     name = models.CharField(max_length=128)
     endpoint = models.CharField(max_length=128)
     api_user = models.CharField(max_length=256)

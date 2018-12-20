@@ -17,6 +17,10 @@ def get_save_path(instance, filename):
 
 # Create your models here.
 class Vendor(models.Model):
+    '''
+    Vendor class has reference to api interface
+    The api interface list instantiates the
+    '''
     name = models.CharField(max_length=255)
     sizes_chart = models.ImageField(default=None, upload_to=get_save_path)
     email = models.EmailField()
