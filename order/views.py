@@ -159,7 +159,7 @@ def show_me_the_money(sender, **kwargs):
             payment.save()
             order_group.set_orders_status(OrderStatus.objects.get(id='2'))
         else:
-            return
+            raise PaymentException('Payment is not valid!')
     else:
         pass
 
