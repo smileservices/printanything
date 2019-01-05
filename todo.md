@@ -1,8 +1,8 @@
 # TODO:
 - implement gallery to art
-- add vendor api (can opt in admin for a vendor and its api)
 
 ## Vendor API (printful, pwinty)
+- add vendor api (can opt in admin for a vendor and its api)
 - how to add products
 - how to set up printing area
 - how to implement alongside usual vendors - extend normal vendor class

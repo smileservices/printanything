@@ -17,6 +17,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from easy_pdf.rendering import render_to_pdf
 import tempfile
+import logging
+
+paypalLogger = logging.getLogger('paypal')
 
 def checkout(request):
     cart_proxy = CartProxy(request)
@@ -101,9 +104,13 @@ def payment_complete(request):
         'contact': order_group.contact,
         'settings': settings.INVOICE_SETTINGS
     }
+    paypalLogger.debug('Processing payment complete...')
+    paypalLogger.debug('Setting email context to: ')
+    paypalLogger.debug(context)
     html_msg = render_to_string('order/email/order_placed/customer_main.html', context=context)
     text_msg = strip_tags(html_msg)
     # send email to customer
+    paypalLogger.debug('Sending email ..')
     msg = EmailMultiAlternatives('Your order', body=text_msg, from_email='noreply@tshirtstore.com',
                                  to=[order_group.customer.email, ], bcc=__get_admins_email())
     #create invoice pdf
@@ -119,6 +126,7 @@ def payment_complete(request):
     msg.send()
     #clean up
     os.remove(file_name)
+    paypalLogger.debug('Email sent to % and admin email %'.format(order_group.customer.email, __get_admins_email()))
 
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment',
@@ -133,11 +141,15 @@ def payment_canceled(request):
 
 
 class PaymentException(Exception):
+    paypalLogger.warning('Registered PaymentException!!')
     pass
 
 
 def show_me_the_money(sender, **kwargs):
     ipn_obj = sender
+    paypalLogger.debug('Processing show_me_the_money ..')
+    paypalLogger.debug('IPN Object:')
+    paypalLogger.debug(ipn_obj)
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         if ipn_obj.receiver_email != settings.PAYPAL_RECEIVER_EMAIL:
             # Not a valid payment
