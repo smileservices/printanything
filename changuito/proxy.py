@@ -230,7 +230,8 @@ class CartProxy(MiddlewareMixin):
         #add shipping
         # for vid, ship in shipping.items():
         #     total_price += ship.price
-        return total_price
+        total_charge = total_price + shipping
+        return total_charge
 
     def get_formatted_cart(self):
         #returns items and shipping

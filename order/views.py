@@ -126,7 +126,7 @@ def payment_complete(request):
     msg.send()
     #clean up
     os.remove(file_name)
-    paypalLogger.debug('Email sent to % and admin email %'.format(order_group.customer.email, __get_admins_email()))
+    paypalLogger.debug('Email sent to {} and admin email {}'.format(order_group.customer.email, __get_admins_email()))
 
     return render(request, 'payment/payment_complete.html', {
         'section': 'Payment',
@@ -141,8 +141,9 @@ def payment_canceled(request):
 
 
 class PaymentException(Exception):
-    paypalLogger.warning('Registered PaymentException!!')
-    pass
+    def __init__(self, message):
+        super(PaymentException, self).__init__(message)
+        paypalLogger.warning('Registered PaymentException with message: {}'.format(message))
 
 
 def show_me_the_money(sender, **kwargs):
