@@ -226,7 +226,7 @@ class CartProxy(MiddlewareMixin):
 
     def calculate_total(self):
         total_price = self.cart.total_price()
-        shipping = self.get_shipping()
+        shipping = (lambda shipping: sum([s.price for k,s in shipping.items()]))(self.get_shipping())
         #add shipping
         # for vid, ship in shipping.items():
         #     total_price += ship.price
