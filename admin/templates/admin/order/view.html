@@ -56,17 +56,17 @@
             <div class="card-body">
                 <dl class="dl-horizontal">
                     <dt>Order Group</dt>
-                    <dt>{{ object.order_group }}</dt>
+                    <dd>{{ object.order_group }}</dd>
                     <dt>ID</dt>
                     <dd>{{ object.id }}</dd>
                     <dt>Placed on</dt>
-                    <dd>{{ object.placed }}</dd>
+                    <dd>{{ object.order_group.placed }}</dd>
                     <dt>Last Updated</dt>
                     <dd>{{ object.updated_at }}</dd>
                     <dt>Payment Status</dt>
-                    <dd>{{ object.get_payment_status }}</dd>
+                    <dd>{{ object.order_group.get_payment_status }}</dd>
                     <dt>Customer</dt>
-                    <dd>{{ object.customer }}</dd>
+                    <dd>{{ object.order_group.customer }}</dd>
                     <dt>Amount</dt>
                     <dd>{{ object.calculate_price }}</dd>
                     <hr>

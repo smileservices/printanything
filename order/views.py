@@ -49,6 +49,7 @@ def place_order(request):
             if previous_order_group.get_payment_status() not in ['PAYMENT RECEIVED', ]:
                 previous_order_group.delete()
         except OrderGroup.DoesNotExist:
+            logging.warning('Order group {} does not exist'.format(request.session['order_group']))
             pass
     # create order group
     order_group = OrderGroup(customer=customer, contact=contact, total_amount=total_amount)
@@ -159,7 +160,7 @@ def show_me_the_money(sender, **kwargs):
         order_group = OrderGroup.objects.get(id=ipn_obj.custom)
         if order_group is None:
             raise PaymentException('Payment received for order_group that doesn\'t exist!')
-        if ipn_obj.mc_gross == order_group.calculate_price() and ipn_obj.mc_currency == 'USD':
+        if ipn_obj.mc_gross == order_group.calculate_total() and ipn_obj.mc_currency == 'USD':
             # add to valid payments
             payment = Payment(
                 id=ipn_obj.txn_id,  # yes?
@@ -218,3 +219,7 @@ def show_order_group_status(request,*args,**kwargs):
         'section': 'Order Group Status'
     }
     return render(request, 'order/order_group_details.html', context)
+
+
+def ipn_mockup(request, *args, **kwargs):
+    return render(request, 'payment/ipn_mockup.html')

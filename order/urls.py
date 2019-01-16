@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^paypal/', include('paypal.standard.ipn.urls'), name='paypal-ipn'),
     url(r'payment-return', views.payment_complete, name='payment-return'),
     url(r'payment-cancel', views.payment_canceled, name='payment-cancel'),
+    # url(r'ipn-mockup', views.ipn_mockup, name='ipn-mockup'),
 ]

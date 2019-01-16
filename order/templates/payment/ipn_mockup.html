@@ -1,0 +1,175 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    {% block breadcrumos %}
+        {% include "order/breadcrumbs.html" %}
+    {% endblock breadcrumos %}
+
+
+    <div class="checkout_area section_padding_100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="order_complated_area clearfix">
+                        <h5>test ipn form</h5>
+                        <form action="{% url "paypal-ipn" %}" method="POST">
+                            <div class="form-group">
+                                <label for="">mc_gross</label>
+                                <input class="" type="text" name="mc_gross" value="31">
+                            </div>
+                            <div class="form-group">
+                                <label for="">invoice</label>
+                                <input class="" type="text" name="invoice" value="7">
+                            </div>
+                            <div class="form-group">
+                                <label for="">protection_eligibility</label>
+                                <input class="" type="text" name="protection_eligibility" value="Eligible">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payer_id</label>
+                                <input class="" type="text" name="payer_id" value="WKGTL6VNHXUN4">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payment_date</label>
+                                <input class="" type="text" name="payment_date" value="23:25:46 Jan 09 2019 PST">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payment_status</label>
+                                <input class="" type="text" name="payment_status" value="Completed">
+                            </div>
+                            <div class="form-group">
+                                <label for="">charset</label>
+                                <input class="" type="text" name="charset" value="windows-1252">
+                            </div>
+                            <div class="form-group">
+                                <label for="">mc_fee</label>
+                                <input class="" type="text" name="mc_fee" value="1.7">
+                            </div>
+                            <div class="form-group">
+                                <label for="">notify_version</label>
+                                <input class="" type="text" name="notify_version" value="3.9">
+                            </div>
+                            <div class="form-group">
+                                <label for="">custom</label>
+                                <input class="" type="text" name="custom" value="26">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payer_status</label>
+                                <input class="" type="text" name="payer_status" value="verified">
+                            </div>
+                            <div class="form-group">
+                                <label for="">business</label>
+                                <input class="" type="text" name="business" value="vladimir-facilitator@easymedicaltourism.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="">quantity</label>
+                                <input class="" type="text" name="quantity" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="">protection_eligibility</label>
+                                <input class="" type="text" name="protection_eligibility" value="Eligible">
+                            </div>
+                            <div class="form-group">
+                                <label for="">verify_sign</label>
+                                <input class="" type="text" name="verify_sign" value="A0FIHGGYIJ-nD8w6ijMHucFJMWkkAxevGY03FzaOCQGyRh4sGtbeo10m">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payer_email</label>
+                                <input class="" type="text" name="payer_email" value="vladimir.gorea-buyergmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="">txn_id</label>
+                                <input class="" type="text" name="txn_id" value="5HK75840P9649043A">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payment_type</label>
+                                <input class="" type="text" name="payment_type" value="instant">
+                            </div>
+                            <div class="form-group">
+                                <label for="">last_name</label>
+                                <input class="" type="text" name="last_name" value="Buyer">
+                            </div>
+                            <div class="form-group">
+                                <label for="">receiver_email</label>
+                                <input class="" type="text" name="receiver_email" value="vladimir-facilitator@easymedicaltourism.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payment_fee</label>
+                                <input class="" type="text" name="payment_fee" value="1.77">
+                            </div>
+                            <div class="form-group">
+                                <label for="">shipping_discount</label>
+                                <input class="" type="text" name="shipping_discount" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="">receiver_id</label>
+                                <input class="" type="text" name="receiver_id" value="PTJ3Y3EDEZSVA">
+                            </div>
+                            <div class="form-group">
+                                <label for="">insurance_amount</label>
+                                <input class="" type="text" name="insurance_amount" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="">txn_type</label>
+                                <input class="" type="text" name="txn_type" value="web_accept">
+                            </div>
+                            <div class="form-group">
+                                <label for="">item_name</label>
+                                <input class="" type="text" name="item_name" value="26">
+                            </div>
+                            <div class="form-group">
+                                <label for="">discount</label>
+                                <input class="" type="text" name="discount" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="">mc_currency</label>
+                                <input class="" type="text" name="mc_currency" value="USD">
+                            </div>
+                            <div class="form-group">
+                                <label for="">item_number</label>
+                                <input class="" type="text" name="item_number" value="Eligible">
+                            </div>
+                            <div class="form-group">
+                                <label for="">residence_country</label>
+                                <input class="" type="text" name="residence_country" value="US">
+                            </div>
+                            <div class="form-group">
+                                <label for="">test_ipn</label>
+                                <input class="" type="text" name="test_ipn" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="">shipping_method</label>
+                                <input class="" type="text" name="shipping_method" value="Default">
+                            </div>
+                            <div class="form-group">
+                                <label for="">transaction_subject</label>
+                                <input class="" type="text" name="transaction_subject" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="">payment_gross</label>
+                                <input class="" type="text" name="payment_gross" value="31">
+                            </div>
+                            <div class="form-group">
+                                <label for="">ipn_track_id</label>
+                                <input class="" type="text" name="ipn_track_id" value="b104d60fdbb7b">
+                            </div>
+                            <button type="submit" name="submit">OK</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="checkout_pagination mt-50">
+                        <a href="{%  url "index" %}">Go Back Shop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block custom_javascript %}
+    <script src="{% static 'js/order_checkout.js' %}"></script>
+{% endblock custom_javascript %}
+

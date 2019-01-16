@@ -67,7 +67,7 @@ class OrderGroup(models.Model):
             return False
 
     def set_orders_status(self, orderStatus):
-        for order in self.order_set:
+        for order in self.order_set.all():
             order.status = orderStatus
             order.save()
 

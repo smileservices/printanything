@@ -1,5 +1,6 @@
 # TODO:
 - implement gallery to art
+- find solution for statuses (prepopulate?)
 
 ## Vendor API (printful, pwinty)
 - add vendor api (can opt in admin for a vendor and its api)
