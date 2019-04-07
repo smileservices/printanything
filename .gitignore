@@ -4,6 +4,6 @@ media/
 *.sqlite3
 .idea/
 */migrations/*
-tshirtstore/settings.py
 static_col/*
 *.log
+.env
