@@ -2,7 +2,7 @@ awesome-slugify==1.6.5
 beautifulsoup4==4.6.0
 certifi==2017.11.5
 chardet==3.0.4
-Django==1.11.3
+Django==2.2.24
 django-admin-jqueryui112==1.12.1b5
 django-blog-zinnia==0.20
 django-braces==1.12.0
