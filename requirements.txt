@@ -29,7 +29,7 @@ image==1.5.16
 libmagic==1.0
 Markdown==2.6.11
 mots-vides==2015.5.11
-numpy==1.13.3
+numpy==1.22.0
 olefile==0.44
 Pillow==4.3.0
 pipreqs==0.4.9
